@@ -4,14 +4,21 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.validation.Validated;
+import jakarta.inject.Inject;
+import sharedPayments.service.PaymentsService;
 
-@Controller("/api/v1/") 
+@Validated
+@Controller("/api/v1")
 public class PaymentsRestController {
 
-    @Get("payments")
+    @Inject
+    private PaymentsService paymentService;
+
+    @Get("/payments")
     @Produces(MediaType.TEXT_PLAIN) 
     public String getAllPayments() {
-        return "Hello World"; 
+        return this.paymentService.getPayments();
     }
-    
+        
 }
