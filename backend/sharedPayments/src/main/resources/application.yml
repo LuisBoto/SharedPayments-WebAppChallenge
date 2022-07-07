@@ -1,0 +1,7 @@
+micronaut:
+  application:
+    name: sharedPayments
+netty:
+  default:
+    allocator:
+      max-order: 3
