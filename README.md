@@ -1,2 +1,1 @@
-# autentia-challenge
-☠️
+# Autentia tech challenge
