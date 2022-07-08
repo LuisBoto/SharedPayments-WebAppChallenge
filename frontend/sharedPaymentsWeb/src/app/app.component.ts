@@ -63,7 +63,10 @@ export class AppComponent {
         this.httpOptions
       )
       .subscribe({
-        next: (response) => this.users.push(response as User),
+        next: (response) => {
+          form.reset();
+          this.users.push(response as User);
+        },
         error: (error) => console.log(error),
       });
   }
@@ -78,6 +81,7 @@ export class AppComponent {
       )
       .subscribe({
         next: (response) => {
+          form.reset();
           this.readUserList();
           this.readPaymentList();
         },
