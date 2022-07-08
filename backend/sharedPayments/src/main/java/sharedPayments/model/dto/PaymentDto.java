@@ -1,5 +1,7 @@
 package sharedPayments.model.dto;
 
+import javax.validation.Valid;
+
 import sharedPayments.model.Payment;
 import sharedPayments.model.User;
 
@@ -73,7 +75,7 @@ public class PaymentDto {
 		this.id = id;
 	}
 	
-	public Payment toEntity(User payer) {
+	public @Valid Payment toEntity(User payer) {
 		return new Payment(
 				payer, 
 				this.description, 

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.micronaut.core.annotation.Introspected;
+import sharedPayments.model.dto.UserDto;
 
 @Entity
 @Table(name = "user")
@@ -58,6 +59,10 @@ public class User {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public UserDto toDto() {
+		return new UserDto(this.id, this.name, this.debt);
 	}
 
 }
