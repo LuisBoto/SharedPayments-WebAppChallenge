@@ -1,5 +1,6 @@
 package sharedPayments.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class User {
 	private String name;
 
 	@NotNull
+	@Column(scale=2)
 	private double debt;
 
 	public User() {

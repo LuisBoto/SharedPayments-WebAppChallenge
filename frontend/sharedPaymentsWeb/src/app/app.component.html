@@ -1,9 +1,11 @@
 <h1>{{ title }}</h1>
+
+<h2>Add friend:</h2>
 <div id="addFriend">
   <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
-    <label for="userName">Name:</label>
+    <label for="userName">Name: </label>
     <input type="text" name="name" ngModel>
-    <button type="submit">Add friend</button>
+    <button type="submit"> Add friend </button>
   </form> 
 </div>
 
@@ -11,3 +13,19 @@
 <ul id="userList" *ngFor="let user of users">
   <b class="friendName">{{ user.name }}</b>: <span class="friendDebt">{{ -user.debt }}€</span>
 </ul>
+
+<h2>Create new payment:</h2>
+<div id="addPayment">
+  <form #paymentForm="ngForm" (ngSubmit)="createPayment(paymentForm)">
+    <label for="description">Payment description: </label>
+    <input type="text" name="description" ngModel> <br>
+    <label for="price">Amount / Price: </label>
+    <input type="decimal" name="price" ngModel> <br>
+    <select name="payerId" ngModel>
+      <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="0">{{user.name}}</option>
+    </select>
+
+    <br>
+    <button type="submit"> Create new payment </button>
+  </form> 
+</div>

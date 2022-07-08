@@ -51,6 +51,20 @@ export class AppComponent {
       });
   }
 
+  createPayment(form: NgForm) {
+    console.log(form.value);
+    this.http
+      .post(
+        this.apiUrl+'/payments', 
+        JSON.stringify(form.value), 
+        this.httpOptions
+      )
+      .subscribe({
+        next: (response) => this.readUserList(),
+        error: (error) => console.log(error),
+      });
+  }
+
 }
 
 export class User {
