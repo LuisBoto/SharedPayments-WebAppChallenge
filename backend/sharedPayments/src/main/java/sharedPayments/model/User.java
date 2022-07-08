@@ -22,7 +22,7 @@ public class User {
 	private Long id;
 
 	@NotEmpty(message = "Cannot be empty")
-	@Size(min = 1, max = 20)
+	@Size(min = 1, max = 75)
 	private String name;
 
 	@NotNull

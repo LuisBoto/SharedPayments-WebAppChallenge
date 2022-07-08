@@ -6,3 +6,8 @@
     <button type="submit">Add friend</button>
   </form> 
 </div>
+
+<h2>My Friend Group</h2>
+<ul id="userList" *ngFor="let user of users">
+  <b class="friendName">{{ user.name }}</b>: <span class="friendDebt">{{ -user.debt }}€</span>
+</ul>

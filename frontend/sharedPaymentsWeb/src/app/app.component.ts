@@ -11,9 +11,31 @@ import { NgForm } from '@angular/forms';
 export class AppComponent {
   title = "Shared Payments WebApp";
   apiUrl = "http://localhost:8080/api/v1";
+  httpOptions = {
+    headers : new HttpHeaders({
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+    })
+  };
+  users: User[] = [];
 
   constructor(private http: HttpClient) {
     this.http = http;
+    this.readUserList();
+  }
+
+  readUserList() {
+    this.http
+    .get(
+      this.apiUrl+'/users', 
+      this.httpOptions
+    )
+    .subscribe({
+      next: (response) => {
+        this.users = (response as []);
+      },
+      error: (error) => console.log(error),
+    });
   }
 
   createUser(form: NgForm) {
@@ -21,16 +43,18 @@ export class AppComponent {
       .post(
         this.apiUrl+'/users', 
         JSON.stringify(form.value), 
-        {
-          headers : new HttpHeaders({
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        })
-      })
+        this.httpOptions
+      )
       .subscribe({
-        next: (response) => console.log(response),
+        next: (response) => this.users.push(response as User),
         error: (error) => console.log(error),
       });
   }
 
+}
+
+export class User {
+  debt!: number;
+  name!: string;
+  id!: string;
 }
