@@ -4,13 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.micronaut.core.annotation.Introspected;
 
-
 @Entity
+@Table(name = "user")
 @Introspected // Used to avoid reflective operations
 public class User {
 
@@ -22,11 +24,24 @@ public class User {
 	@Size(min = 1, max = 20)
 	private String name;
 
-	public User() { }
-	
+	@NotNull
+	private double debt;
+
+	public User() {
+	}
+
 	public User(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
 		super();
 		this.name = name;
+		this.debt = 0;
+	}
+
+	public double getDebt() {
+		return debt;
+	}
+
+	public void setDebt(double debt) {
+		this.debt = debt;
 	}
 
 	public Long getId() {
