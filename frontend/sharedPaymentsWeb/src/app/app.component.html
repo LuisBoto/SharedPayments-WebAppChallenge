@@ -5,6 +5,7 @@
   <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
     <label for="userName">Name: </label>
     <input type="text" name="name" ngModel>
+    <br>
     <button type="submit"> Add friend </button>
   </form> 
 </div>
@@ -22,10 +23,16 @@
     <label for="price">Amount / Price: </label>
     <input type="decimal" name="price" ngModel> <br>
     <select name="payerId" ngModel>
-      <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="0">{{user.name}}</option>
+      <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="!i">{{user.name}}</option>
     </select>
-
-    <br>
+    <br><br>
     <button type="submit"> Create new payment </button>
   </form> 
 </div>
+
+<h2>Payment list</h2>
+<ul id="paymentList" *ngFor="let payment of payments">
+  <b class="paymentDescription">{{ payment.description }}</b> <br>
+  Amount: <span class="paymentPrice">{{ payment.price }}€</span> <br>
+  Payed by <b class="payerName">{{ payment.payerName }}</b> on <b>{{ payment.paymentDate }}</b>
+</ul>
