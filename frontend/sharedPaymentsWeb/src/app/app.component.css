@@ -7,6 +7,34 @@
 
 h2 {
     border-bottom: 1px solid #0A01A3;
+    font-size: 2.3em;
+}
+
+button {
+    font-size: 1.3em;
+    background-color: #FF0055;
+    color: white;
+    margin: 0.8em 0 0.8em 0;
+    padding: 8px 15px;
+    display: inline-block;
+    border: none;
+    border-radius: 6%;
+}
+button:hover {
+    background-color: #E20E55;
+}
+
+input, select {
+    margin: 1em;
+    font-size: 1.1em;
+}
+
+label, ul {
+    font-size: 1.3em;
+}
+
+.paymentListItem {
+    border-bottom: 2px dashed #d3d3d3;
 }
 
 #webTitle {
@@ -44,5 +72,13 @@ h2 {
 }
 #paymentPanel {
     justify-self: start;
+}
+
+.friendDebtPositive {
+    color: #7aad1b
+}
+
+.friendDebtNegative {
+    color: #E20E55
 }
 

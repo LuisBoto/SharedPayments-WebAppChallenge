@@ -16,7 +16,8 @@
     <div id="friendListPanel" class="cardPanel">
       <h2>My Friend Group</h2>
       <ul id="userList" *ngFor="let user of users">
-        <b class="friendName">{{ user.name }}</b>: <span class="friendDebt">{{ -user.debt }}€</span>
+        <b class="friendName">{{ user.name }}, debt</b>: 
+        <span [ngClass]="user.debt<=0  ? 'friendDebtPositive' : 'friendDebtNegative'">{{ -user.debt }}€</span>
       </ul>
     </div>
   </div>
@@ -29,6 +30,7 @@
         <input type="text" name="description" ngModel> <br>
         <label for="price">Amount / Price: </label>
         <input type="decimal" name="price" ngModel> <br>
+        <label for="payerId">Paid by: </label>
         <select name="payerId" ngModel>
           <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="!i">{{user.name}}</option>
         </select>
@@ -39,7 +41,7 @@
 
     <div id="paymentListPanel" class="cardPanel">
       <h2>Payment list</h2>
-      <ul id="paymentList" *ngFor="let payment of payments">
+      <ul id="paymentList" class="paymentListItem" *ngFor="let payment of payments">
         <b class="paymentDescription">{{ payment.description }}</b> <br>
         Amount: <span class="paymentPrice">{{ payment.price }}€</span> <br>
         Payed by <b class="payerName">{{ payment.payerName }}</b> on <b>{{ payment.paymentDate }}</b>
