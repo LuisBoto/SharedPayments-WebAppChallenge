@@ -1,38 +1,50 @@
-<h1>{{ title }}</h1>
+<h1 id="webTitle">{{ title }}</h1>
 
-<h2>Add friend:</h2>
-<div id="addFriend">
-  <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
-    <label for="userName">Name: </label>
-    <input type="text" name="name" ngModel>
-    <br>
-    <button type="submit"> Add friend </button>
-  </form> 
+<div id="mainContentContainer">
+
+  <div id ="friendPanel" class="mainSidePanel">
+    <div id="addFriendPanel" class="cardPanel">
+      <h2>Add friend:</h2>
+      <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
+        <label for="userName">Name: </label>
+        <input type="text" name="name" ngModel>
+        <br>
+        <button type="submit"> Add friend </button>
+      </form> 
+    </div>
+
+    <div id="friendListPanel" class="cardPanel">
+      <h2>My Friend Group</h2>
+      <ul id="userList" *ngFor="let user of users">
+        <b class="friendName">{{ user.name }}</b>: <span class="friendDebt">{{ -user.debt }}€</span>
+      </ul>
+    </div>
+  </div>
+
+  <div id ="paymentPanel" class="mainSidePanel">
+    <div id="addPaymentPanel" class="cardPanel">
+      <h2>Create new payment:</h2>
+      <form #paymentForm="ngForm" (ngSubmit)="createPayment(paymentForm)">
+        <label for="description">Payment description: </label>
+        <input type="text" name="description" ngModel> <br>
+        <label for="price">Amount / Price: </label>
+        <input type="decimal" name="price" ngModel> <br>
+        <select name="payerId" ngModel>
+          <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="!i">{{user.name}}</option>
+        </select>
+        <br><br>
+        <button type="submit"> Create new payment </button>
+      </form> 
+    </div>
+
+    <div id="paymentListPanel" class="cardPanel">
+      <h2>Payment list</h2>
+      <ul id="paymentList" *ngFor="let payment of payments">
+        <b class="paymentDescription">{{ payment.description }}</b> <br>
+        Amount: <span class="paymentPrice">{{ payment.price }}€</span> <br>
+        Payed by <b class="payerName">{{ payment.payerName }}</b> on <b>{{ payment.paymentDate }}</b>
+      </ul>
+    </div>
+  </div>
+
 </div>
-
-<h2>My Friend Group</h2>
-<ul id="userList" *ngFor="let user of users">
-  <b class="friendName">{{ user.name }}</b>: <span class="friendDebt">{{ -user.debt }}€</span>
-</ul>
-
-<h2>Create new payment:</h2>
-<div id="addPayment">
-  <form #paymentForm="ngForm" (ngSubmit)="createPayment(paymentForm)">
-    <label for="description">Payment description: </label>
-    <input type="text" name="description" ngModel> <br>
-    <label for="price">Amount / Price: </label>
-    <input type="decimal" name="price" ngModel> <br>
-    <select name="payerId" ngModel>
-      <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="!i">{{user.name}}</option>
-    </select>
-    <br><br>
-    <button type="submit"> Create new payment </button>
-  </form> 
-</div>
-
-<h2>Payment list</h2>
-<ul id="paymentList" *ngFor="let payment of payments">
-  <b class="paymentDescription">{{ payment.description }}</b> <br>
-  Amount: <span class="paymentPrice">{{ payment.price }}€</span> <br>
-  Payed by <b class="payerName">{{ payment.payerName }}</b> on <b>{{ payment.paymentDate }}</b>
-</ul>
