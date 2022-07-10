@@ -61,7 +61,7 @@ public class PaymentDto {
 	}
 
 	public Double getPrice() {
-		return price;
+		return this.price;
 	}
 
 	public void setPrice(Double price) {

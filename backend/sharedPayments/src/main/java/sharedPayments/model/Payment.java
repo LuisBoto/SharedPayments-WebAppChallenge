@@ -1,5 +1,7 @@
 package sharedPayments.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +29,7 @@ public class Payment {
 
 	@NotNull
 	@Positive
-	private double price;
+	private BigDecimal price;
 
 	@NotNull
 	private Long paymentDate;
@@ -39,7 +41,7 @@ public class Payment {
 		super();
 		this.payer = payer;
 		this.description = description;
-		this.price = price;
+		this.price = BigDecimal.valueOf(price).setScale(2);
 		this.paymentDate = paymentDate;
 	}
 	
@@ -47,7 +49,7 @@ public class Payment {
 		super();
 		this.payer = payer;
 		this.description = description;
-		this.price = price;
+		this.price = BigDecimal.valueOf(price).setScale(2);
 		this.paymentDate = System.currentTimeMillis();
 	}
 
@@ -60,11 +62,11 @@ public class Payment {
 	}
 
 	public double getPrice() {
-		return price;
+		return price.doubleValue();
 	}
 
 	public void setPrice(double price) {
-		this.price = price;
+		this.price = BigDecimal.valueOf(price).setScale(2);
 	}
 
 	public Long getPaymentDate() {
@@ -95,7 +97,7 @@ public class Payment {
 		return new PaymentDto(
 				this.payer.getId(), 
 				this.paymentDate, 
-				this.price, 
+				this.price.doubleValue(), 
 				this.description, 
 				this.id);
 	}

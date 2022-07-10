@@ -1,6 +1,8 @@
 package sharedPayments.model;
 
-import javax.persistence.Column;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +29,7 @@ public class User {
 	private String name;
 
 	@NotNull
-	@Column(precision=2, scale=2)
-	private double debt;
+	private BigDecimal debt;
 
 	public User() {
 	}
@@ -36,15 +37,19 @@ public class User {
 	public User(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
 		super();
 		this.name = name;
-		this.debt = 0;
+		this.debt = BigDecimal.valueOf(0.0).setScale(2, RoundingMode.FLOOR);
 	}
 
 	public double getDebt() {
-		return debt;
+		return debt.doubleValue();
 	}
 
 	public void setDebt(double debt) {
-		this.debt = debt;
+		this.debt = BigDecimal.valueOf(debt).setScale(2);
+	}
+	
+	public BigDecimal getBDDebt() {
+		return this.debt;
 	}
 
 	public Long getId() {

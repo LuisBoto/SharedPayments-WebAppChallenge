@@ -16,7 +16,7 @@
     <div id="friendListPanel" class="cardPanel">
       <h2>My Friend Group</h2>
       <ul id="userList" *ngFor="let user of users">
-        <b class="friendName">{{ user.name }}, debt</b>: 
+        <b class="friendName">{{ user.name }}</b>, current balance: 
         <span [ngClass]="user.debt<=0  ? 'friendDebtPositive' : 'friendDebtNegative'">{{ -user.debt }}€</span>
       </ul>
     </div>

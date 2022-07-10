@@ -1,6 +1,8 @@
 package sharedPayments.model.dto;
 
-import javax.persistence.Column;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -18,12 +20,18 @@ public class UserDto {
 	@Size(min = 1, max = 75)
 	private String name;
 	@NotNull
-	@Column(precision=2, scale=2)
-	private double debt;
+	private BigDecimal debt;
 
 	public UserDto() { }
 	
 	public UserDto(Long id, String name, double debt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
+	}
+	
+	public UserDto(Long id, String name, BigDecimal debt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -47,11 +55,11 @@ public class UserDto {
 	}
 
 	public double getDebt() {
-		return debt;
+		return debt!=null ? debt.doubleValue() : 0.0;
 	}
 
 	public void setDebt(double debt) {
-		this.debt = debt;
+		this.debt = BigDecimal.valueOf(debt).setScale(2);
 	}
 
 	public @Valid User toEntity() {
