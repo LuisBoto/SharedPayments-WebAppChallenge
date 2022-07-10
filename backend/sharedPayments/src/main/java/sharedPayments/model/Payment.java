@@ -1,6 +1,7 @@
 package sharedPayments.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class Payment {
 		super();
 		this.payer = payer;
 		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2);
+		this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR);
 		this.paymentDate = paymentDate;
 	}
 	
@@ -66,7 +67,7 @@ public class Payment {
 	}
 
 	public void setPrice(double price) {
-		this.price = BigDecimal.valueOf(price).setScale(2);
+		this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR);
 	}
 
 	public Long getPaymentDate() {

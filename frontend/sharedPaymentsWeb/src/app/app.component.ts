@@ -72,7 +72,6 @@ export class AppComponent {
   }
 
   createPayment(form: NgForm) {
-    console.log(form.value);
     this.http
       .post(
         this.apiUrl+'/payments', 

@@ -35,15 +35,12 @@ public class UserService {
 	public void updateUserDebts(Long payerId, Double price) {
 		var userList = this.getUsers();
 		BigDecimal priceBD = BigDecimal.valueOf(price), userNoBD = BigDecimal.valueOf(userList.size());
-		BigDecimal extraCents = BigDecimal.valueOf((price*100) % userRepository.count());
-		BigDecimal roundingErrorCents = extraCents, resultDebt;
-		//System.out.println(priceBD.subtract(priceBD.divide(userNoBD, 2, RoundingMode.FLOOR)));
+		BigDecimal roundingErrorCents = BigDecimal.valueOf((price*100) % userRepository.count()), resultDebt;
 		
 		for (User user : userRepository.findAll()) {
 			if (user.getId() == payerId) 
 				resultDebt = user.getBDDebt().subtract(
 						priceBD.subtract(priceBD.divide(userNoBD, 2, RoundingMode.FLOOR)));
-						//.subtract(extraCents.divide(BigDecimal.valueOf(100.0)));
 			else {
 				resultDebt = user.getBDDebt().add(
 						priceBD.divide(userNoBD, 2, RoundingMode.FLOOR));

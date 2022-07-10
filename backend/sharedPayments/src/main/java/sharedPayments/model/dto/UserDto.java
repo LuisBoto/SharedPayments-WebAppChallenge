@@ -59,7 +59,7 @@ public class UserDto {
 	}
 
 	public void setDebt(double debt) {
-		this.debt = BigDecimal.valueOf(debt).setScale(2);
+		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
 	}
 
 	public @Valid User toEntity() {
