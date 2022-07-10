@@ -1,13 +1,24 @@
 package sharedPayments.model.dto;
 
+import javax.persistence.Column;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import io.micronaut.core.annotation.Introspected;
 import sharedPayments.model.User;
 
+@Introspected
 public class UserDto {
 
 	private Long id;
+	
+	@NotEmpty(message = "Cannot be empty")
+	@Size(min = 1, max = 75)
 	private String name;
+	@NotNull
+	@Column(precision=2, scale=2)
 	private double debt;
 
 	public UserDto() { }

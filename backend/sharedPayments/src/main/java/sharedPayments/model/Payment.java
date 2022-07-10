@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import io.micronaut.core.annotation.Introspected;
-import net.bytebuddy.implementation.bind.annotation.Default;
 import sharedPayments.model.dto.PaymentDto;
 
 @Entity

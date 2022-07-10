@@ -1,16 +1,25 @@
 package sharedPayments.model.dto;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
+import io.micronaut.core.annotation.Introspected;
 import sharedPayments.model.Payment;
 import sharedPayments.model.User;
 
+@Introspected
 public class PaymentDto {
 
+	@NotNull
 	private Long payerId;
+	
 	private Long paymentDate;
+	
+	@NotNull
 	private Double price;
+	
 	private String description;
+	
 	private Long id;
 
 	public PaymentDto() {

@@ -41,7 +41,7 @@ public class SharedPaymentsRestController {
     
     @Post("/users")
     @Produces(MediaType.APPLICATION_JSON)
-    public HttpResponse<UserDto> createUser(@Body UserDto newUser) {
+    public HttpResponse<UserDto> createUser(@Body @Valid UserDto newUser) {
     	return HttpResponse
     			.status(HttpStatus.CREATED)
     			.body(
@@ -60,7 +60,7 @@ public class SharedPaymentsRestController {
     @Post("/payments")
     @Produces(MediaType.APPLICATION_JSON) 
     @Transactional
-    public HttpResponse<PaymentDto> createPayment(@Body PaymentDto newPayment) {
+    public HttpResponse<PaymentDto> createPayment(@Body @Valid PaymentDto newPayment) {
     	var result = HttpResponse
         		.status(HttpStatus.OK)
         		.body(

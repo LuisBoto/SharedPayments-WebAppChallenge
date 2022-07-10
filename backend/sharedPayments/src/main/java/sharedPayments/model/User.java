@@ -27,7 +27,7 @@ public class User {
 	private String name;
 
 	@NotNull
-	@Column(scale=2)
+	@Column(precision=2, scale=2)
 	private double debt;
 
 	public User() {
