@@ -36,6 +36,7 @@ services:
       - MYSQL_PASSWORD=password
     expose:
       - "3306"
+    restart: always
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost:3306"]
         interval: 30s
