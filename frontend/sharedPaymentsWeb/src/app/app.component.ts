@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 
@@ -10,7 +11,7 @@ import { NgForm } from '@angular/forms';
 
 export class AppComponent {
   title = "Shared Payments WebApp";
-  apiUrl = "http://localhost:8080/api/v1";
+  apiUrl = environment.apiUrl;
   httpOptions = {
     headers : new HttpHeaders({
     "Access-Control-Allow-Origin": "*",
