@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { environment } from './../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +21,18 @@ export class AppComponent {
   users: User[] = [];
   payments: Payment[] = [];
 
+  paymentForm: FormGroup;
+
   constructor(private http: HttpClient) {
     this.http = http;
     this.readUserList();
     this.readPaymentList();
+
+    this.paymentForm = new FormGroup({
+      description: new FormControl('', [Validators.minLength(3), Validators.required]),
+      price: new FormControl('', [Validators.minLength(1), Validators.min(0.01), Validators.required]),
+      payerId: new FormControl('', Validators.required)
+    });  
   }
 
   readUserList() {
@@ -72,16 +80,21 @@ export class AppComponent {
       });
   }
 
-  createPayment(form: NgForm) {
+  createPayment() {
+    if (!this.paymentForm.valid) {
+      this.paymentForm.markAllAsTouched();
+      return;
+    }
+    console.log(this.paymentForm.value);
     this.http
       .post(
         this.apiUrl+'/payments', 
-        JSON.stringify(form.value), 
+        JSON.stringify(this.paymentForm.value), 
         this.httpOptions
       )
       .subscribe({
         next: (response) => {
-          form.reset();
+          this.paymentForm.reset();
           this.readUserList();
           this.readPaymentList();
         },

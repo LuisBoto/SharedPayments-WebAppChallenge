@@ -63,7 +63,7 @@ label, ul {
 }
 
 .mainSidePanel {
-    width: 70%;
+    width: 90%;
     margin: 0 1em 0 1em;
 }
 
@@ -78,7 +78,7 @@ label, ul {
     color: #7aad1b
 }
 
-.friendDebtNegative {
+.friendDebtNegative, .alert {
     color: #E20E55
 }
 

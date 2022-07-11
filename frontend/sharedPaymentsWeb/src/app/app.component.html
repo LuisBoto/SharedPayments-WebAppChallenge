@@ -9,6 +9,7 @@
         <label for="userName">Name: </label>
         <input type="text" name="name" ngModel>
         <br>
+
         <button type="submit"> Add friend </button>
       </form> 
     </div>
@@ -25,15 +26,43 @@
   <div id ="paymentPanel" class="mainSidePanel">
     <div id="addPaymentPanel" class="cardPanel">
       <h2>Create new payment:</h2>
-      <form #paymentForm="ngForm" (ngSubmit)="createPayment(paymentForm)">
+      <form [formGroup]="paymentForm" (ngSubmit)="createPayment()">
+
         <label for="description">Payment description: </label>
-        <input type="text" name="description" ngModel> <br>
+        <input type="text" formControlName="description"> 
+        <div *ngIf="paymentForm.get('description')?.touched" class="errorMsgs, alert">
+          <div *ngIf="paymentForm.get('description')?.hasError('required')">
+            Description is required.
+          </div>
+          <div *ngIf="paymentForm.get('description')?.hasError('minlength')">
+            Description must be at least 3 characters long.
+          </div>
+        </div>
+        <br>
+
         <label for="price">Amount / Price: </label>
-        <input type="decimal" name="price" ngModel> <br>
+        <input type="number" min="0.01" step="any" formControlName="price"> 
+        <div *ngIf="paymentForm.get('price')?.touched" class="errorMsgs, alert">
+          <div *ngIf="paymentForm.get('price')?.hasError('required')">
+            Price is required.
+          </div>
+          <div *ngIf="paymentForm.get('price')?.hasError('min')">
+            Price must be more than 0.
+          </div>
+        </div>
+        <br>
+
         <label for="payerId">Paid by: </label>
-        <select name="payerId" ngModel>
-          <option *ngFor="let user of users; let i = index" [ngValue]="user.id" [attr.selected]="!i">{{user.name}}</option>
+        <select formControlName="payerId">
+          <option hidden selected="true" value="">Select who's paying...</option>
+          <option *ngFor="let user of users; let i = index" [ngValue]="user.id">{{user.name}}</option>
         </select>
+        <div *ngIf="paymentForm.get('payerId')?.touched" class="errorMsgs, alert">
+          <div *ngIf="paymentForm.get('payerId')?.hasError('required')">
+            Payer user is required.
+          </div>
+        </div>
+
         <br><br>
         <button type="submit"> Create new payment </button>
       </form> 
