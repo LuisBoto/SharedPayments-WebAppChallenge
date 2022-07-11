@@ -5,9 +5,17 @@
   <div id ="friendPanel" class="mainSidePanel">
     <div id="addFriendPanel" class="cardPanel">
       <h2>Add friend:</h2>
-      <form #userForm="ngForm" (ngSubmit)="createUser(userForm)">
-        <label for="userName">Name: </label>
-        <input type="text" name="name" ngModel>
+      <form [formGroup]="newUserForm" (ngSubmit)="createUser()">
+        <label for="name">Name: </label>
+        <input type="text" formControlName="name">
+        <div *ngIf="newUserForm.get('name')?.touched" class="errorMsgs, alert">
+          <div *ngIf="newUserForm.get('name')?.hasError('required')">
+            Friend name is required.
+          </div>
+          <div *ngIf="newUserForm.get('name')?.hasError('maxlength')">
+            Friend name cannot be over 75 characters.
+          </div>
+        </div>
         <br>
 
         <button type="submit"> Add friend </button>

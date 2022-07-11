@@ -22,12 +22,16 @@ export class AppComponent {
   payments: Payment[] = [];
 
   paymentForm: FormGroup;
+  newUserForm: FormGroup;
 
   constructor(private http: HttpClient) {
     this.http = http;
     this.readUserList();
     this.readPaymentList();
 
+    this.newUserForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(75)])
+    });
     this.paymentForm = new FormGroup({
       description: new FormControl('', [Validators.minLength(3), Validators.required]),
       price: new FormControl('', [Validators.minLength(1), Validators.min(0.01), Validators.required]),
@@ -64,16 +68,21 @@ export class AppComponent {
     });
   }
 
-  createUser(form: NgForm) {
+  createUser() {
+    if (!this.newUserForm.valid) {
+      this.newUserForm.markAllAsTouched();
+      return;
+    }
+
     this.http
       .post(
         this.apiUrl+'/users', 
-        JSON.stringify(form.value), 
+        JSON.stringify(this.newUserForm.value), 
         this.httpOptions
       )
       .subscribe({
         next: (response) => {
-          form.reset();
+          this.newUserForm.reset();
           this.users.push(response as User);
         },
         error: (error) => console.log(error),
