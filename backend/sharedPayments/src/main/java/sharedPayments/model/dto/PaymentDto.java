@@ -2,6 +2,7 @@ package sharedPayments.model.dto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import io.micronaut.core.annotation.Introspected;
 import sharedPayments.model.Payment;
@@ -16,6 +17,7 @@ public class PaymentDto {
 	private Long paymentDate;
 	
 	@NotNull
+	@Positive
 	private Double price;
 	
 	private String description;

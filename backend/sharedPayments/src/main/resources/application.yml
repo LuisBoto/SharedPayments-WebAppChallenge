@@ -16,7 +16,7 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:mysql://${DATABASE_URL:localhost:3306}/${DATABASE_NAME:test}
+    url: jdbc:mysql://${DATABASE_URL:`localhost:3306`}/${DATABASE_NAME:test}
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:password}
