@@ -82,3 +82,6 @@ label, ul {
     color: #E20E55
 }
 
+.no-item:not(:first-child) {
+    display:none;
+}
