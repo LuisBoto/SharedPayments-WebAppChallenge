@@ -103,7 +103,9 @@ export class AppComponent {
       )
       .subscribe({
         next: (response) => {
-          this.paymentForm.reset();
+          this.paymentForm.reset({
+            payerId: ''
+          });
           this.readUserList();
           this.readPaymentList();
         },
