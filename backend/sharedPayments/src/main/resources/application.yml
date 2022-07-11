@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: sharedPayments
+  server:
+    port: ${SERVER_PORT:8080}
     
 netty:
   default:
@@ -14,10 +16,10 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:mysql://localhost:3306/test
+    url: jdbc:mysql://${DATABASE_URL:localhost:3306}/${DATABASE_NAME:test}
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password: "password"
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:password}
     dialect: MySQL
 
 jpa:
