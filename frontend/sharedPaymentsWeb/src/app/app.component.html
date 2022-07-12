@@ -8,7 +8,7 @@
       <form [formGroup]="newUserForm" (ngSubmit)="createUser()">
         <label for="name">Name: </label>
         <input type="text" formControlName="name">
-        <div *ngIf="newUserForm.get('name')?.touched" class="errorMsgs, alert">
+        <div *ngIf="newUserForm.get('name')?.touched  && newUserForm.get('name')?.invalid" class="errorMsgs, alert">
           <div *ngIf="newUserForm.get('name')?.hasError('required')">
             Friend name is required.
           </div>
@@ -41,7 +41,7 @@
 
         <label for="description">Payment description: </label>
         <input type="text" formControlName="description"> 
-        <div *ngIf="paymentForm.get('description')?.touched" class="errorMsgs, alert">
+        <div *ngIf="paymentForm.get('description')?.touched && paymentForm.get('description')?.invalid" class="errorMsgs, alert">
           <div *ngIf="paymentForm.get('description')?.hasError('required')">
             Description is required.
           </div>
@@ -50,10 +50,10 @@
           </div>
         </div>
         <br>
-
+        
         <label for="price">Amount / Price: </label>
         <input type="number" min="0.01" step="any" formControlName="price"> 
-        <div *ngIf="paymentForm.get('price')?.touched" class="errorMsgs, alert">
+        <div *ngIf="paymentForm.get('price')?.touched && paymentForm.get('price')?.invalid" class="errorMsgs, alert">
           <div *ngIf="paymentForm.get('price')?.hasError('required')">
             Price is required.
           </div>
@@ -68,13 +68,13 @@
           <option hidden selected="true" value="">Select who's paying...</option>
           <option *ngFor="let user of users; let i = index" [ngValue]="user.id">{{user.name}}</option>
         </select>
-        <div *ngIf="paymentForm.get('payerId')?.touched" class="errorMsgs, alert">
+        <div *ngIf="paymentForm.get('payerId')?.touched && paymentForm.get('payerId')?.invalid" class="errorMsgs, alert">
           <div *ngIf="paymentForm.get('payerId')?.hasError('required')">
             Payer user is required.
           </div>
         </div>
-
         <br><br>
+
         <button type="submit"> Create new payment </button>
       </form> 
     </div>
