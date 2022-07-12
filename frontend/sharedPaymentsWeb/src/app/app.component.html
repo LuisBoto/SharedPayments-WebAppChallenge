@@ -4,7 +4,7 @@
 
   <div id ="friendPanel" class="mainSidePanel">
     <div id="addFriendPanel" class="cardPanel">
-      <h2>Add friend:</h2>
+      <h2>Add a friend:</h2>
       <form [formGroup]="newUserForm" (ngSubmit)="createUser()">
         <label for="name">Name: </label>
         <input type="text" formControlName="name">
@@ -23,7 +23,7 @@
     </div>
 
     <div id="friendListPanel" class="cardPanel">
-      <h2>My Friend Group</h2>
+      <h2>My friend group</h2>
       <div>
         <ul id="userList" *ngFor="let user of users">
           <b class="friendName">{{ user.name }}</b>, current balance: 
