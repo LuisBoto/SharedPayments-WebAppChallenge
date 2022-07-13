@@ -39,11 +39,12 @@ public class DebtCalculator {
 		for (int i = 0; i < usersOwedMoney.size(); i++) {
 			this.userOwedMoney = usersOwedMoney.get(i);
 			for (int j=0; j < usersOwingMoney.size() && userOwedMoney.getDebt() < 0; j++) {
+				if (usersOwingMoney.get(j).getDebt() == 0)
+					continue;
 				this.userOwingMoney = usersOwingMoney.get(j);
 				this.compensateDebt();	
 				usersOwingMoney.set(j, userOwingMoney);
 			}
-			for (UserDto user : usersOwingMoney) if (user.getDebt()==0) usersOwingMoney.remove(user);
 		}
 		return this.movements;
 	}

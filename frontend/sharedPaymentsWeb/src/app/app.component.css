@@ -33,7 +33,7 @@ label, ul {
     font-size: 1.3em;
 }
 
-.paymentListItem {
+.paymentListItem, .movementListItem {
     border-bottom: 2px dashed #d3d3d3;
 }
 
@@ -75,11 +75,13 @@ label, ul {
 }
 
 .friendDebtPositive {
-    color: #7aad1b
+    color: #7aad1b;
+    font-weight: bold;
 }
 
 .friendDebtNegative, .alert {
-    color: #E20E55
+    color: #E20E55;
+    font-weight: bold;
 }
 
 .no-item:not(:first-child) {

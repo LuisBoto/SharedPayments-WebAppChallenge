@@ -32,6 +32,18 @@
         <b class="no-item">No one yet, start by adding some friends!</b>
       </div>
     </div>
+
+    <div id="movementsListPanel" class="cardPanel">
+      <h2>Money movements to make it fair</h2>
+      <div>
+        <ul id="movementList" class="movementListItem" *ngFor="let movement of movements">
+          > <b class="friendName">{{ movement.userOwingMoneyId }}</b> pays  
+          <span class="friendDebtPositive">{{ movement.amount }}€</span> to 
+          <b class="friendName">{{ movement.userOwedMoneyId }}</b>.
+        </ul>
+        <b class="no-item">No money transfers necessary.</b>
+      </div>
+    </div>
   </div>
 
   <div id ="paymentPanel" class="mainSidePanel">

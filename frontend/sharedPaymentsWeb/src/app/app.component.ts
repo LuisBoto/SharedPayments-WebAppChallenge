@@ -12,6 +12,9 @@ import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 export class AppComponent {
   title = "Shared Payments WebApp";
   apiUrl = environment.apiUrl;
+  usersEndpoint = "/users";
+  paymentsEndpoint = "/payments";
+  movementsEndpoint = "/movements";
   httpOptions = {
     headers : new HttpHeaders({
     "Access-Control-Allow-Origin": "*",
@@ -20,6 +23,7 @@ export class AppComponent {
   };
   users: User[] = [];
   payments: Payment[] = [];
+  movements: Movement[] = [];
 
   paymentForm: FormGroup;
   newUserForm: FormGroup;
@@ -42,12 +46,28 @@ export class AppComponent {
   readUserList() {
     this.http
     .get(
-      this.apiUrl+'/users', 
+      this.apiUrl+this.usersEndpoint, 
       this.httpOptions
     )
     .subscribe({
       next: (response) => {
         this.users = (response as []);
+        this.readMovementList();
+      },
+      error: (error) => console.log(error),
+    });
+  }
+
+  readMovementList() {
+    this.http
+    .get(
+      this.apiUrl+this.movementsEndpoint, 
+      this.httpOptions
+    )
+    .subscribe({
+      next: (response) => {
+        this.movements = (response as []);
+        this.formatMovements();
       },
       error: (error) => console.log(error),
     });
@@ -56,7 +76,7 @@ export class AppComponent {
   readPaymentList() {
     this.http
     .get(
-      this.apiUrl+'/payments', 
+      this.apiUrl+this.paymentsEndpoint, 
       this.httpOptions
     )
     .subscribe({
@@ -76,7 +96,7 @@ export class AppComponent {
 
     this.http
       .post(
-        this.apiUrl+'/users', 
+        this.apiUrl+this.usersEndpoint, 
         JSON.stringify(this.newUserForm.value), 
         this.httpOptions
       )
@@ -97,7 +117,7 @@ export class AppComponent {
     console.log(this.paymentForm.value);
     this.http
       .post(
-        this.apiUrl+'/payments', 
+        this.apiUrl+this.paymentsEndpoint, 
         JSON.stringify(this.paymentForm.value), 
         this.httpOptions
       )
@@ -119,6 +139,13 @@ export class AppComponent {
       this.payments[i].payerName = this.users.find(user => user.id == this.payments[i].payerId)?.name;
     }
   }
+
+  formatMovements() {
+    for (let i = 0; i< this.movements.length; i++) {
+      this.movements[i].userOwedMoneyId = this.users.find(user => user.id == this.movements[i].userOwedMoneyId)?.name;
+      this.movements[i].userOwingMoneyId = this.users.find(user => user.id == this.movements[i].userOwingMoneyId)?.name;
+    }
+  }
 }
 
 export class User {
@@ -134,4 +161,10 @@ export class Payment {
   description!: string;
   id!: string;
   payerName!: string | undefined;
+}
+
+export class Movement {
+  userOwedMoneyId!: string | undefined;
+  amount!: number;
+  userOwingMoneyId!: string | undefined;
 }
