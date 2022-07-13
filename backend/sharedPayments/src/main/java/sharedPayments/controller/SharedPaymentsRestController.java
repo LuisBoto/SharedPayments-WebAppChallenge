@@ -15,6 +15,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.validation.Validated;
 import jakarta.inject.Inject;
+import sharedPayments.model.dto.MoneyMovementDto;
 import sharedPayments.model.dto.PaymentDto;
 import sharedPayments.model.dto.UserDto;
 import sharedPayments.service.PaymentService;
@@ -68,6 +69,15 @@ public class SharedPaymentsRestController {
         						userService.getUser(newPayment.getPayerId())));
     	this.userService.updateUserDebts(newPayment.getPayerId(), newPayment.getPrice());
     	return result;
+    }
+    
+    @Get("/movements")
+    @Produces(MediaType.APPLICATION_JSON) 
+    public HttpResponse<List<MoneyMovementDto>> getMoneyMovementsToCompensateDebt() {
+    	return HttpResponse
+    			.status(HttpStatus.OK)
+    			.body(
+    					this.userService.getMoneyMovementsToCompensateDebt());
     }
         
 }

@@ -57,6 +57,10 @@ public class UserDto {
 	public double getDebt() {
 		return debt!=null ? debt.doubleValue() : 0.0;
 	}
+	
+	public BigDecimal getBDDebt() {
+		return this.debt;
+	}
 
 	public void setDebt(double debt) {
 		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
