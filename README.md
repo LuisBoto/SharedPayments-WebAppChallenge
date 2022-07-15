@@ -1,4 +1,4 @@
-# Shared Payments Webapp tech challenge
+# Shared Payments WebApp tech challenge
 
 This project consists of a simple web application designed to share expenses between friend groups. It was created as part of a week long challenge to build a whole application, both frontend and backend, using technologies and frameworks that i had never used up until that point nor was i familiar with beforehand.
 
@@ -26,4 +26,4 @@ Built using a single Angular component, it features reactive angular forms with 
 
 Both the back and front ends have been supplied with Dockerfiles to allow packaging as Docker container images, which can be built locally using the provided [building script](buildDockerImages.sh) by executing it directly from the root of this repository. 
 
-Along with those, a [docker-compose](docker-compose.yml) file has been created to make deployment of both containers and the required database more convenient.
+Along with those, a [docker-compose](docker-compose.yml) file has been created to make deployment of both containers and the required database more convenient. **By default this file deploys the front end on port 4200**.
