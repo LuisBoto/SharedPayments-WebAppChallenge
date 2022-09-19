@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -57,6 +58,20 @@ public class PaymentServiceTest {
 				));
 
 		assertTrue(this.paymentService.getPayments().size() == 2);
+	}
+	
+	@Test
+	void givenSeveralPayments_WhenGetAllPayments_ThenPaymentsAreSortedByDate() {
+		when(this.paymentRepository.findAll()).thenReturn( Arrays.asList(
+				new Payment(new User(), "Description", 500, 100000L),
+				new Payment(new User(), "Description 2", 235, 500000L),
+				new Payment(new User(), "Description 3", 800, 3000L)
+				));
+		
+		List<PaymentDto> payments = this.paymentService.getPayments();
+		assertEquals(3000L, payments.get(2).getPaymentDate());
+		assertEquals(100000L, payments.get(1).getPaymentDate());
+		assertEquals(500000L, payments.get(0).getPaymentDate());
 	}
 	
 	@Test
