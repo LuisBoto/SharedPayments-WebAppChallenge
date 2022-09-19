@@ -68,11 +68,17 @@ public class DebtCalculator {
 	}
 	
 	public BigDecimal calculatePayerDebt(BigDecimal payerUserCurrentDebt, BigDecimal price, BigDecimal userNumber) {
+		if (userNumber.equals(BigDecimal.ZERO))
+			return payerUserCurrentDebt.setScale(2);
+		
 		return payerUserCurrentDebt.subtract(
 				price.subtract(price.divide(userNumber, 2, RoundingMode.FLOOR)));
 	}
 	
 	public BigDecimal calculateOwerDebt(BigDecimal owerCurrentDebt, BigDecimal price, BigDecimal userNumber, boolean addRoundignErrorCent) {
+		if (userNumber.equals(BigDecimal.ZERO))
+			return owerCurrentDebt.setScale(2);
+		
 		BigDecimal resultDebt = owerCurrentDebt.add(
 				price.divide(userNumber, 2, RoundingMode.FLOOR));
 		if (addRoundignErrorCent) 
