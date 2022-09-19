@@ -158,7 +158,7 @@ public class DebtCalculatorTest {
 		List<UserDto> users = Arrays.asList(ower1, payer, ower2);
 		List<MoneyMovementDto> movements = this.calculator.calculateCompensationMovements(users);
 		assertTrue(movements.size()==2);
-		assertEquals("200.00", movements.get(0).getAmount().add(movements.get(1).getAmount()));
+		assertEquals("200.00", movements.get(0).getAmount().add(movements.get(1).getAmount()).toString());
 	}
 
 }
