@@ -1,21 +1,9 @@
 package sharedPayments;
 
-import io.micronaut.runtime.EmbeddedApplication;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.platform.suite.api.SelectClasses;
 
-import jakarta.inject.Inject;
-
-@MicronautTest
+@SelectClasses({ PaymentServiceTest.class })
 class SharedPaymentsTest {
 
-    @Inject
-    EmbeddedApplication<?> application;
-
-    @Test
-    void testItWorks() {
-        Assertions.assertTrue(application.isRunning());
-    }
 
 }
