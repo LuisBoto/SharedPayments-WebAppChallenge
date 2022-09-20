@@ -30,7 +30,7 @@ public class UserServiceTest {
 		for (int i=0; i<debts.length; i++) {
 			User user = new User("Name");
 			user.setDebt(debts[i]);
-			user.setId((long) i);
+			user.setId((long) i+1);
 			users.add(user);
 		}
 		
@@ -87,18 +87,27 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	void givenOneUser_WhenUpdateUserDebts_ThenDebtIsFullPriceAmount() {
+	void givenOneUser_WhenUpdateUserDebts_ThenDebtIsUnchanged() {
 		this.setUpMockRepositoryUsersWithDebts(100D);
 		this.userService.updateUserDebts(1L, 300D);
-		assertEquals("400.00", this.userRepository.findById(1L).get().getBDDebt().toString());
+		assertEquals("100.00", this.userRepository.findById(1L).get().getBDDebt().toString());
 	}
 	
 	@Test
 	void givenTwoUsers_WhenUpdateUserDebts_ThenDebtIsDistributed() {
 		this.setUpMockRepositoryUsersWithDebts(-100D, 200D);
-		this.userService.updateUserDebts(1L, 80D);
+		this.userService.updateUserDebts(2L, 80D);
 		assertEquals("-60.00", this.userRepository.findById(1L).get().getBDDebt().toString());
 		assertEquals("160.00", this.userRepository.findById(2L).get().getBDDebt().toString());
+	}
+	
+	@Test
+	void givenThreeUsers_WhenUpdateUserDebtsWithIndivisiblePrice_ThenRemainderIsAssigned() {
+		this.setUpMockRepositoryUsersWithDebts(0D, 0D, 0D);
+		this.userService.updateUserDebts(2L, 100D);
+		assertEquals("33.34", this.userRepository.findById(1L).get().getBDDebt().toString());
+		assertEquals("-66.67", this.userRepository.findById(2L).get().getBDDebt().toString());
+		assertEquals("33.33", this.userRepository.findById(3L).get().getBDDebt().toString());
 	}
 
 }
