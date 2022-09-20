@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import sharedPayments.model.User;
 import sharedPayments.model.dto.MoneyMovementDto;
@@ -16,10 +15,13 @@ import sharedPayments.repository.UserRepository;
 @Singleton
 public class UserService {
 	
-	@Inject
 	private UserRepository userRepository;
 
-    public List<UserDto> getUsers() {
+    public UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
+	public List<UserDto> getUsers() {
     	List<UserDto> result = new ArrayList<UserDto>();
     	userRepository.findAll().forEach(user -> result.add(user.toDto()));
     	return result;
@@ -34,11 +36,14 @@ public class UserService {
 	}
 
 	public void updateUserDebts(Long payerId, Double price) {
+		int userCount = (int) userRepository.count();
+		if (userCount <= 0) return;
+		
 		DebtCalculator debtCalculator = new DebtCalculator();
 		boolean addRoundingErrorCent;
 		BigDecimal priceBD = BigDecimal.valueOf(price);
 		BigDecimal userNumberBD = BigDecimal.valueOf(this.getUsers().size());
-		BigDecimal roundingErrorCents = BigDecimal.valueOf((price*100) % userRepository.count()), resultDebt;
+		BigDecimal roundingErrorCents = BigDecimal.valueOf((price*100) % userCount), resultDebt;
 		
 		for (User user : userRepository.findAll()) {
 			if (user.getId() == payerId) 
