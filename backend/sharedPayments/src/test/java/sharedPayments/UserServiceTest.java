@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,6 +83,7 @@ public class UserServiceTest {
 		this.setUpMockRepositoryUsersWithDebts();
 		this.userService.updateUserDebts(1L, 100D);
 		verify(this.userRepository, times(1)).count();
+		verify(this.userRepository, never()).save(any());
 		
 	}
 	
