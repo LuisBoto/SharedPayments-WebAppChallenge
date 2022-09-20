@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
@@ -63,6 +65,7 @@ public class PaymentServiceTest {
 		
 		PaymentDto createdPayment = this.paymentService.createPayment(paymentDto, Optional.of(user));
 		assertTrue(paymentDto.equals(createdPayment));
+		verify(this.paymentRepository, times(1)).save(any());
 	}
 	
 	@Test

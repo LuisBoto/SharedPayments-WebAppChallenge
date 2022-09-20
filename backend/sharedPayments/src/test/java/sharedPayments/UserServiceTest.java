@@ -76,6 +76,7 @@ public class UserServiceTest {
 		
 		UserDto createdUser = this.userService.createUser(userDto);
 		assertTrue(userDto.equals(createdUser));
+		verify(this.userRepository, times(1)).save(any());
 	}
 	
 	@Test
@@ -108,6 +109,17 @@ public class UserServiceTest {
 		assertEquals("33.34", this.userRepository.findById(1L).get().getBDDebt().toString());
 		assertEquals("-66.67", this.userRepository.findById(2L).get().getBDDebt().toString());
 		assertEquals("33.33", this.userRepository.findById(3L).get().getBDDebt().toString());
+	}
+	
+	@Test
+	void givenFiveUsers_WhenUpdateUserDebtsWithIndivisibleDecimalPrice_ThenRemainderIsAssigned() {
+		this.setUpMockRepositoryUsersWithDebts(0D, 0D, 0D, 0D, 0D);
+		this.userService.updateUserDebts(5L, 100.03D);
+		assertEquals("20.01", this.userRepository.findById(1L).get().getBDDebt().toString());
+		assertEquals("20.01", this.userRepository.findById(2L).get().getBDDebt().toString());
+		assertEquals("20.01", this.userRepository.findById(3L).get().getBDDebt().toString());
+		assertEquals("20.00", this.userRepository.findById(4L).get().getBDDebt().toString());
+		assertEquals("-80.03", this.userRepository.findById(5L).get().getBDDebt().toString());
 	}
 
 }
