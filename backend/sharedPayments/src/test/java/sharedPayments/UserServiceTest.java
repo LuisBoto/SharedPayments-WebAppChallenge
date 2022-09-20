@@ -66,8 +66,6 @@ public class UserServiceTest {
 	void givenNewValidUser_WhenCreateUser_ThenUserIsSaved() {
 		UserDto userDto = new UserDto(2L, "Marcos", 50);
 
-		User user = new User();
-		user.setId(2L);
 		when(this.userRepository.save(any(User.class))).then(call -> {
 			User result = userDto.toEntity();
 			result.setId(2L);
@@ -100,6 +98,14 @@ public class UserServiceTest {
 		this.userService.updateUserDebts(2L, 80D);
 		assertEquals("-60.00", this.userRepository.findById(1L).get().getBDDebt().toString());
 		assertEquals("160.00", this.userRepository.findById(2L).get().getBDDebt().toString());
+	}
+	
+	@Test
+	void givenTwoUsers_WhenUpdateUserDebtsWithBigPrice_ThenDebtsProportionallyReverse() {
+		this.setUpMockRepositoryUsersWithDebts(-45.60, 51.99);
+		this.userService.updateUserDebts(2L, 149.77);
+		assertEquals("29.29", this.userRepository.findById(1L).get().getBDDebt().toString());
+		assertEquals("-22.90", this.userRepository.findById(2L).get().getBDDebt().toString());
 	}
 	
 	@Test
