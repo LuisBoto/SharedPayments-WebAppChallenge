@@ -4,7 +4,7 @@ WORKDIR /backend/sharedPayments
 COPY sharedPayments/pom.xml /backend/sharedPayments
 RUN mvn -B clean verify --fail-never
 COPY sharedPayments/src /backend/sharedPayments/src
-RUN mvn -B -DskipTests=true package
+RUN mvn -B package
 
 #########################################################
 FROM openjdk:11-jdk-slim
