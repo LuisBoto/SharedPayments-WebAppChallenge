@@ -3,7 +3,6 @@ package sharedPayments.integration;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +22,14 @@ import org.testcontainers.utility.DockerImageName;
 @Testcontainers
 public class RepositoryIT {
 	
+	private static String MYSQL_USERNAME = "root";
+	private static String MYSQL_PASSWORD = "password";
+	
 	@Container
 	private static MySQLContainer<?> mySQL = new MySQLContainer<>(DockerImageName.parse("mysql:8"))
 			.withExposedPorts(3306)
-			.withEnv("MYSQL_ROOT_PASSWORD", "password")
-			.withEnv("MYSQL_DATABASE", "test")
-			.withEnv("MYSQL_USER", "admin")
-			.withEnv("MYSQL_PASSWORD", "password");
+			.withEnv("MYSQL_ROOT_PASSWORD", MYSQL_PASSWORD)
+			.withDatabaseName("test");
 	
 	private Map<String, String> dbConfig = new HashMap<String, String>();
 	
@@ -41,9 +41,9 @@ public class RepositoryIT {
 	@BeforeEach
 	void resetDB() {
 		this.dbConfig.put("url", mySQL.getJdbcUrl());
-		this.dbConfig.put("username", mySQL.getUsername());
-		this.dbConfig.put("password", mySQL.getPassword());
-		QueryEnum.EMPTY_DATABASE.execute(mySQL.getJdbcDriverInstance(), dbConfig);
+		this.dbConfig.put("username", MYSQL_USERNAME);
+		this.dbConfig.put("password", MYSQL_PASSWORD);
+		QueryEnum.EMPTY_DATABASE.execute(mySQL, dbConfig);
 	}
 	
 	@AfterAll

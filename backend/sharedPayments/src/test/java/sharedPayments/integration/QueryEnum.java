@@ -1,13 +1,13 @@
 package sharedPayments.integration;
 
-import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.Properties;
+
+import org.testcontainers.containers.MySQLContainer;
 
 public enum QueryEnum {
 	
-	EMPTY_DATABASE("drop table User, Payment");
+	EMPTY_DATABASE("drop table if exists User, Payment");
 	
 	private String query;
 	
@@ -15,11 +15,9 @@ public enum QueryEnum {
 		this.query = query;
 	}
 	
-	public void execute(Driver driver, Map<String, String> dbConfig) {
-		var properties = new Properties();
-		properties.put("username", dbConfig.get("username"));
-		properties.put("password", dbConfig.get("password"));
-		try(var connection = driver.connect(dbConfig.get("url"), properties)) {
+	public void execute(MySQLContainer<?> mySQL, Map<String, String> dbConfig) {		
+		try(var connection = mySQL.createConnection(
+				String.format("?user=?s&password=?s", dbConfig.get("username"), dbConfig.get("password")))) {
 			var preparedStatement = connection.prepareStatement(this.query);
 			preparedStatement.execute();
 			preparedStatement.close();
