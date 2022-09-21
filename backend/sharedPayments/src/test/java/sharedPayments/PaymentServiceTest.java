@@ -2,10 +2,8 @@ package sharedPayments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -13,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,13 +27,17 @@ public class PaymentServiceTest {
 	private PaymentService paymentService = new PaymentService(this.paymentRepository);
 	
 	@Test
-	void givenTwoPayments_WhenGetAllPayments_ThenSizeIsTwo() {
-		when(this.paymentRepository.findAll()).thenReturn( Arrays.asList(
-				new Payment(new User(), "Description", 500),
-				new Payment(new User(), "Description 2", 235)
-				));
+	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturned() {
+		User payer = new User("Manola");
+		List<Payment> payments = Arrays.asList(
+				new Payment(payer, "Description", 500),
+				new Payment(payer, "Description 2", 235)
+				);
+		when(this.paymentRepository.findAll()).thenReturn(payments);
 
-		assertTrue(this.paymentService.getPayments().size() == 2);
+		assertEquals(
+				payments.stream().map(payment -> payment.toDto()).collect(Collectors.toList()), 
+				this.paymentService.getPayments());
 	}
 	
 	@Test
@@ -64,8 +67,8 @@ public class PaymentServiceTest {
 		});
 		
 		PaymentDto createdPayment = this.paymentService.createPayment(paymentDto, Optional.of(user));
-		assertTrue(paymentDto.equals(createdPayment));
-		verify(this.paymentRepository, times(1)).save(any());
+		assertEquals(paymentDto, createdPayment);
+		verify(this.paymentRepository).save(any());
 	}
 	
 	@Test

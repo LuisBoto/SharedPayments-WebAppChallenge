@@ -1,7 +1,6 @@
 package sharedPayments;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -58,13 +58,16 @@ public class UserServiceTest {
 	}
 	
 	@Test
-	void givenTwoUsers_WhenGetAllUsers_ThenSizeIsTwo() {
-		when(this.userRepository.findAll()).thenReturn( Arrays.asList(
+	void givenTwoUsers_WhenGetAllUsers_ThenAllUsersAreReturned() {
+		List<User> users = Arrays.asList(
 				new User(),
 				new User()
-				));
+				);
+		when(this.userRepository.findAll()).thenReturn(users);
 
-		assertTrue(this.userService.getUsers().size() == 2);
+		assertEquals(
+				users.stream().map(user -> user.toDto()).collect(Collectors.toList()), 
+				this.userService.getUsers());
 	}
 	
 	@Test
@@ -78,8 +81,8 @@ public class UserServiceTest {
 		});
 		
 		UserDto createdUser = this.userService.createUser(userDto);
-		assertTrue(userDto.equals(createdUser));
-		verify(this.userRepository, times(1)).save(any());
+		assertEquals(userDto, createdUser);
+		verify(this.userRepository).save(any());
 	}
 	
 	@Test
