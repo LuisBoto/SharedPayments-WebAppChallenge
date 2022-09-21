@@ -1,5 +1,7 @@
 package sharedPayments;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,31 +28,21 @@ public class PaymentServiceTest {
 	private PaymentService paymentService = new PaymentService(this.paymentRepository);
 	
 	@Test
-	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturned() {
+	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturnedAndSorted() {
 		User payer = new User("Manola");
 		List<Payment> payments = Arrays.asList(
-				new Payment(payer, "Description", 500),
-				new Payment(payer, "Description 2", 235)
+				new Payment(payer, "Description", 500, 100000L),
+				new Payment(payer, "Description 2", 235, 500000L),
+				new Payment(payer, "Description 3", 800, 3000L)
 				);
 		when(this.paymentRepository.findAll()).thenReturn(payments);
+		List<PaymentDto> sortedPayments = Arrays.asList(
+				payments.get(1).toDto(),
+				payments.get(0).toDto(),
+				payments.get(2).toDto()
+				);
 
-		assertEquals(
-				payments.stream().map(payment -> payment.toDto()).collect(Collectors.toList()), 
-				this.paymentService.getPayments());
-	}
-	
-	@Test
-	void givenSeveralPayments_WhenGetAllPayments_ThenPaymentsAreSortedByDate() {
-		when(this.paymentRepository.findAll()).thenReturn( Arrays.asList(
-				new Payment(new User(), "Description", 500, 100000L),
-				new Payment(new User(), "Description 2", 235, 500000L),
-				new Payment(new User(), "Description 3", 800, 3000L)
-				));
-		
-		List<PaymentDto> payments = this.paymentService.getPayments();
-		assertEquals(3000L, payments.get(2).getPaymentDate());
-		assertEquals(100000L, payments.get(1).getPaymentDate());
-		assertEquals(500000L, payments.get(0).getPaymentDate());
+		assertThat(this.paymentService.getPayments(), is(sortedPayments));
 	}
 	
 	@Test

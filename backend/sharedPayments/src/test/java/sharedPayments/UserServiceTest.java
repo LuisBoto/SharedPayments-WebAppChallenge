@@ -1,6 +1,8 @@
 package sharedPayments;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -60,14 +62,13 @@ public class UserServiceTest {
 	@Test
 	void givenTwoUsers_WhenGetAllUsers_ThenAllUsersAreReturned() {
 		List<User> users = Arrays.asList(
-				new User(),
-				new User()
+				new User("Juana"),
+				new User("Mark")
 				);
 		when(this.userRepository.findAll()).thenReturn(users);
 
-		assertEquals(
-				users.stream().map(user -> user.toDto()).collect(Collectors.toList()), 
-				this.userService.getUsers());
+		assertThat(this.userService.getUsers(),
+				is(users.stream().map(user -> user.toDto()).collect(Collectors.toList())));
 	}
 	
 	@Test
