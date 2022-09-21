@@ -7,7 +7,21 @@ import org.testcontainers.containers.MySQLContainer;
 
 public enum QueryEnum {
 	
-	EMPTY_DATABASE("drop table if exists User, Payment");
+	EMPTY_DATABASE("drop table if exists User, Payment"),
+	
+	CREATE_USER_TABLE("create table User ("
+			+ "id bigint not null, "
+			+ "debt decimal(19,2), "
+			+ "name varchar(255), "
+			+ "primary key (id))"),
+	
+	CREATE_PAYMENT_TABLE("create table Payment ("
+			+ "id bigint not null, "
+			+ "description varchar(255), "
+			+ "payment_date bigint, "
+			+ "price decimal(19,2), "
+			+ "FOREIGN KEY (payer_id) REFERENCES User(id), "
+			+ "PRIMARY KEY (id));");
 	
 	private String query;
 	
