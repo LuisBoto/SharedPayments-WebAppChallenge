@@ -94,6 +94,13 @@
 			<artifactId>hamcrest</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-failsafe-plugin</artifactId>
+			<version>3.0.0-M7</version>
+			<scope>test</scope>
+		</dependency>
 
 
 		<dependency>
@@ -129,7 +136,6 @@
 				<groupId>io.micronaut.build</groupId>
 				<artifactId>micronaut-maven-plugin</artifactId>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -170,6 +176,17 @@
 					</compilerArgs>
 				</configuration>
 			</plugin>
+			<plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 

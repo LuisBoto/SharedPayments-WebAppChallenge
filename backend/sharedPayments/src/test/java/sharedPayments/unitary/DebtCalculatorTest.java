@@ -1,4 +1,4 @@
-package sharedPayments;
+package sharedPayments.unitary;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,4 +1,4 @@
-package sharedPayments;
+package sharedPayments.unitary;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
