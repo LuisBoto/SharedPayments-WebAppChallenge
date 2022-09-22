@@ -33,6 +33,7 @@ public enum QueryEnum {
 		try(var connection = DriverManager.getConnection(
 				String.format("%s?user=%s&password=%s", 
 						dbConfig.get("url"), dbConfig.get("username"), dbConfig.get("password")))) {
+			System.out.println(String.format("Executing query %s", this.name()));
 			var preparedStatement = connection.prepareStatement(this.query);
 			preparedStatement.execute();
 			preparedStatement.close();
