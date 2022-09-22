@@ -21,6 +21,11 @@ datasources:
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:password}
     dialect: MySQL
+  
+test-resources:
+  containers:
+    mysql:
+      image-name: mysql:8
 
 jpa:
   default:

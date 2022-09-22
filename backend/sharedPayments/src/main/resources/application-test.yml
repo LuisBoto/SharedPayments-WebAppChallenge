@@ -1,0 +1,32 @@
+micronaut:
+  application:
+    name: sharedPayments
+  server:
+    port: ${SERVER_PORT:8080}
+    
+netty:
+  default:
+    allocator:
+      max-order: 3
+
+micronaut:
+    server:
+        cors:
+            enabled: true
+
+datasources:
+  default:
+    dialect: MySQL
+  
+test-resources:
+  containers:
+    mysql:
+      image-name: mysql:8
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true

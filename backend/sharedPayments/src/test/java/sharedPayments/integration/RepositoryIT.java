@@ -12,48 +12,54 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
+import io.micronaut.context.annotation.Value;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import sharedPayments.model.User;
+import sharedPayments.repository.PaymentRepository;
+import sharedPayments.repository.UserRepository;
 
-
-@Testcontainers
+@MicronautTest
 public class RepositoryIT {
 	
-	private static String MYSQL_USERNAME = "root";
-	private static String MYSQL_PASSWORD = "password";
-	
-	@Container
-	private static MySQLContainer<?> mySQL = new MySQLContainer<>(DockerImageName.parse("mysql:8"))
-			.withExposedPorts(3306)
-			.withEnv("MYSQL_ROOT_PASSWORD", MYSQL_PASSWORD)
-			.withDatabaseName("test");
-	
+	@Value("${datasources.default.username}")
+	private static String username;
+	@Value("${datasources.default.password}")
+	private static String password;
+	@Value("${datasources.default.url}")
+	private static String url;
 	private Map<String, String> dbConfig = new HashMap<String, String>();
+	
+	@Inject
+	private UserRepository userRepository;
+	@Inject
+	private PaymentRepository paymentRepository;
 	
 	@BeforeAll
 	static void setUpDBContainer() throws NamingException {
-		mySQL.start();
+		//mySQL.start();
 	}
 	
 	@BeforeEach
 	void resetDB() {
-		this.dbConfig.put("url", mySQL.getJdbcUrl());
-		this.dbConfig.put("username", MYSQL_USERNAME);
-		this.dbConfig.put("password", MYSQL_PASSWORD);
-		QueryEnum.EMPTY_DATABASE.execute(mySQL, dbConfig);
+		this.dbConfig.put("url", url);
+		this.dbConfig.put("username", username);
+		this.dbConfig.put("password", password);
+		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
+		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
+		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
 	}
 	
 	@AfterAll
 	static void closeDBContainer() {
-		mySQL.close();
-		mySQL.stop();
+		//mySQL.close();
+		//mySQL.stop();
 	}
 
 	@Test
 	void notImplemented() {
+		System.out.println(this.userRepository.save(new User("Fuencisla")));
 		assertThat(1, is(1));
 	}
 

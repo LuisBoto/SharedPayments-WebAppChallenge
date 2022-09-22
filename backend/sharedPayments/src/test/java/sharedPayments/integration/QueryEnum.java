@@ -1,9 +1,8 @@
 package sharedPayments.integration;
 
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
-
-import org.testcontainers.containers.MySQLContainer;
 
 public enum QueryEnum {
 	
@@ -20,6 +19,7 @@ public enum QueryEnum {
 			+ "description varchar(255), "
 			+ "payment_date bigint, "
 			+ "price decimal(19,2), "
+			+ "payer_id bigint not null,"
 			+ "FOREIGN KEY (payer_id) REFERENCES User(id), "
 			+ "PRIMARY KEY (id));");
 	
@@ -29,9 +29,10 @@ public enum QueryEnum {
 		this.query = query;
 	}
 	
-	public void execute(MySQLContainer<?> mySQL, Map<String, String> dbConfig) {		
-		try(var connection = mySQL.createConnection(
-				String.format("?user=?s&password=?s", dbConfig.get("username"), dbConfig.get("password")))) {
+	public void execute(Map<String, String> dbConfig) {		
+		try(var connection = DriverManager.getConnection(
+				String.format("%s?user=%s&password=%s", 
+						dbConfig.get("url"), dbConfig.get("username"), dbConfig.get("password")))) {
 			var preparedStatement = connection.prepareStatement(this.query);
 			preparedStatement.execute();
 			preparedStatement.close();
