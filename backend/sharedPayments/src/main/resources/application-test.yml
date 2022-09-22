@@ -16,6 +16,7 @@ micronaut:
 
 datasources:
   default:
+    db-type: mysql
     dialect: MySQL
   
 test-resources:
