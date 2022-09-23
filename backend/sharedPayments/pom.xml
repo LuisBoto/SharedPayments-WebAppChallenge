@@ -170,6 +170,9 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<classpathDependencyScopeExclude>runtime</classpathDependencyScopeExclude>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
