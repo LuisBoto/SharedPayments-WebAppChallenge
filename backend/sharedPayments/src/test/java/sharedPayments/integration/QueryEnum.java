@@ -84,7 +84,7 @@ public enum QueryEnum {
 	
 	@Transactional
 	public void executeFormatted(Map<String, String> dbConfig, Object... params) {
-		final String baseQuery = this.query.toString();
+		final String baseQuery = this.query;
 		this.query = String.format(this.query, params);
 		this.execute(dbConfig);
 		this.query = baseQuery;

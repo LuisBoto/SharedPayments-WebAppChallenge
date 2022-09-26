@@ -94,10 +94,9 @@ public class UserRepositoryIT extends RepositoryIT {
 	@Test
 	void givenOneUser_WhenUpdateUserName_ThenDatabaseHasUpdatedData() throws SQLException {
 		String newName = "NewName";
-		User user = new User("OldName");
-		this.repoHandler.save(user);
+		this.saveDatabaseUsers(new User("OldName"));
 		
-		user = this.repoHandler.findUserById(1L).get();
+		User user = this.repoHandler.findUserById(1L).get();
 		user.setName(newName);
 		user = this.repoHandler.update(user);
 		CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
