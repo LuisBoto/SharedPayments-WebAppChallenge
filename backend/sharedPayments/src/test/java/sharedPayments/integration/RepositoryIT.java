@@ -36,6 +36,7 @@ public class RepositoryIT {
 	void resetDB() {
 		this.setUpDatabaseConfig();
 		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
+		QueryEnum.RESET_HIBERNATE_AUTO_ID.execute(dbConfig);
 		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
 		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
 	}
@@ -48,13 +49,33 @@ public class RepositoryIT {
 		}
 	}
 	
+	private void setUpUsers(User... users) {
+		for (User user : users) 
+			this.repoHandler.save(user);
+	}
+	
 	@Test
-	void givenNoUsers_WhenSaveNewUser_ThenUsersTableContainsThatUser() throws InterruptedException, SQLException {
+	void givenNoUsers_WhenSaveNewUser_ThenUsersTableContainsThatUser() throws SQLException {
 		User user = new User("Fuencisla");
 		user = this.repoHandler.save(user);
-		assertThat(user.getName(), is("Fuencisla"));
 		CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
+		
+		assertThat(user.getId(), is(1L));
+		assertThat(users.getString("id"), is(user.getId().toString()));
 		assertThat(users.getString("name"), is(user.getName()));
+	}
+	
+	@Test
+	void givenOneUser_WhenSaveNewUser_ThenUsersTableContainsBoth() throws SQLException {
+		this.setUpUsers(new User("Juana"));
+		User user = new User("NewUser");
+		user = this.repoHandler.save(user);
+		CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
+		
+		assertThat(users.getString("name"), is("Juana"));
+		assertThat(users.next(), is(true));
+		assertThat(users.getString("name"), is(user.getName()));
+		assertThat(users.getString("id"), is("2"));
 	}
 
 }

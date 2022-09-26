@@ -11,6 +11,8 @@ import javax.transaction.Transactional;
 
 public enum QueryEnum {
 	
+	RESET_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=1"),
+	
 	EMPTY_DATABASE("drop table if exists user, payment"),
 	
 	CREATE_USER_TABLE("create table user ("
