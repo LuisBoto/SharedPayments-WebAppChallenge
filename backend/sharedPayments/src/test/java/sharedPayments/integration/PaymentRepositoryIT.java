@@ -3,8 +3,10 @@ package sharedPayments.integration;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -82,9 +84,7 @@ public class PaymentRepositoryIT extends RepositoryIT {
 		this.saveDatabasePayments(dbPayments);
 		List<Payment> payments = this.repoHandler.findAllPayments();
 		
-		assertThat(payments.get(0).getDescription(), is(dbPayments[0].getDescription()));
-		assertThat(payments.get(1).getDescription(), is(dbPayments[1].getDescription()));
-		assertThat(payments.get(2).getDescription(), is(dbPayments[2].getDescription()));
+		assertEquals(Arrays.asList(dbPayments), payments);
 	}
 	
 	@Test

@@ -2,9 +2,11 @@ package sharedPayments.integration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
@@ -86,9 +88,7 @@ public class UserRepositoryIT extends RepositoryIT {
 		this.saveDatabaseUsers(dbUsers);
 		List<User> users = this.repoHandler.findAllUsers();
 		
-		assertThat(users.get(0).getName(), is(dbUsers[0].getName()));
-		assertThat(users.get(1).getName(), is(dbUsers[1].getName()));
-		assertThat(users.get(2).getName(), is(dbUsers[2].getName()));
+		assertEquals(Arrays.asList(dbUsers), users);
 	}
 	
 	@Test
