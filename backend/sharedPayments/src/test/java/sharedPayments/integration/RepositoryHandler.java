@@ -1,6 +1,7 @@
 package sharedPayments.integration;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,11 @@ public class RepositoryHandler {
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public User update(User user) {
+		return this.userRepository.update(user);
+	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public Payment save(Payment payment) {
 		return this.paymentRepository.save(payment);
 	}
@@ -38,6 +44,10 @@ public class RepositoryHandler {
 	
 	public List<Payment> findAllPayments() {
 		return this.paymentRepository.findAll();
+	}
+	
+	public Optional<User> findUserById(Long id) {
+		return this.userRepository.findById(id);
 	}
 
 }
