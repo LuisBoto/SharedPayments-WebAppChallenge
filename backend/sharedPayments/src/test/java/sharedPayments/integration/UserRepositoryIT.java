@@ -56,7 +56,7 @@ public class UserRepositoryIT extends RepositoryIT {
 				new User("User2"),
 				new User("User3"),
 				new User("User4")};
-		for (User user : dbUsers) this.repoHandler.save(user);
+		this.saveDatabaseUsers(dbUsers);
 		User userWithId5 = new User("User5");
 		
 		this.repoHandler.save(userWithId5);
@@ -89,7 +89,7 @@ public class UserRepositoryIT extends RepositoryIT {
 	}
 	
 	@Test
-	void givenOneUser_WhenUpdateUserName_ThenDatabaseHasNewData() throws SQLException {
+	void givenOneUser_WhenUpdateUserName_ThenDatabaseHasUpdatedData() throws SQLException {
 		String newName = "NewName";
 		User user = new User("OldName");
 		this.repoHandler.save(user);

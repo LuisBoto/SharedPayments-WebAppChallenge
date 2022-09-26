@@ -47,6 +47,11 @@ public class RepositoryHandler {
 		RepositoryIT.currentId++;
 		return this.paymentRepository.save(payment);
 	}
+	
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Payment update(Payment payment) {
+		return this.paymentRepository.update(payment);
+	}
 
 	public List<Payment> findAllPayments() {
 		return this.paymentRepository.findAll();

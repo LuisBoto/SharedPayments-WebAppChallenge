@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ public class PaymentRepositoryIT extends RepositoryIT {
 	}
 	
 	@Test
-	void givenNoPayments_WhenNewPaymentIsSaved_ThenPaymentsTableContainsPayment() throws SQLException {
+	void givenNoPayments_WhenSaveNewPayment_ThenPaymentsTableContainsPayment() throws SQLException {
 		User payer = this.repoHandler.save(new User("Payer"));
 		Payment payment = new Payment(payer, "NewPaymentDescription", 11.4);
 		
@@ -32,6 +33,22 @@ public class PaymentRepositoryIT extends RepositoryIT {
 		
 		assertThat(payments.getString("description"), is(payment.getDescription()));
 		assertThat(payments.getString("price"), is("11.40"));
+	}
+	
+	@Test
+	void givenOnePayment_WhenSaveNewPayment_ThenPaymentsTableContainsBoth() throws SQLException {
+		Payment oldPayment = new Payment(null, "old payment", 33.33);
+		this.saveDatabasePayments(oldPayment);
+		
+		User payer = this.repoHandler.save(new User("Payer"));
+		Payment payment = new Payment(payer, "newer payment", 77.89);
+		payment = this.repoHandler.save(payment);
+		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		
+		assertThat(payments.getString("description"), is(oldPayment.getDescription()));
+		assertThat(payments.next(), is(true));
+		assertThat(payments.getString("description"), is(payment.getDescription()));
+		assertThat(payments.getString("id"), is("4"));
 	}
 	
 	@Test
@@ -47,6 +64,25 @@ public class PaymentRepositoryIT extends RepositoryIT {
 	}
 	
 	@Test
+	void givenNoPayments_WhenFindAll_ThenListIsEmpty() {
+		assertThat(this.repoHandler.findAllPayments().size(), is(0));
+	}
+	
+	@Test
+	void givenSeveralPayments_WhenFindAll_ThenListContainsAllUsers() {
+		Payment[] dbPayments = {
+				new Payment(null, "First", 10.11),
+				new Payment(null, "Second", 20.22),
+				new Payment(null, "Third", 30.33)};
+		this.saveDatabasePayments(dbPayments);
+		List<Payment> payments = this.repoHandler.findAllPayments();
+		
+		assertThat(payments.get(0).getDescription(), is(dbPayments[0].getDescription()));
+		assertThat(payments.get(1).getDescription(), is(dbPayments[1].getDescription()));
+		assertThat(payments.get(2).getDescription(), is(dbPayments[2].getDescription()));
+	}
+	
+	@Test
 	void givenFourPayments_WhenFindById_ThenFoundPaymentHasPayerUserEntity() {
 		this.saveDatabasePayments(
 				new Payment(null, "Payment1", 100), // Id 2
@@ -58,6 +94,21 @@ public class PaymentRepositoryIT extends RepositoryIT {
 		assertThat(payment.getPayer(), is(notNullValue()));
 		assertThat(payment.getPayer().getId().toString(), is("3"));
 		assertThat(payment.getPayer().getName(), is("User 3"));
+	}
+	
+	@Test
+	void givenOnePayment_WhenUpdateAmountAndPayer_ThenDatabaseHasUpdatedData() throws SQLException {
+		User user1 = this.repoHandler.save(new User("u1"));
+		this.saveDatabasePayments(new Payment(null, "oldDescription", 55.99));
+		
+		Payment payment = this.repoHandler.findPaymentById(3L).get();
+		payment.setDescription("newUpdatedDescription");
+		payment.setPayer(user1);
+		this.repoHandler.update(payment);
+		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		
+		assertThat(payments.getString("description"), is(payment.getDescription()));
+		assertThat(payments.getString("payer_id"), is("1"));
 	}
 
 }
