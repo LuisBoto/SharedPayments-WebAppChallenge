@@ -15,8 +15,10 @@ public class PaymentRepositoryIT extends RepositoryIT {
 	
 	private void saveDatabasePayments(Payment... payments) {
 		for (Payment payment : payments) {
-			payment.setPayer(this.repoHandler.save(new User("User "+RepositoryIT.currentId)));
-			this.repoHandler.save(payment);
+			payment.setPayer(this.repoHandler.save(new User("User " + RepositoryIT.currentId)));
+			payment.setId(RepositoryIT.currentId);
+			QueryEnum.INSERT_INTO_PAYMENTS.execute(dbConfig, payment);
+			//this.repoHandler.save(payment);
 		}
 	}
 	

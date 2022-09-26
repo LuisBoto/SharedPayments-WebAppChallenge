@@ -9,6 +9,7 @@ import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import javax.transaction.Transactional;
 
+import sharedPayments.model.Payment;
 import sharedPayments.model.User;
 
 public enum QueryEnum {
@@ -38,7 +39,10 @@ public enum QueryEnum {
 	
 	SELECT_ALL_PAYMENTS("select * from payment"),
 	
-	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')");
+	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')"),
+	
+	INSERT_INTO_PAYMENTS("insert into payment (id, description, payment_date, price, payer_id) "
+			+ "values (%d, '%s', %d, %s, %d)");
 	
 	private String query;
 	
@@ -73,6 +77,21 @@ public enum QueryEnum {
 		final String baseQuery = this.query.toString();
 		this.query = String.format(this.query, 
 				user.getId(), user.getBDDebt().toString().replace(',', '.'), user.getName());
+		var result = this.execute(dbConfig);
+		RepositoryIT.incrementCurrentId();
+		this.query = baseQuery;
+		return result;
+	}
+	
+	@Transactional
+	public CachedRowSet execute(Map<String, String> dbConfig, Payment payment) {
+		final String baseQuery = this.query.toString();
+		this.query = String.format(this.query, 
+				payment.getId(), 
+				payment.getDescription(), 
+				payment.getPaymentDate(),
+				String.valueOf(payment.getPrice()).replace(',', '.'), 
+				payment.getPayer().getId());
 		var result = this.execute(dbConfig);
 		RepositoryIT.incrementCurrentId();
 		this.query = baseQuery;
