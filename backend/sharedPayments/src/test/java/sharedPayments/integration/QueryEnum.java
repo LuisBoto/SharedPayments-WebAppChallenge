@@ -9,9 +9,6 @@ import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import javax.transaction.Transactional;
 
-import sharedPayments.model.Payment;
-import sharedPayments.model.User;
-
 public enum QueryEnum {
 	
 	RESET_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=1"),
@@ -39,10 +36,23 @@ public enum QueryEnum {
 	
 	SELECT_ALL_PAYMENTS("select * from payment"),
 	
-	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')"),
+	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')") {
+		@Override
+		public void executeFormatted(Map<String, String> dbConfig, Object... params) {
+			super.executeFormatted(dbConfig, params);
+			RepositoryIT.incrementCurrentId();
+		}
+	},
 	
-	INSERT_INTO_PAYMENTS("insert into payment (id, description, payment_date, price, payer_id) "
-			+ "values (%d, '%s', %d, %s, %d)");
+	INSERT_INTO_PAYMENTS(
+			"insert into payment (id, description, payment_date, price, payer_id) "
+			+ "values (%d, '%s', %d, %s, %d)") {
+		@Override
+		public void executeFormatted(Map<String, String> dbConfig, Object... params) {
+			super.executeFormatted(dbConfig, params);
+			RepositoryIT.incrementCurrentId();
+		}
+	};
 	
 	private String query;
 	
@@ -73,35 +83,9 @@ public enum QueryEnum {
 	}
 	
 	@Transactional
-	public CachedRowSet execute(Map<String, String> dbConfig, User user) {
+	public void executeFormatted(Map<String, String> dbConfig, Object... params) {
 		final String baseQuery = this.query.toString();
-		this.query = String.format(this.query, 
-				user.getId(), user.getBDDebt().toString().replace(',', '.'), user.getName());
-		var result = this.execute(dbConfig);
-		RepositoryIT.incrementCurrentId();
-		this.query = baseQuery;
-		return result;
-	}
-	
-	@Transactional
-	public CachedRowSet execute(Map<String, String> dbConfig, Payment payment) {
-		final String baseQuery = this.query.toString();
-		this.query = String.format(this.query, 
-				payment.getId(), 
-				payment.getDescription(), 
-				payment.getPaymentDate(),
-				String.valueOf(payment.getPrice()).replace(',', '.'), 
-				payment.getPayer().getId());
-		var result = this.execute(dbConfig);
-		RepositoryIT.incrementCurrentId();
-		this.query = baseQuery;
-		return result;
-	}
-	
-	@Transactional
-	public void execute(Map<String, String> dbConfig, long id) {
-		final String baseQuery = this.query.toString();
-		this.query = String.format(this.query, id);
+		this.query = String.format(this.query, params);
 		this.execute(dbConfig);
 		this.query = baseQuery;
 	}

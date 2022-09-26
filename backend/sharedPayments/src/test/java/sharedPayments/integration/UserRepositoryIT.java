@@ -18,7 +18,10 @@ public class UserRepositoryIT extends RepositoryIT {
 	private void saveDatabaseUsers(User... users) {
 		for (User user : users)  {
 			user.setId(RepositoryIT.currentId);
-			QueryEnum.INSERT_INTO_USERS.execute(dbConfig, user);
+			QueryEnum.INSERT_INTO_USERS.executeFormatted(dbConfig, 
+					user.getId(), 
+					user.getBDDebt(), 
+					user.getName());
 			//this.repoHandler.save(user);
 		}
 	}

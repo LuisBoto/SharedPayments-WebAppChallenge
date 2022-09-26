@@ -49,7 +49,7 @@ public abstract class RepositoryIT {
 	
 	public static void incrementCurrentId() {
 		RepositoryIT.currentId++;
-		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.execute(dbConfig, RepositoryIT.currentId); 
+		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.executeFormatted(dbConfig, RepositoryIT.currentId); 
 	}
 
 }
