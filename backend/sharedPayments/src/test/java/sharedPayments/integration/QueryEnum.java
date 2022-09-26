@@ -9,9 +9,13 @@ import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
 import javax.transaction.Transactional;
 
+import sharedPayments.model.User;
+
 public enum QueryEnum {
 	
 	RESET_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=1"),
+	
+	UPDATE_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=%d"),
 	
 	EMPTY_DATABASE("drop table if exists user, payment"),
 	
@@ -32,7 +36,9 @@ public enum QueryEnum {
 	
 	SELECT_ALL_USERS("select * from user"),
 	
-	SELECT_ALL_PAYMENTS("select * from payment");
+	SELECT_ALL_PAYMENTS("select * from payment"),
+	
+	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')");
 	
 	private String query;
 	
@@ -60,6 +66,25 @@ public enum QueryEnum {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Transactional
+	public CachedRowSet execute(Map<String, String> dbConfig, User user) {
+		final String baseQuery = this.query.toString();
+		this.query = String.format(this.query, 
+				user.getId(), user.getBDDebt().toString().replace(',', '.'), user.getName());
+		var result = this.execute(dbConfig);
+		RepositoryIT.incrementCurrentId();
+		this.query = baseQuery;
+		return result;
+	}
+	
+	@Transactional
+	public void execute(Map<String, String> dbConfig, long id) {
+		final String baseQuery = this.query.toString();
+		this.query = String.format(this.query, id);
+		this.execute(dbConfig);
+		this.query = baseQuery;
 	}
 
 }

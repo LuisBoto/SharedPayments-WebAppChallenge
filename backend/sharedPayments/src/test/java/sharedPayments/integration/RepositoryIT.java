@@ -11,6 +11,8 @@ import jakarta.inject.Inject;
 
 @MicronautTest
 public abstract class RepositoryIT {
+	
+	protected static long currentId = 1L;
 
 	@Value("${datasources.default.username}")
 	private String username;
@@ -19,25 +21,35 @@ public abstract class RepositoryIT {
 	@Value("${datasources.default.url}")
 	private String url;
 
-	Map<String, String> dbConfig = new HashMap<String, String>();
+	static Map<String, String> dbConfig = new HashMap<String, String>();
 
 	@Inject
 	RepositoryHandler repoHandler;
 
 	@BeforeEach
 	void resetDB() {
-		if (this.dbConfig.isEmpty())
+		if (dbConfig.isEmpty())
 			this.setUpDatabaseConfig();
 		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
-		QueryEnum.RESET_HIBERNATE_AUTO_ID.execute(dbConfig);
+		this.resetId();
 		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
 		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
 	}
-
+	
 	private void setUpDatabaseConfig() {
-		this.dbConfig.put("url", url);
-		this.dbConfig.put("username", username);
-		this.dbConfig.put("password", password);
+		dbConfig.put("url", url);
+		dbConfig.put("username", username);
+		dbConfig.put("password", password);
+	}
+	
+	private void resetId() {
+		currentId = 1L;
+		QueryEnum.RESET_HIBERNATE_AUTO_ID.execute(dbConfig);
+	}
+	
+	public static void incrementCurrentId() {
+		RepositoryIT.currentId++;
+		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.execute(dbConfig, RepositoryIT.currentId); 
 	}
 
 }

@@ -14,40 +14,46 @@ import sharedPayments.repository.UserRepository;
 
 @Bean
 public class RepositoryHandler {
-	
+
 	private UserRepository userRepository;
 	private PaymentRepository paymentRepository;
-	
+
 	public RepositoryHandler(UserRepository userRepository, PaymentRepository paymentRepository) {
 		this.userRepository = userRepository;
 		this.paymentRepository = paymentRepository;
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public User save(User user) {
+		RepositoryIT.currentId++;
 		return this.userRepository.save(user);
 	}
-	
+
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public User update(User user) {
 		return this.userRepository.update(user);
 	}
-	
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public Payment save(Payment payment) {
-		return this.paymentRepository.save(payment);
-	}
-	
+
 	public List<User> findAllUsers() {
 		return this.userRepository.findAll();
 	}
-	
+
+	public Optional<User> findUserById(Long id) {
+		return this.userRepository.findById(id);
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Payment save(Payment payment) {
+		RepositoryIT.currentId++;
+		return this.paymentRepository.save(payment);
+	}
+
 	public List<Payment> findAllPayments() {
 		return this.paymentRepository.findAll();
 	}
 	
-	public Optional<User> findUserById(Long id) {
-		return this.userRepository.findById(id);
+	public Optional<Payment> findPaymentById(Long id) {
+		return this.paymentRepository.findById(id);
 	}
 
 }

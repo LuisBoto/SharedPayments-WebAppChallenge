@@ -16,8 +16,11 @@ import sharedPayments.model.User;
 public class UserRepositoryIT extends RepositoryIT {
 	
 	private void saveDatabaseUsers(User... users) {
-		for (User user : users) 
+		for (User user : users)  {
+			//user.setId(RepositoryIT.currentId);
+			//QueryEnum.INSERT_INTO_USERS.execute(dbConfig, user);
 			this.repoHandler.save(user);
+		}
 	}
 	
 	@Test
@@ -33,16 +36,16 @@ public class UserRepositoryIT extends RepositoryIT {
 	
 	@Test
 	void givenOneUser_WhenSaveNewUser_ThenUsersTableContainsBoth() throws SQLException {
-		User user1 = new User("Juana");
+		User user1 = new User("OldUser");
 		this.saveDatabaseUsers(user1);
 		
-		User user = new User("NewUser");
-		user = this.repoHandler.save(user);
+		User user2 = new User("NewUser");
+		user2 = this.repoHandler.save(user2);
 		CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
 		
 		assertThat(users.getString("name"), is(user1.getName()));
 		assertThat(users.next(), is(true));
-		assertThat(users.getString("name"), is(user.getName()));
+		assertThat(users.getString("name"), is(user2.getName()));
 		assertThat(users.getString("id"), is("2"));
 	}
 	
@@ -53,7 +56,7 @@ public class UserRepositoryIT extends RepositoryIT {
 				new User("User2"),
 				new User("User3"),
 				new User("User4")};
-		this.saveDatabaseUsers(dbUsers);
+		for (User user : dbUsers) this.repoHandler.save(user);
 		User userWithId5 = new User("User5");
 		
 		this.repoHandler.save(userWithId5);
