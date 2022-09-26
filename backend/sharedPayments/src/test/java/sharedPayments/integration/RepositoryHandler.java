@@ -6,16 +6,20 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.micronaut.context.annotation.Bean;
+import sharedPayments.model.Payment;
 import sharedPayments.model.User;
+import sharedPayments.repository.PaymentRepository;
 import sharedPayments.repository.UserRepository;
 
 @Bean
 public class RepositoryHandler {
 	
 	private UserRepository userRepository;
+	private PaymentRepository paymentRepository;
 	
-	public RepositoryHandler(UserRepository repository) {
-		this.userRepository = repository;
+	public RepositoryHandler(UserRepository userRepository, PaymentRepository paymentRepository) {
+		this.userRepository = userRepository;
+		this.paymentRepository = paymentRepository;
 	}
 	
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -23,8 +27,17 @@ public class RepositoryHandler {
 		return this.userRepository.save(user);
 	}
 	
-	public List<User> findAll() {
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public Payment save(Payment payment) {
+		return this.paymentRepository.save(payment);
+	}
+	
+	public List<User> findAllUsers() {
 		return this.userRepository.findAll();
+	}
+	
+	public List<Payment> findAllPayments() {
+		return this.paymentRepository.findAll();
 	}
 
 }

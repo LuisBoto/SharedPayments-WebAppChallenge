@@ -1,14 +1,16 @@
 package sharedPayments.integration;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hibernate.SessionFactory;
+import javax.sql.rowset.CachedRowSet;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -17,9 +19,6 @@ import sharedPayments.model.User;
 
 @MicronautTest
 public class RepositoryIT {
-	
-	@Inject
-	private SessionFactory sessionFactory;
 	
 	@Value("${datasources.default.username}")
 	private String username;
@@ -31,35 +30,31 @@ public class RepositoryIT {
 	private Map<String, String> dbConfig = new HashMap<String, String>();
 	
 	@Inject
-	private RepositoryHandler userRepository; 
+	private RepositoryHandler repoHandler; 
 
 	@BeforeEach
 	void resetDB() {
-		this.dbConfig.put("url", url);
-		this.dbConfig.put("username", username);
-		this.dbConfig.put("password", password);
-		//QueryEnum.EMPTY_DATABASE.execute(dbConfig);
-		//QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
-		//QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
+		this.setUpDatabaseConfig();
+		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
+		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
+		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
+	}
+	
+	private void setUpDatabaseConfig() {
+		if (this.dbConfig.isEmpty()) {
+			this.dbConfig.put("url", url);
+			this.dbConfig.put("username", username);
+			this.dbConfig.put("password", password);
+		}
 	}
 	
 	@Test
-	void givenNoUsers_WhenSaveNewUser_ThenUsersTableHasOneUser() throws InterruptedException, SQLException {
-
-		//sessionFactory.getCurrentSession().setHibernateFlushMode(FlushMode.MANUAL);
+	void givenNoUsers_WhenSaveNewUser_ThenUsersTableContainsThatUser() throws InterruptedException, SQLException {
 		User user = new User("Fuencisla");
-		this.userRepository.findAll().forEach(System.out::println);
-		user = this.userRepository.save(user);
-		user = this.userRepository.save(new User("Pepita"));
-		sessionFactory.getCurrentSession().flush();
-		//assertThat(user.getId(), is(1L));
-		//assertThat(user.getName(), is("Fuencisla"));
-		this.userRepository.findAll().forEach(System.out::println);
-		
-		
-		//CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
-		
-		//assertThat(users.getString("name"), is(user.getName()));
+		user = this.repoHandler.save(user);
+		assertThat(user.getName(), is("Fuencisla"));
+		CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
+		assertThat(users.getString("name"), is(user.getName()));
 	}
 
 }

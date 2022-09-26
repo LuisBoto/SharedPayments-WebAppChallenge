@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
+import javax.transaction.Transactional;
 
 public enum QueryEnum {
 	
@@ -35,6 +36,7 @@ public enum QueryEnum {
 		this.query = query;
 	}
 	
+	@Transactional
 	public CachedRowSet execute(Map<String, String> dbConfig) {
 		try(var connection = DriverManager.getConnection(
 				String.format("%s?user=%s&password=%s", 
@@ -45,10 +47,10 @@ public enum QueryEnum {
 			System.out.println(String.format("Executing query %s", this.name()));
 			preparedStatement.execute();
 			var result = preparedStatement.getResultSet();
-			if (result != null)
-			System.out.println(result.getString("id"));
-			if (result != null)
-				rowset.populate(result);
+			if (result != null) {
+				rowset.populate(result); 
+				rowset.first();
+			}
 			return rowset;
 		} catch (SQLException e) {
 			e.printStackTrace();
