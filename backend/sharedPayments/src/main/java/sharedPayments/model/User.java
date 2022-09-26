@@ -89,5 +89,10 @@ public class User {
 		User other = (User) obj;
 		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", debt=" + debt + "]";
+	}
 	
 }

@@ -19,7 +19,7 @@
 		<micronaut.version>3.6.0</micronaut.version>
 		<micronaut.data.version>3.8.0</micronaut.data.version>
 		<micronaut.runtime>netty</micronaut.runtime>
-		<micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
+		<micronaut.test.resources.enabled>false</micronaut.test.resources.enabled>
 		<exec.mainClass>sharedPayments.Application</exec.mainClass>
 	</properties>
 
@@ -92,6 +92,14 @@
 		<dependency>
 			<groupId>io.micronaut.testresources</groupId>
 			<artifactId>micronaut-test-resources-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.micronaut.spring/micronaut-spring -->
+		<dependency>
+			<groupId>io.micronaut.spring</groupId>
+			<artifactId>micronaut-spring</artifactId>
+			<version>4.3.1</version>
+			<scope>runtime</scope>
 		</dependency>
 
 

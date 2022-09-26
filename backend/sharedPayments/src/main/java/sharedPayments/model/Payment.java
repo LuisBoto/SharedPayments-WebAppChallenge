@@ -1,5 +1,4 @@
 package sharedPayments.model;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -9,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -16,6 +16,7 @@ import io.micronaut.core.annotation.Introspected;
 import sharedPayments.model.dto.PaymentDto;
 
 @Entity
+@Table(name = "payment")
 @Introspected
 public class Payment {
 
