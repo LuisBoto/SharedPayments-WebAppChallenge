@@ -30,7 +30,9 @@ public enum QueryEnum {
 			+ "FOREIGN KEY (payer_id) REFERENCES user(id), "
 			+ "PRIMARY KEY (id));"),
 	
-	SELECT_ALL_USERS("select * from user");
+	SELECT_ALL_USERS("select * from user"),
+	
+	SELECT_ALL_PAYMENTS("select * from payment");
 	
 	private String query;
 	

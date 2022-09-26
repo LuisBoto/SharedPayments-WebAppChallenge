@@ -5,49 +5,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.sql.rowset.CachedRowSet;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.micronaut.context.annotation.Value;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
 import sharedPayments.model.User;
 
-@MicronautTest
-public class UserRepositoryIT {
-	
-	@Value("${datasources.default.username}")
-	private String username;
-	@Value("${datasources.default.password}")
-	private String password;
-	@Value("${datasources.default.url}")
-	private String url;
-	
-	private Map<String, String> dbConfig = new HashMap<String, String>();
-	
-	@Inject
-	private RepositoryHandler repoHandler; 
-
-	@BeforeEach
-	void resetDB() {
-		if (this.dbConfig.isEmpty()) this.setUpDatabaseConfig();
-		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
-		QueryEnum.RESET_HIBERNATE_AUTO_ID.execute(dbConfig);
-		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
-		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
-	}
-	
-	private void setUpDatabaseConfig() {
-		this.dbConfig.put("url", url);
-		this.dbConfig.put("username", username);
-		this.dbConfig.put("password", password);
-	}
+public class UserRepositoryIT extends RepositoryIT {
 	
 	private void saveDatabaseUsers(User... users) {
 		for (User user : users) 
