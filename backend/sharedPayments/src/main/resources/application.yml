@@ -3,16 +3,13 @@ micronaut:
     name: sharedPayments
   server:
     port: ${SERVER_PORT:8080}
+    cors:
+      enabled: true
     
 netty:
   default:
     allocator:
       max-order: 3
-
-micronaut:
-    server:
-        cors:
-            enabled: true
 
 datasources:
   default:
@@ -20,7 +17,7 @@ datasources:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:password}
-    dialect: MySQL
+    db-type: mysql
 
 jpa:
   default:

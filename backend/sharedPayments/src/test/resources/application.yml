@@ -3,26 +3,24 @@ micronaut:
     name: sharedPayments
   server:
     port: ${SERVER_PORT:8080}
+    cors:
+      enabled: true
     
 netty:
   default:
     allocator:
       max-order: 3
 
-micronaut:
-    server:
-        cors:
-            enabled: true
-
 datasources:
   default:
     db-type: mysql
-    dialect: MySQL
   
 test-resources:
   containers:
     mysql:
       image-name: mysql:8
+      ro-fs-bind:
+        - "src/test/resources/": /docker-entrypoint-initdb.d/
 
 jpa:
   default:
