@@ -11,7 +11,4 @@ create table payment (
         price decimal(19,2),
         payer_id bigint not null,
         FOREIGN KEY (payer_id) REFERENCES user(id),
-        PRIMARY KEY (id));
-        
- insert into user (id, name, debt) values (1, "Pepe", 10.00);
-	
+        PRIMARY KEY (id));	

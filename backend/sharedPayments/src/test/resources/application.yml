@@ -20,7 +20,7 @@ test-resources:
     mysql:
       image-name: mysql:8
       ro-fs-bind:
-        - "src/test/resources/": /docker-entrypoint-initdb.d/
+        - "src/test/resources/databaseInitScripts/": /docker-entrypoint-initdb.d/
 
 jpa:
   default:
