@@ -7,13 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
 
-@MicronautTest
+@MicronautTest(transactional = false)
 public abstract class RepositoryIT {
 	
-	protected static long currentId = 1L;
-
 	@Value("${datasources.default.username}")
 	private String username;
 	@Value("${datasources.default.password}")
@@ -22,18 +19,14 @@ public abstract class RepositoryIT {
 	private String url;
 
 	static Map<String, String> dbConfig = new HashMap<String, String>();
-
-	@Inject
-	RepositoryHandler repoHandler;
-
+	
 	@BeforeEach
 	void resetDB() {
 		if (dbConfig.isEmpty())
 			this.setUpDatabaseConfig();
-		QueryEnum.EMPTY_DATABASE.execute(dbConfig);
-		this.resetId();
-		QueryEnum.CREATE_USER_TABLE.execute(dbConfig);
-		QueryEnum.CREATE_PAYMENT_TABLE.execute(dbConfig);
+		QueryEnum.DELETE_INSERTED_PAYMENTS.execute(dbConfig);
+		QueryEnum.DELETE_INSERTED_USERS.execute(dbConfig);
+		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.executeFormatted(dbConfig, this.getInitialID()); 
 	}
 	
 	private void setUpDatabaseConfig() {
@@ -42,14 +35,6 @@ public abstract class RepositoryIT {
 		dbConfig.put("password", password);
 	}
 	
-	private void resetId() {
-		currentId = 1L;
-		QueryEnum.RESET_HIBERNATE_AUTO_ID.execute(dbConfig);
-	}
-	
-	public static void incrementCurrentId() {
-		RepositoryIT.currentId++;
-		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.executeFormatted(dbConfig, RepositoryIT.currentId); 
-	}
+	protected abstract long getInitialID();
 
 }

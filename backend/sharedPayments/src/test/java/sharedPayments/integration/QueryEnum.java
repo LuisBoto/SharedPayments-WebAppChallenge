@@ -10,49 +10,16 @@ import javax.sql.rowset.RowSetProvider;
 import javax.transaction.Transactional;
 
 public enum QueryEnum {
-	
-	RESET_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=1"),
-	
+		
 	UPDATE_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=%d"),
 	
-	EMPTY_DATABASE("drop table if exists user, payment"),
+	DELETE_INSERTED_PAYMENTS("delete from payment where id>=100"),
 	
-	CREATE_USER_TABLE("create table user ("
-			+ "id bigint not null, "
-			+ "debt decimal(19,2), "
-			+ "name varchar(255), "
-			+ "primary key (id))"),
-	
-	CREATE_PAYMENT_TABLE("create table payment ("
-			+ "id bigint not null, "
-			+ "description varchar(255), "
-			+ "payment_date bigint, "
-			+ "price decimal(19,2), "
-			+ "payer_id bigint not null,"
-			+ "FOREIGN KEY (payer_id) REFERENCES user(id), "
-			+ "PRIMARY KEY (id));"),
+	DELETE_INSERTED_USERS("delete from user where id>=100"),
 	
 	SELECT_ALL_USERS("select * from user"),
 	
-	SELECT_ALL_PAYMENTS("select * from payment"),
-	
-	INSERT_INTO_USERS("insert into user (id, debt, name) values (%d, %s, '%s')") {
-		@Override
-		public void executeFormatted(Map<String, String> dbConfig, Object... params) {
-			super.executeFormatted(dbConfig, params);
-			RepositoryIT.incrementCurrentId();
-		}
-	},
-	
-	INSERT_INTO_PAYMENTS(
-			"insert into payment (id, description, payment_date, price, payer_id) "
-			+ "values (%d, '%s', %d, %s, %d)") {
-		@Override
-		public void executeFormatted(Map<String, String> dbConfig, Object... params) {
-			super.executeFormatted(dbConfig, params);
-			RepositoryIT.incrementCurrentId();
-		}
-	};
+	SELECT_ALL_PAYMENTS("select * from payment");
 	
 	private String query;
 	

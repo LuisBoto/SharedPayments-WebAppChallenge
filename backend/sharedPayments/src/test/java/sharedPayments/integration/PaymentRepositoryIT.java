@@ -4,116 +4,132 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import jakarta.inject.Inject;
 import sharedPayments.model.Payment;
 import sharedPayments.model.User;
+import sharedPayments.repository.PaymentRepository;
+import sharedPayments.repository.UserRepository;
 
 public class PaymentRepositoryIT extends RepositoryIT {
 	
-	private void saveDatabasePayments(Payment... payments) {
-		for (Payment payment : payments) {
-			payment.setPayer(this.repoHandler.save(new User("User " + RepositoryIT.currentId)));
-			payment.setId(RepositoryIT.currentId);
-			QueryEnum.INSERT_INTO_PAYMENTS.executeFormatted(dbConfig, 
-					payment.getId(), 
-					payment.getDescription(), 
-					payment.getPaymentDate(), 
-					payment.getPrice(), 
-					payment.getPayer().getId());
-			//this.repoHandler.save(payment);
+	@Inject
+	private PaymentRepository paymentRepository;
+	
+	@Inject
+	private UserRepository userRepository;
+	
+	@Override
+	protected long getInitialID() {
+		return 100L;
+	}
+	
+	private void savePayments(Payment... payments) {
+		for (Payment p : payments) 
+			this.paymentRepository.save(p);
+	}
+	
+	private List<Payment> getAllPaymentsFromDatabase() throws SQLException {
+		var dbPayments = new ArrayList<Payment>();
+		var paymentRows = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		paymentRows.beforeFirst();
+		while (paymentRows.next()) {
+			Payment p = new Payment(
+					this.userRepository.findById(paymentRows.getLong("payer_id")).get(),
+					paymentRows.getString("description"),
+					paymentRows.getDouble("price"),
+					paymentRows.getLong("payment_date"));
+			p.setId(paymentRows.getLong("id"));
+			dbPayments.add(p);
 		}
+		return dbPayments;
 	}
 	
 	@Test
-	void givenNoPayments_WhenSaveNewPayment_ThenPaymentsTableContainsPayment() throws SQLException {
-		User payer = this.repoHandler.save(new User("Payer"));
+	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsNewPayment() throws SQLException {
+		User payer = this.userRepository.save(new User("Payer"));
 		Payment payment = new Payment(payer, "NewPaymentDescription", 11.4);
 		
-		this.repoHandler.save(payment);
+		this.paymentRepository.save(payment);
 		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
 		
+		assertThat(payments.absolute(7), is(true));
 		assertThat(payments.getString("description"), is(payment.getDescription()));
 		assertThat(payments.getString("price"), is("11.40"));
 	}
 	
 	@Test
-	void givenOnePayment_WhenSaveNewPayment_ThenPaymentsTableContainsBoth() throws SQLException {
-		Payment oldPayment = new Payment(null, "old payment", 33.33);
-		this.saveDatabasePayments(oldPayment);
-		
-		User payer = this.repoHandler.save(new User("Payer"));
+	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsAll() throws SQLException {		
+		User payer = this.userRepository.findById(2L).get();
 		Payment payment = new Payment(payer, "newer payment", 77.89);
-		payment = this.repoHandler.save(payment);
+		payment = this.paymentRepository.save(payment);
 		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
 		
-		assertThat(payments.getString("description"), is(oldPayment.getDescription()));
+		assertThat(payments.absolute(6), is(true));
+		assertThat(payments.getString("description"), is("Tire"));
 		assertThat(payments.next(), is(true));
 		assertThat(payments.getString("description"), is(payment.getDescription()));
-		assertThat(payments.getString("id"), is("4"));
+		assertThat(payments.getLong("id"), is(100L));
 	}
 	
 	@Test
-	void givenNoPayments_WhenNewPaymentIsSaved_ThenPaymentsTableContainsUserForeignKey() throws SQLException {
-		User payer = this.repoHandler.save(new User("Payer")); // Id 1
+	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsUserForeignKey() throws SQLException {
+		User payer = this.userRepository.save(new User("Payer1")); // Id 100
 		Payment payment = new Payment(payer, "NewPaymentWithUser", 25);
 		
-		this.repoHandler.save(payment);
+		this.paymentRepository.save(payment);
 		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
 		
-		assertThat(payments.getString("payer_id"), is("1"));
-		assertThat(payments.getString("id"), is("2"));
+		assertThat(payments.absolute(7), is(true));
+		assertThat(payments.getLong("payer_id"), is(payer.getId()));
+		assertThat(payments.getLong("id"), is(101L));
 	}
 	
 	@Test
-	void givenNoPayments_WhenFindAll_ThenListIsEmpty() {
-		assertThat(this.repoHandler.findAllPayments().size(), is(0));
+	void givenPayments_WhenFindAll_ThenListContainsAllPayments() throws SQLException {
+		assertEquals(this.getAllPaymentsFromDatabase(), this.paymentRepository.findAll());
 	}
 	
 	@Test
-	void givenSeveralPayments_WhenFindAll_ThenListContainsAllUsers() {
-		Payment[] dbPayments = {
-				new Payment(null, "First", 10.11),
-				new Payment(null, "Second", 20.22),
-				new Payment(null, "Third", 30.33)};
-		this.saveDatabasePayments(dbPayments);
-		List<Payment> payments = this.repoHandler.findAllPayments();
+	void givenTwoNewPayments_WhenFindAll_ThenListContainsAllPayments() throws SQLException {
+		this.savePayments(
+				new Payment(this.userRepository.findById(1L).get(), "First", 10.11),
+				new Payment(this.userRepository.findById(2L).get(), "Second", 20.22),
+				new Payment(this.userRepository.findById(3L).get(), "Third", 30.33));
 		
-		assertEquals(Arrays.asList(dbPayments), payments);
+		assertEquals(this.getAllPaymentsFromDatabase(), this.paymentRepository.findAll());
 	}
 	
 	@Test
-	void givenFourPayments_WhenFindById_ThenFoundPaymentHasPayerUserEntity() {
-		this.saveDatabasePayments(
-				new Payment(null, "Payment1", 100), // Id 2
-				new Payment(null, "Payment2", 200), // Id 4
-				new Payment(null, "Payment3", 300), // Id 6
-				new Payment(null, "Payment4", 400)); // Id 8
-		
-		Payment payment = this.repoHandler.findPaymentById(4L).get();
+	void givenPayments_WhenFindById_ThenFoundPaymentHasPayerUserEntity() {	
+		Payment payment = this.paymentRepository.findById(9L).get();
 		assertThat(payment.getPayer(), is(notNullValue()));
-		assertThat(payment.getPayer().getId().toString(), is("3"));
-		assertThat(payment.getPayer().getName(), is("User 3"));
+		assertThat(payment.getPayer().getId(), is(4L));
+		assertThat(payment.getPayer().getName(), is("Carla"));
 	}
 	
 	@Test
-	void givenOnePayment_WhenUpdateAmountAndPayer_ThenDatabaseHasUpdatedData() throws SQLException {
-		User user1 = this.repoHandler.save(new User("u1"));
-		this.saveDatabasePayments(new Payment(null, "oldDescription", 55.99));
+	void givenOneNewPayment_WhenUpdateAmountAndPayer_ThenDatabaseHasUpdatedData() throws SQLException {
+		User user1 = this.userRepository.save(new User("u1"));
+		this.savePayments(new Payment(
+				this.userRepository.findById(3L).get(), "oldDescription", 55.99));
 		
-		Payment payment = this.repoHandler.findPaymentById(3L).get();
+		Payment payment = this.paymentRepository.findById(101L).get();
 		payment.setDescription("newUpdatedDescription");
 		payment.setPayer(user1);
-		this.repoHandler.update(payment);
+		this.paymentRepository.update(payment);
 		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
 		
+		assertTrue(payments.absolute(7));
 		assertThat(payments.getString("description"), is(payment.getDescription()));
-		assertThat(payments.getString("payer_id"), is("1"));
+		assertThat(payments.getLong("payer_id"), is(100L));
 	}
 
 }
