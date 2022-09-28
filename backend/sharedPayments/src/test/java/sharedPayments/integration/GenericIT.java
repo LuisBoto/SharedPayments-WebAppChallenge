@@ -9,7 +9,7 @@ import io.micronaut.context.annotation.Value;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 
 @MicronautTest(transactional = false)
-public abstract class RepositoryIT {
+public abstract class GenericIT {
 	
 	@Value("${datasources.default.username}")
 	private String username;
@@ -24,8 +24,8 @@ public abstract class RepositoryIT {
 	void resetDB() {
 		if (dbConfig.isEmpty())
 			this.setUpDatabaseConfig();
-		QueryEnum.DELETE_INSERTED_PAYMENTS.execute(dbConfig);
-		QueryEnum.DELETE_INSERTED_USERS.execute(dbConfig);
+		QueryEnum.DELETE_INSERTED_PAYMENTS.executeFormatted(dbConfig, this.getInitialID());
+		QueryEnum.DELETE_INSERTED_USERS.executeFormatted(dbConfig, this.getInitialID());
 		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.executeFormatted(dbConfig, this.getInitialID()); 
 	}
 	

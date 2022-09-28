@@ -17,7 +17,7 @@ import jakarta.inject.Inject;
 import sharedPayments.model.User;
 import sharedPayments.repository.UserRepository;
 
-public class UserRepositoryIT extends RepositoryIT {
+public class UserRepositoryIT extends GenericIT {
 	
 	@Inject
 	private UserRepository userRepository;

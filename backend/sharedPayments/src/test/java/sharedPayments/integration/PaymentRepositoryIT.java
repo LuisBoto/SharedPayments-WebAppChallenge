@@ -18,7 +18,7 @@ import sharedPayments.model.User;
 import sharedPayments.repository.PaymentRepository;
 import sharedPayments.repository.UserRepository;
 
-public class PaymentRepositoryIT extends RepositoryIT {
+public class PaymentRepositoryIT extends GenericIT {
 	
 	@Inject
 	private PaymentRepository paymentRepository;

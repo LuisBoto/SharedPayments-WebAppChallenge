@@ -13,9 +13,9 @@ public enum QueryEnum {
 		
 	UPDATE_HIBERNATE_AUTO_ID("update hibernate_sequence set next_val=%d"),
 	
-	DELETE_INSERTED_PAYMENTS("delete from payment where id>=100"),
+	DELETE_INSERTED_PAYMENTS("delete from payment where id>=%d"),
 	
-	DELETE_INSERTED_USERS("delete from user where id>=100"),
+	DELETE_INSERTED_USERS("delete from user where id>=%d"),
 	
 	SELECT_ALL_USERS("select * from user"),
 	
