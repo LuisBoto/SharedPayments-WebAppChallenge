@@ -1,6 +1,7 @@
 package sharedPayments.model.dto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class MoneyMovementDto {
 
@@ -11,7 +12,7 @@ public class MoneyMovementDto {
 	public MoneyMovementDto(Long userOwedMoneyId, BigDecimal amount, Long userOwingMoneyId) {
 		super();
 		this.userOwedMoneyId = userOwedMoneyId;
-		this.amount = amount;
+		this.amount = amount.setScale(2, RoundingMode.HALF_EVEN);
 		this.userOwingMoneyId = userOwingMoneyId;
 	}
 

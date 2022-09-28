@@ -1,13 +1,14 @@
 package sharedPayments.model;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -15,6 +16,7 @@ import io.micronaut.core.annotation.Introspected;
 import sharedPayments.model.dto.PaymentDto;
 
 @Entity
+@Table(name = "payment")
 @Introspected
 public class Payment {
 
@@ -101,6 +103,25 @@ public class Payment {
 				this.price.doubleValue(), 
 				this.description, 
 				this.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, id, payer, paymentDate, price);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Payment other = (Payment) obj;
+		return Objects.equals(description, other.description) && Objects.equals(id, other.id)
+				&& Objects.equals(payer, other.payer) && Objects.equals(paymentDate, other.paymentDate)
+				&& Objects.equals(price, other.price);
 	}
 
 }

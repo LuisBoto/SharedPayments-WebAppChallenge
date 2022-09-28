@@ -2,6 +2,7 @@ package sharedPayments.model.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -67,7 +68,27 @@ public class UserDto {
 	}
 
 	public @Valid User toEntity() {
-		return new User(this.name);
+		User result = new User(this.name);
+		result.setDebt(this.getDebt());
+		result.setId(this.id);
+		return result;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(debt, id, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserDto other = (UserDto) obj;
+		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
 
 }

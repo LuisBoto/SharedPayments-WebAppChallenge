@@ -2,6 +2,7 @@ package sharedPayments.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -72,4 +73,26 @@ public class User {
 		return new UserDto(this.id, this.name, this.debt);
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(debt, id, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", debt=" + debt + "]";
+	}
+	
 }

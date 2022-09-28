@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import sharedPayments.model.User;
 import sharedPayments.model.dto.PaymentDto;
@@ -15,8 +14,11 @@ import sharedPayments.repository.PaymentRepository;
 @Singleton
 public class PaymentService {
 
-	@Inject
 	private PaymentRepository paymentRepository;
+	
+	public PaymentService(PaymentRepository paymentRepository) {
+		this.paymentRepository = paymentRepository;
+	}
 	
 	private Comparator<PaymentDto> comparePaymentsByDate = ((PaymentDto o1, PaymentDto o2)-> 
 			o1.getPaymentDate() <= o2.getPaymentDate() ?1:-1);

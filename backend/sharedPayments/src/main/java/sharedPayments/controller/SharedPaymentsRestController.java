@@ -14,10 +14,8 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.validation.Validated;
-import jakarta.inject.Inject;
 import sharedPayments.model.dto.MoneyMovementDto;
 import sharedPayments.model.dto.PaymentDto;
-import sharedPayments.model.dto.UserDto;
 import sharedPayments.service.PaymentService;
 import sharedPayments.service.UserService;
 
@@ -25,28 +23,12 @@ import sharedPayments.service.UserService;
 @Controller("/api/v1")
 public class SharedPaymentsRestController {
 
-    @Inject
     private UserService userService;
-    
-    @Inject
     private PaymentService paymentService;
-
-    @Get("/users")
-    @Produces(MediaType.APPLICATION_JSON) 
-    public HttpResponse<List<UserDto>> getAllUsers() {
-        return HttpResponse
-        		.status(HttpStatus.OK)
-        		.body(
-        				this.userService.getUsers());
-    }
     
-    @Post("/users")
-    @Produces(MediaType.APPLICATION_JSON)
-    public HttpResponse<UserDto> createUser(@Body @Valid UserDto newUser) {
-    	return HttpResponse
-    			.status(HttpStatus.CREATED)
-    			.body(
-    					this.userService.createUser(newUser));
+    public SharedPaymentsRestController(UserService userService, PaymentService paymentService) {
+    	this.userService = userService;
+    	this.paymentService = paymentService;
     }
     
     @Get("/payments")
