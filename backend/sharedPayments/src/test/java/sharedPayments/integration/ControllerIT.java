@@ -78,7 +78,6 @@ public class ControllerIT {
 	public void givenNewInvalidUser_WhenPostUsers_ThenRequestError (RequestSpecification spec) {
 		JSONObject requestBody = new JSONObject();
 		requestBody.put("debt", 20f);
-		System.out.println(requestBody.toString());
 		
 		spec
 		.given()
