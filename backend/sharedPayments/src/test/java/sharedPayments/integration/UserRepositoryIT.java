@@ -31,7 +31,7 @@ public class UserRepositoryIT extends GenericIT {
 	void givenOneNewUser_WhenSaved_ThenUsersTableContainsThatUser() throws SQLException {
 		User user = new User("Fuencisla");
 		user = this.userRepository.save(user);
-		// CachedRowSet users = QueryEnum.SELECT_ALL_USERS.execute(dbConfig);
+
 		var users = this.getAllUsersFromDB();
 
 		assertEquals(6, users.size());
