@@ -1,15 +1,24 @@
 package sharedPayments.integration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 
 import io.micronaut.context.annotation.Value;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import sharedPayments.model.Payment;
+import sharedPayments.model.User;
 
-@MicronautTest(transactional = false)
+@MicronautTest
 public abstract class GenericIT {
+	
+	@Inject
+	protected EntityManager entityManager;
 	
 	@Value("${datasources.default.username}")
 	private String username;
@@ -24,15 +33,25 @@ public abstract class GenericIT {
 	void resetDB() {
 		if (dbConfig.isEmpty())
 			this.setUpDatabaseConfig();
-		QueryEnum.DELETE_INSERTED_PAYMENTS.executeFormatted(dbConfig, this.getInitialID());
-		QueryEnum.DELETE_INSERTED_USERS.executeFormatted(dbConfig, this.getInitialID());
-		QueryEnum.UPDATE_HIBERNATE_AUTO_ID.executeFormatted(dbConfig, this.getInitialID()); 
+		this.entityManager.createNativeQuery(
+				String.format("update hibernate_sequence set next_val=%d", this.getInitialID()))
+		.executeUpdate();
 	}
 	
 	private void setUpDatabaseConfig() {
 		dbConfig.put("url", url);
 		dbConfig.put("username", username);
 		dbConfig.put("password", password);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected List<User> getAllUsersFromDB() {
+		return this.entityManager.createQuery("from User").getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected List<Payment> getAllPaymentsFromDB() {
+		return this.entityManager.createQuery("from Payment").getResultList();
 	}
 	
 	protected abstract long getInitialID();

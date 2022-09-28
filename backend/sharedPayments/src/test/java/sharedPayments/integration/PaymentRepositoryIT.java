@@ -4,11 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,33 +33,17 @@ public class PaymentRepositoryIT extends GenericIT {
 			this.paymentRepository.save(p);
 	}
 	
-	private List<Payment> getAllPaymentsFromDatabase() throws SQLException {
-		var dbPayments = new ArrayList<Payment>();
-		var paymentRows = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
-		paymentRows.beforeFirst();
-		while (paymentRows.next()) {
-			Payment p = new Payment(
-					this.userRepository.findById(paymentRows.getLong("payer_id")).get(),
-					paymentRows.getString("description"),
-					paymentRows.getDouble("price"),
-					paymentRows.getLong("payment_date"));
-			p.setId(paymentRows.getLong("id"));
-			dbPayments.add(p);
-		}
-		return dbPayments;
-	}
-	
 	@Test
 	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsNewPayment() throws SQLException {
 		User payer = this.userRepository.save(new User("Payer"));
 		Payment payment = new Payment(payer, "NewPaymentDescription", 11.4);
 		
 		this.paymentRepository.save(payment);
-		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		var payments = this.getAllPaymentsFromDB();
 		
-		assertThat(payments.absolute(7), is(true));
-		assertThat(payments.getString("description"), is(payment.getDescription()));
-		assertThat(payments.getString("price"), is("11.40"));
+		assertEquals(7, payments.size()); 
+		assertThat(payments.get(6).getDescription(), is(payment.getDescription()));
+		assertThat(payments.get(6).getPrice(), is(11.4));
 	}
 	
 	@Test
@@ -70,13 +51,12 @@ public class PaymentRepositoryIT extends GenericIT {
 		User payer = this.userRepository.findById(2L).get();
 		Payment payment = new Payment(payer, "newer payment", 77.89);
 		payment = this.paymentRepository.save(payment);
-		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		var payments = this.getAllPaymentsFromDB();
 		
-		assertThat(payments.absolute(6), is(true));
-		assertThat(payments.getString("description"), is("Tire"));
-		assertThat(payments.next(), is(true));
-		assertThat(payments.getString("description"), is(payment.getDescription()));
-		assertThat(payments.getLong("id"), is(100L));
+		assertEquals(7, payments.size());
+		assertThat(payments.get(5).getDescription(), is("Tire"));
+		assertThat(payments.get(6).getDescription(), is(payment.getDescription()));
+		assertThat(payments.get(6).getId(), is(100L));
 	}
 	
 	@Test
@@ -85,16 +65,16 @@ public class PaymentRepositoryIT extends GenericIT {
 		Payment payment = new Payment(payer, "NewPaymentWithUser", 25);
 		
 		this.paymentRepository.save(payment);
-		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		var payments = this.getAllPaymentsFromDB();
 		
-		assertThat(payments.absolute(7), is(true));
-		assertThat(payments.getLong("payer_id"), is(payer.getId()));
-		assertThat(payments.getLong("id"), is(101L));
+		assertEquals(7, payments.size());
+		assertThat(payments.get(6).getPayer().getId(), is(payer.getId()));
+		assertThat(payments.get(6).getId(), is(101L));
 	}
 	
 	@Test
 	void givenPayments_WhenFindAll_ThenListContainsAllPayments() throws SQLException {
-		assertEquals(this.getAllPaymentsFromDatabase(), this.paymentRepository.findAll());
+		assertEquals(this.getAllPaymentsFromDB(), this.paymentRepository.findAll());
 	}
 	
 	@Test
@@ -104,7 +84,7 @@ public class PaymentRepositoryIT extends GenericIT {
 				new Payment(this.userRepository.findById(2L).get(), "Second", 20.22),
 				new Payment(this.userRepository.findById(3L).get(), "Third", 30.33));
 		
-		assertEquals(this.getAllPaymentsFromDatabase(), this.paymentRepository.findAll());
+		assertEquals(this.getAllPaymentsFromDB(), this.paymentRepository.findAll());
 	}
 	
 	@Test
@@ -125,11 +105,11 @@ public class PaymentRepositoryIT extends GenericIT {
 		payment.setDescription("newUpdatedDescription");
 		payment.setPayer(user1);
 		this.paymentRepository.update(payment);
-		var payments = QueryEnum.SELECT_ALL_PAYMENTS.execute(dbConfig);
+		var payments = this.getAllPaymentsFromDB();
 		
-		assertTrue(payments.absolute(7));
-		assertThat(payments.getString("description"), is(payment.getDescription()));
-		assertThat(payments.getLong("payer_id"), is(100L));
+		assertEquals(7, payments.size());
+		assertThat(payments.get(6).getDescription(), is(payment.getDescription()));
+		assertThat(payments.get(6).getId(), is(101L));
 	}
 
 }
