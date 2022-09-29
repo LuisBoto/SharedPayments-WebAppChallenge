@@ -10,14 +10,17 @@ import jakarta.inject.Singleton;
 import sharedPayments.model.User;
 import sharedPayments.model.dto.PaymentDto;
 import sharedPayments.repository.PaymentRepository;
+import sharedPayments.repository.UserRepository;
 
 @Singleton
 public class PaymentService {
 
 	private PaymentRepository paymentRepository;
+	private UserRepository userRepository;
 	
-	public PaymentService(PaymentRepository paymentRepository) {
+	public PaymentService(PaymentRepository paymentRepository, UserRepository userRepository) {
 		this.paymentRepository = paymentRepository;
+		this.userRepository = userRepository;
 	}
 	
 	private Comparator<PaymentDto> comparePaymentsByDate = ((PaymentDto o1, PaymentDto o2)-> 
@@ -30,7 +33,8 @@ public class PaymentService {
 		return result;
 	}
 
-	public PaymentDto createPayment(PaymentDto newPayment, Optional<User> payerUser) {
+	public PaymentDto createPayment(PaymentDto newPayment) {
+		Optional<User> payerUser = this.userRepository.findById(newPayment.getPayerId());
 		if (payerUser.isEmpty())
 			throw new NoSuchElementException("Payer User not found");
 

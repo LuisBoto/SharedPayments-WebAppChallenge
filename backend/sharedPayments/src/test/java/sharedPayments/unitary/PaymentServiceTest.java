@@ -20,12 +20,14 @@ import sharedPayments.model.Payment;
 import sharedPayments.model.User;
 import sharedPayments.model.dto.PaymentDto;
 import sharedPayments.repository.PaymentRepository;
+import sharedPayments.repository.UserRepository;
 import sharedPayments.service.PaymentService;
 
 public class PaymentServiceTest {
 
 	private PaymentRepository paymentRepository = mock(PaymentRepository.class);
-	private PaymentService paymentService = new PaymentService(this.paymentRepository);
+	private UserRepository userRepository = mock(UserRepository.class);
+	private PaymentService paymentService = new PaymentService(this.paymentRepository, this.userRepository);
 	
 	@Test
 	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturnedAndSorted() {
@@ -51,24 +53,26 @@ public class PaymentServiceTest {
 
 		User user = new User();
 		user.setId(5L);
+		when(this.userRepository.findById(any())).thenReturn(Optional.of(user));
 		when(this.paymentRepository.save(any())).then(call -> {
 			Payment result = paymentDto.toEntity(user);
 			result.setId(15L);
 			return result;
 		});
 		
-		PaymentDto createdPayment = this.paymentService.createPayment(paymentDto, Optional.of(user));
+		PaymentDto createdPayment = this.paymentService.createPayment(paymentDto);
 		assertEquals(paymentDto, createdPayment);
 		verify(this.paymentRepository).save(any());
 	}
 	
 	@Test
 	void givenNewPayment_WhenPayerUserDoesNotExist_ThenError() {
-		PaymentDto paymentDto = new PaymentDto(1L, 10000L, 500.0, "Description", 15L);
+		when(this.userRepository.findById(any())).thenReturn(Optional.empty());
+		PaymentDto paymentDto = new PaymentDto(-7L, 10000L, 500.0, "Description", 15L);
 		when(this.paymentRepository.save(any())).thenReturn(paymentDto.toEntity(new User()));
 		assertThrows(
 				NoSuchElementException.class, 
-				() -> this.paymentService.createPayment(paymentDto, Optional.empty()));
+				() -> this.paymentService.createPayment(paymentDto));
 	}
 
 }

@@ -47,8 +47,7 @@ public class SharedPaymentsRestController {
     	var result = HttpResponse
         		.status(HttpStatus.OK)
         		.body(
-        				this.paymentService.createPayment(newPayment, 
-        						userService.getUser(newPayment.getPayerId())));
+        				this.paymentService.createPayment(newPayment));
     	this.userService.updateUserDebts(newPayment.getPayerId(), newPayment.getPrice());
     	return result;
     }
