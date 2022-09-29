@@ -1,5 +1,6 @@
 package sharedPayments.model.dto;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -20,7 +21,7 @@ public class PaymentDto {
 	
 	@NotNull
 	@Positive
-	private Double price;
+	private BigDecimal price;
 	
 	private String description;
 	
@@ -29,7 +30,7 @@ public class PaymentDto {
 	public PaymentDto() {
 	}
 
-	public PaymentDto(Long payerId, Long paymentDate, Double price, String description, Long id) {
+	public PaymentDto(Long payerId, Long paymentDate, BigDecimal price, String description, Long id) {
 		super();
 		this.payerId = payerId;
 		this.paymentDate = paymentDate;
@@ -38,13 +39,27 @@ public class PaymentDto {
 		this.id = id;
 	}
 	
-	public PaymentDto(Long payerId, Double price, String description, Long id) {
-		super();
-		this.payerId = payerId;
-		this.paymentDate = System.currentTimeMillis();
-		this.price = price;
-		this.description = description;
-		this.id = id;
+	public PaymentDto(Long payerId, Long paymentDate, double price, String description, Long id) {
+		this(payerId, 
+				paymentDate, 
+				BigDecimal.valueOf(price).setScale(2), 
+				description, 
+				id);
+	}
+	
+	public PaymentDto(Long payerId, BigDecimal price, String description, Long id) {
+		this(payerId, 
+				System.currentTimeMillis(), 
+				price, 
+				description, 
+				id);
+	}
+	
+	public PaymentDto(Long payerId, double price, String description, Long id) {
+		this(payerId, 
+				BigDecimal.valueOf(price).setScale(2), 
+				description, 
+				id);
 	}
 
 	public Long getPayerId() {
@@ -65,11 +80,11 @@ public class PaymentDto {
 	}
 
 	public Double getPrice() {
-		return this.price;
+		return this.price.doubleValue();
 	}
 
 	public void setPrice(Double price) {
-		this.price = price;
+		this.price = BigDecimal.valueOf(price);
 	}
 
 	public String getDescription() {

@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 
 import java.sql.SQLException;
 
@@ -43,7 +45,7 @@ public class PaymentRepositoryIT extends GenericIT {
 		
 		assertEquals(7, payments.size()); 
 		assertThat(payments.get(6).getDescription(), is(payment.getDescription()));
-		assertThat(payments.get(6).getPrice(), is(11.4));
+		assertThat(payments.get(6).getPrice().toString(), is("11.40"));
 	}
 	
 	@Test

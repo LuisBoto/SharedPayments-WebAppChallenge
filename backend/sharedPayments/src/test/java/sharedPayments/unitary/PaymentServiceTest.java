@@ -31,9 +31,9 @@ public class PaymentServiceTest {
 	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturnedAndSorted() {
 		User payer = new User("Manola");
 		List<Payment> payments = Arrays.asList(
-				new Payment(payer, "Description", 500, 100000L),
-				new Payment(payer, "Description 2", 235, 500000L),
-				new Payment(payer, "Description 3", 800, 3000L)
+				new Payment(payer, "Description", 500D, 100000L),
+				new Payment(payer, "Description 2", 235D, 500000L),
+				new Payment(payer, "Description 3", 800D, 3000L)
 				);
 		when(this.paymentRepository.findAll()).thenReturn(payments);
 		List<PaymentDto> sortedPayments = Arrays.asList(

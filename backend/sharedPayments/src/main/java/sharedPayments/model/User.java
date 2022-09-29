@@ -34,22 +34,22 @@ public class User {
 
 	public User() {
 	}
-
-	public User(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
+	
+	public User(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name, Double debt) {
 		super();
 		this.name = name;
-		this.debt = BigDecimal.valueOf(0.0).setScale(2, RoundingMode.FLOOR);
-	}
-
-	public double getDebt() {
-		return debt.doubleValue();
-	}
-
-	public void setDebt(double debt) {
 		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
 	}
+
+	public User(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
+		this(name, 0D);
+	}
+
+	public void setDebt(BigDecimal debt) {
+		this.debt = debt;
+	}
 	
-	public BigDecimal getBDDebt() {
+	public BigDecimal getDebt() {
 		return this.debt;
 	}
 

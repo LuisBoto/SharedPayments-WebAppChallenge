@@ -48,15 +48,15 @@ public class UserService {
 		for (User user : userRepository.findAll()) {
 			if (user.getId() == payerId) 
 				resultDebt = debtCalculator.calculatePayerDebt(
-						user.getBDDebt(), priceBD, userNumberBD);
+						user.getDebt(), priceBD, userNumberBD);
 			else {
 				addRoundingErrorCent = roundingErrorCents.doubleValue() > 0;
 				resultDebt = debtCalculator.calculateOwerDebt(
-						user.getBDDebt(), priceBD, userNumberBD, addRoundingErrorCent);
+						user.getDebt(), priceBD, userNumberBD, addRoundingErrorCent);
 				if (addRoundingErrorCent) roundingErrorCents = roundingErrorCents.subtract(BigDecimal.valueOf(1));
 			}
 			
-			user.setDebt(resultDebt.doubleValue());
+			user.setDebt(resultDebt);
 			userRepository.save(user);
 		}
 	}

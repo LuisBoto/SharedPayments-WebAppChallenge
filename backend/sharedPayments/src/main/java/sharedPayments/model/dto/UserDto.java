@@ -69,7 +69,7 @@ public class UserDto {
 
 	public @Valid User toEntity() {
 		User result = new User(this.name);
-		result.setDebt(this.getDebt());
+		result.setDebt(this.debt);
 		result.setId(this.id);
 		return result;
 	}

@@ -31,8 +31,7 @@ public class UserServiceTest {
 	private void setUpMockRepositoryUsersWithDebts(Double... debts) {
 		List<User> users = new ArrayList<User>();
 		for (int i=0; i<debts.length; i++) {
-			User user = new User("Name");
-			user.setDebt(debts[i]);
+			User user = new User("Name", debts[i]);
 			user.setId((long) i+1);
 			users.add(user);
 		}
@@ -56,7 +55,7 @@ public class UserServiceTest {
 	}
 	
 	private String getDebtForMockUser(Long Id) {
-		return this.userRepository.findById(Id).get().getBDDebt().toString();
+		return this.userRepository.findById(Id).get().getDebt().toString();
 	}
 	
 	@Test

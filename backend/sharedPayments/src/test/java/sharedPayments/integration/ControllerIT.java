@@ -34,7 +34,6 @@ public class ControllerIT {
 				UserDto paramUser = call.getArgument(0);
 				User user = paramUser.toEntity();
 				user.setId(100L);
-				user.setDebt(0f);
 				return user.toDto();
 			});
         return userService;

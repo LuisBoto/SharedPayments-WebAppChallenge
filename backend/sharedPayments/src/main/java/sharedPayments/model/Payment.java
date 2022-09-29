@@ -40,20 +40,28 @@ public class Payment {
 	public Payment() {
 	}
 
-	public Payment(@NotNull User payer, String description, @NotNull @Positive double price, @NotNull Long paymentDate) {
+	public Payment(@NotNull User payer, String description, @NotNull @Positive BigDecimal price, @NotNull Long paymentDate) {
 		super();
 		this.payer = payer;
 		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR);
+		this.price = price;
 		this.paymentDate = paymentDate;
 	}
 	
+	public Payment(@NotNull User payer, String description, @NotNull @Positive double price, @NotNull Long paymentDate) {
+		this(
+			payer,
+			description,
+			BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR),
+			paymentDate);
+	}
+	
 	public Payment(@NotNull User payer, String description, @NotNull @Positive double price) {
-		super();
-		this.payer = payer;
-		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2);
-		this.paymentDate = System.currentTimeMillis();
+		this(
+			payer,
+			description,
+			BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR),
+			System.currentTimeMillis());
 	}
 
 	public String getDescription() {
@@ -64,8 +72,8 @@ public class Payment {
 		this.description = description;
 	}
 
-	public double getPrice() {
-		return price.doubleValue();
+	public BigDecimal getPrice() {
+		return price;
 	}
 
 	public void setPrice(double price) {
