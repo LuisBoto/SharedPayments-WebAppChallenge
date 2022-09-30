@@ -3,7 +3,6 @@ package sharedPayments.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import jakarta.inject.Singleton;
 import sharedPayments.model.User;
@@ -30,10 +29,6 @@ public class UserService {
     public UserDto createUser(UserDto newUser) {
     	return this.userRepository.save(newUser.toEntity()).toDto();
     }
-
-	public Optional<User> getUser(Long userId) {
-		return this.userRepository.findById(userId);
-	}
 
 	public void updateUserDebts(Long payerId, Double price) {
 		int userCount = (int) userRepository.count();
