@@ -1,214 +1,257 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    	
-  
-  <modelVersion>4.0.0</modelVersion>
-    	
-  
-  <groupId>com.sharedPayments</groupId>
-    	
-  
-  <artifactId>parent-project</artifactId>
-    	
-  
-  <version>0.3</version>
-    	
-  
-  <name>parent-project</name>
-    	
-  
-  <packaging>pom</packaging>
-    	
-  
-  <properties>
-        		
-    
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        		
-    
-    <maven.compiler.source>1.7</maven.compiler.source>
-        		
-    
-    <maven.compiler.target>1.7</maven.compiler.target>
-        	
-  
-  </properties>
-    	
-  
-  <dependencies>
-        		
-    
-    <dependency>
-            			
-      
-      <groupId>junit</groupId>
-            			
-      
-      <artifactId>junit</artifactId>
-            			
-      
-      <version>4.11</version>
-            			
-      
-      <scope>test</scope>
-            		
-    
-    </dependency>
-        	
-  
-  </dependencies>
-    	
-  
-  <build>
-        		
-    
-    <pluginManagement>
-             
-      
-      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-            			
-      
-      <plugins>
-                 
-        
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-clean-plugin</artifactId>
-                    					
-          
-          <version>3.1.0</version>
-                    				
-        
-        </plugin>
-                 
-        
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-resources-plugin</artifactId>
-                    					
-          
-          <version>3.0.2</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-compiler-plugin</artifactId>
-                    					
-          
-          <version>3.8.0</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-surefire-plugin</artifactId>
-                    					
-          
-          <version>2.22.1</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-jar-plugin</artifactId>
-                    					
-          
-          <version>3.0.2</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-install-plugin</artifactId>
-                    					
-          
-          <version>2.5.2</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-deploy-plugin</artifactId>
-                    					
-          
-          <version>2.8.2</version>
-                    				
-        
-        </plugin>
-                 
-        
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-site-plugin</artifactId>
-                    					
-          
-          <version>3.7.1</version>
-                    				
-        
-        </plugin>
-                				
-        
-        <plugin>
-                    					
-          
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-                    					
-          
-          <version>3.0.0</version>
-                    				
-        
-        </plugin>
-                			
-      
-      </plugins>
-            		
-    
-    </pluginManagement>
-        	
-  
-  </build>
-    	
-  
-  <modules>
-        		
-    
-    <module>application</module>
-        	  
-    
-    <module>infrastructure</module>
-          
-    
-    <module>controller</module>
-      
-  </modules>
-    
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.sharedPayments</groupId>
+	<artifactId>parent-project</artifactId>
+	<version>0.3</version>
+	<name>parent-project</name>
+	<packaging>pom</packaging>
 
+	<parent>
+		<groupId>io.micronaut</groupId>
+		<artifactId>micronaut-parent</artifactId>
+		<version>3.6.0</version>
+	</parent>
+
+	<properties>
+		<exec.mainClass>com.sharedPayments.Application</exec.mainClass>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.11</maven.compiler.source>
+		<maven.compiler.target>1.11</maven.compiler.target>
+		<packaging>jar</packaging>
+		<jdk.version>11</jdk.version>
+		<release.version>11</release.version>
+		<micronaut.version>3.6.0</micronaut.version>
+		<micronaut.data.version>3.8.0</micronaut.data.version>
+		<micronaut.runtime>netty</micronaut.runtime>
+		<micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>https://repo.maven.apache.org/maven2</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-inject</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-validation</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-jdbc-hikari</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.test</groupId>
+			<artifactId>micronaut-test-junit5</artifactId>
+			<scope>test</scope>
+		</dependency> <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency> <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.testresources</groupId>
+			<artifactId>micronaut-test-resources-core</artifactId>
+			<scope>test</scope>
+		</dependency> <!-- https://mvnrepository.com/artifact/io.micronaut.spring/micronaut-spring -->
+		<dependency>
+			<groupId>io.micronaut.spring</groupId>
+			<artifactId>micronaut-spring</artifactId>
+			<scope>test</scope>
+		</dependency> <!-- https://mvnrepository.com/artifact/io.micronaut.test/micronaut-test-rest-assured -->
+		<dependency>
+			<groupId>io.micronaut.test</groupId>
+			<artifactId>micronaut-test-rest-assured</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<scope>test</scope>
+		</dependency> <!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20220924</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-http-client</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-http-server-netty</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-jackson-databind</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<pluginManagement>
+			<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin> <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin> <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>io.micronaut.build</groupId>
+				<artifactId>micronaut-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- Uncomment to enable incremental compilation -->
+					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+
+					<annotationProcessorPaths combine.children="append">
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-http-validation</artifactId>
+							<version>${micronaut.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-inject-java</artifactId>
+							<version>${micronaut.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.data</groupId>
+							<artifactId>micronaut-data-processor</artifactId>
+							<version>${micronaut.data.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-validation</artifactId>
+							<version>${micronaut.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.data</groupId>
+							<artifactId>micronaut-data-hibernate-jpa</artifactId>
+							<version>${micronaut.data.version}</version>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Amicronaut.processing.group=com.sharedPayments</arg>
+						<arg>-Amicronaut.processing.module=com.sharedPayments</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<configuration>
+					<classpathDependencyScopeExclude>runtime</classpathDependencyScopeExclude>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<modules>
+		<module>application</module>
+		<module>infrastructure</module>
+		<module>controller</module>
+	</modules>
 </project>
