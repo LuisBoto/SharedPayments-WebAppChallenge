@@ -1,0 +1,47 @@
+{"properties": [
+  {
+    "name": "jpa.default.entity-scan.classpath",
+    "type": "java.lang.String",
+    "description": "A description for 'jpa.default.entity-scan.classpath'"
+  },
+  {
+    "name": "jpa.default.entity-scan.packages",
+    "type": "java.lang.String",
+    "description": "A description for 'jpa.default.entity-scan.packages'"
+  },
+  {
+    "name": "jpa.default.properties.hibernate.hbm2ddl.auto",
+    "type": "java.lang.String",
+    "description": "A description for 'jpa.default.properties.hibernate.hbm2ddl.auto'"
+  },
+  {
+    "name": "jpa.default.properties.hibernate.show_sql",
+    "type": "java.lang.String",
+    "description": "A description for 'jpa.default.properties.hibernate.show_sql'"
+  },
+  {
+    "name": "datasources.default.url",
+    "type": "java.lang.String",
+    "description": "A description for 'datasources.default.url'"
+  },
+  {
+    "name": "datasources.default.driverClassName",
+    "type": "java.lang.String",
+    "description": "A description for 'datasources.default.driverClassName'"
+  },
+  {
+    "name": "datasources.default.username",
+    "type": "java.lang.String",
+    "description": "A description for 'datasources.default.username'"
+  },
+  {
+    "name": "datasources.default.password",
+    "type": "java.lang.String",
+    "description": "A description for 'datasources.default.password'"
+  },
+  {
+    "name": "datasources.default.db-type",
+    "type": "java.lang.String",
+    "description": "A description for 'datasources.default.db-type'"
+  }
+]}

@@ -16,8 +16,7 @@
 		<maven.compiler.target>1.11</maven.compiler.target>
 		<exec.mainClass>com.sharedPayments.Application</exec.mainClass>
 	</properties>
-	<dependencies></dependencies>
-	<build>
-		
-	</build>
+	<dependencies>
+	</dependencies>
+	<build></build>
 </project>

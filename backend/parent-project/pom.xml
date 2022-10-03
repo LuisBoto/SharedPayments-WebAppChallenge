@@ -166,16 +166,31 @@
 						<compilerArgs>
 							<arg>-parameters</arg>
 						</compilerArgs>
-						<annotationProcessorPaths>
+						<annotationProcessorPaths combine.children="append">
+							<path>
+								<groupId>io.micronaut</groupId>
+								<artifactId>micronaut-http-validation</artifactId>
+								<version>${micronaut.version}</version>
+							</path>
 							<path>
 								<groupId>io.micronaut</groupId>
 								<artifactId>micronaut-inject-java</artifactId>
 								<version>${micronaut.version}</version>
 							</path>
 							<path>
+								<groupId>io.micronaut.data</groupId>
+								<artifactId>micronaut-data-processor</artifactId>
+								<version>${micronaut.data.version}</version>
+							</path>
+							<path>
 								<groupId>io.micronaut</groupId>
 								<artifactId>micronaut-validation</artifactId>
 								<version>${micronaut.version}</version>
+							</path>
+							<path>
+								<groupId>io.micronaut.data</groupId>
+								<artifactId>micronaut-data-hibernate-jpa</artifactId>
+								<version>${micronaut.data.version}</version>
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
@@ -229,46 +244,6 @@
 					<artifactId>maven-project-info-reports-plugin</artifactId>
 					<version>3.0.0</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<!-- Uncomment to enable incremental compilation -->
-						<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
-
-						<annotationProcessorPaths combine.children="append">
-							<path>
-								<groupId>io.micronaut</groupId>
-								<artifactId>micronaut-http-validation</artifactId>
-								<version>${micronaut.version}</version>
-							</path>
-							<path>
-								<groupId>io.micronaut</groupId>
-								<artifactId>micronaut-inject-java</artifactId>
-								<version>${micronaut.version}</version>
-							</path>
-							<path>
-								<groupId>io.micronaut.data</groupId>
-								<artifactId>micronaut-data-processor</artifactId>
-								<version>${micronaut.data.version}</version>
-							</path>
-							<path>
-								<groupId>io.micronaut</groupId>
-								<artifactId>micronaut-validation</artifactId>
-								<version>${micronaut.version}</version>
-							</path>
-							<path>
-								<groupId>io.micronaut.data</groupId>
-								<artifactId>micronaut-data-hibernate-jpa</artifactId>
-								<version>${micronaut.data.version}</version>
-							</path>
-						</annotationProcessorPaths>
-						<compilerArgs>
-							<arg>-Amicronaut.processing.group=com.sharedPayments</arg>
-							<arg>-Amicronaut.processing.module=com.sharedPayments</arg>
-						</compilerArgs>
-					</configuration>
-				</plugin>
 
 			</plugins>
 		</pluginManagement>
@@ -280,7 +255,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -301,7 +275,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
 				<configuration>
 					<executable>java</executable>
 					<arguments>

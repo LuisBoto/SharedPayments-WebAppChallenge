@@ -18,7 +18,7 @@ import io.micronaut.core.annotation.Introspected;
 
 @Entity
 @Table(name = "payment")
-@Introspected(packages="com.sharedPayments.model", includedAnnotations=Entity.class)
+@Introspected
 public class Payment {
 
 	@Id
