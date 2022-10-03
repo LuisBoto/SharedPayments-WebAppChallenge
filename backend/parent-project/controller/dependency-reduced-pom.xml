@@ -49,13 +49,13 @@
     <dependency>
       <groupId>io.micronaut.test</groupId>
       <artifactId>micronaut-test-junit5</artifactId>
-      <version>3.4.0</version>
+      <version>3.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.6.1</version>
+      <version>4.8.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -77,13 +77,13 @@
     <dependency>
       <groupId>io.micronaut.testresources</groupId>
       <artifactId>micronaut-test-resources-core</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.micronaut.spring</groupId>
       <artifactId>micronaut-spring</artifactId>
-      <version>4.2.1</version>
+      <version>4.3.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -103,7 +103,7 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>json-path</artifactId>
-      <version>5.1.0</version>
+      <version>5.2.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -119,7 +119,7 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>xml-path</artifactId>
-      <version>5.1.0</version>
+      <version>5.2.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -141,14 +141,8 @@
     <dependency>
       <groupId>io.micronaut.testresources</groupId>
       <artifactId>micronaut-test-resources-client</artifactId>
-      <version>1.0.1</version>
+      <version>1.1.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <properties>
-    <maven.compiler.target>1.11</maven.compiler.target>
-    <exec.mainClass>com.sharedPayments.Application</exec.mainClass>
-    <maven.compiler.source>1.11</maven.compiler.source>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
 </project>
