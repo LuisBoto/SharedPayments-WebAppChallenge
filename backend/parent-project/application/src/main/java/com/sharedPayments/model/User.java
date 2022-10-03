@@ -19,7 +19,7 @@ import io.micronaut.core.annotation.Introspected;
 
 @Entity
 @Table(name = "user")
-@Introspected // Used to avoid reflective operations
+@Introspected(packages="com.sharedPayments.model", includedAnnotations=Entity.class)
 public class User {
 
 	@Id

@@ -6,8 +6,8 @@
 		<groupId>com.sharedPayments</groupId>
 		<version>0.3</version>
 	</parent>
-	<artifactId>controller</artifactId>
-	<name>controller</name>
+	<artifactId>startup</artifactId>
+	<name>startup</name>
 	<packaging>jar</packaging>
 
 	<properties>
@@ -22,8 +22,16 @@
 			<artifactId>application</artifactId>
 			<version>0.3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.sharedPayments</groupId>
+			<artifactId>controller</artifactId>
+			<version>0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sharedPayments</groupId>
+			<artifactId>infrastructure</artifactId>
+			<version>0.3</version>
+		</dependency>
 	</dependencies>
-	<build>
-
-	</build>
+	<build></build>
 </project>
