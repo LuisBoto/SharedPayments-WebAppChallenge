@@ -5,8 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.sharedPayments.model.dto.MoneyMovementDto;
-import com.sharedPayments.model.dto.PaymentDto;
+import com.sharedPayments.dto.MoneyMovementDto;
+import com.sharedPayments.dto.PaymentDto;
 import com.sharedPayments.service.PaymentService;
 import com.sharedPayments.service.UserService;
 

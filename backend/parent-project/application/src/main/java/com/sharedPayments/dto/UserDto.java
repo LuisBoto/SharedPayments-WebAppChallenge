@@ -1,4 +1,4 @@
-package com.sharedPayments.model.dto;
+package com.sharedPayments.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

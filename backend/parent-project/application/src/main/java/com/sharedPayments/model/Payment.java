@@ -7,7 +7,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.sharedPayments.model.dto.PaymentDto;
+import com.sharedPayments.dto.PaymentDto;
 
 public class Payment {
 

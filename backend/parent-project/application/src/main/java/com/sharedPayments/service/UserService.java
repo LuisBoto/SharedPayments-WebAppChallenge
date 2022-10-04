@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sharedPayments.dto.MoneyMovementDto;
+import com.sharedPayments.dto.UserDto;
 import com.sharedPayments.model.DebtCalculator;
 import com.sharedPayments.model.User;
-import com.sharedPayments.model.dto.MoneyMovementDto;
-import com.sharedPayments.model.dto.UserDto;
 import com.sharedPayments.ports.UserRepository;
 
 import jakarta.inject.Singleton;

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.sharedPayments.model.dto.MoneyMovementDto;
-import com.sharedPayments.model.dto.UserDto;
+import com.sharedPayments.dto.MoneyMovementDto;
+import com.sharedPayments.dto.UserDto;
 
 public class DebtCalculator {
 

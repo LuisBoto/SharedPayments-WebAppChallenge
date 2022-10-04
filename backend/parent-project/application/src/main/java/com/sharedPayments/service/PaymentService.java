@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import com.sharedPayments.dto.PaymentDto;
 import com.sharedPayments.model.User;
-import com.sharedPayments.model.dto.PaymentDto;
 import com.sharedPayments.ports.PaymentRepository;
 import com.sharedPayments.ports.UserRepository;
 

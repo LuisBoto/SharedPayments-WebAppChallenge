@@ -8,6 +8,9 @@ import com.sharedPayments.model.UserEntity;
 import com.sharedPayments.ports.UserRepository;
 import com.sharedPayments.repository.UserJpaRepository;
 
+import io.micronaut.context.annotation.Bean;
+
+@Bean
 public class UserRepositoryAdapter implements UserRepository {
 
 	private UserJpaRepository userJpa;

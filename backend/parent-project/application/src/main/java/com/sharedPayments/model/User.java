@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.sharedPayments.model.dto.UserDto;
+import com.sharedPayments.dto.UserDto;
 
 public class User {
 

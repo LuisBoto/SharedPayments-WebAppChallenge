@@ -22,7 +22,6 @@ datasources:
 jpa:
   default:
     entity-scan:
-      classpath: true
       packages: "com.sharedPayments.model"
     properties:
       hibernate:

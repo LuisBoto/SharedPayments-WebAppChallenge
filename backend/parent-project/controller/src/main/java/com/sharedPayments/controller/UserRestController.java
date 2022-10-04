@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import com.sharedPayments.model.dto.UserDto;
+import com.sharedPayments.dto.UserDto;
 import com.sharedPayments.service.UserService;
 
 import io.micronaut.http.HttpResponse;
