@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import com.sharedPayments.dto.MoneyMovementDto;
 import com.sharedPayments.dto.PaymentDto;
 import com.sharedPayments.service.PaymentService;
 import com.sharedPayments.service.UserService;
@@ -24,12 +23,12 @@ import io.micronaut.validation.Validated;
 @Controller("/api/v1")
 public class PaymentRestController {
 
-    private UserService userService;
     private PaymentService paymentService;
+    private UserService userService;
     
-    public PaymentRestController(UserService userService, PaymentService paymentService) {
-    	this.userService = userService;
+    public PaymentRestController(PaymentService paymentService, UserService userService) {
     	this.paymentService = paymentService;
+    	this.userService = userService;
     }
     
     @Get("/payments")
@@ -52,14 +51,6 @@ public class PaymentRestController {
     	this.userService.updateUserDebts(newPayment.getPayerId(), newPayment.getPrice());
     	return result;
     }
-    
-    @Get("/movements")
-    @Produces(MediaType.APPLICATION_JSON) 
-    public HttpResponse<List<MoneyMovementDto>> getMoneyMovementsToCompensateDebt() {
-    	return HttpResponse
-    			.status(HttpStatus.OK)
-    			.body(
-    					this.userService.getMoneyMovementsToCompensateDebt());
-    }
+
         
 }

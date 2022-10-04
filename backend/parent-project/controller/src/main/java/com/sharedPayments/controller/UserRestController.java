@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.sharedPayments.dto.MoneyMovementDto;
 import com.sharedPayments.dto.UserDto;
 import com.sharedPayments.service.UserService;
 
@@ -43,6 +44,15 @@ public class UserRestController {
     			.status(HttpStatus.CREATED)
     			.body(
     					this.userService.createUser(newUser));
+    }
+    
+    @Get("/movements")
+    @Produces(MediaType.APPLICATION_JSON) 
+    public HttpResponse<List<MoneyMovementDto>> getMoneyMovementsToCompensateDebt() {
+    	return HttpResponse
+    			.status(HttpStatus.OK)
+    			.body(
+    					this.userService.getMoneyMovementsToCompensateDebt());
     }
         
 }

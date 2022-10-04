@@ -28,6 +28,19 @@ public class User {
 		this.debt = debt;
 	}
 
+	public User(String name) {
+		this.name = name;
+		this.debt = BigDecimal.valueOf(0.0).setScale(2);
+	}
+
+	public User() {
+	}
+
+	public User(String name, Double debt) {
+		this.name = name;
+		this.debt = BigDecimal.valueOf(debt).setScale(2);
+	}
+
 	public Long getId() {
 		return id;
 	}

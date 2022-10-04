@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.sharedPayments.model.User;
 
+
 public interface UserRepository {
 	
 	public User save(User user);

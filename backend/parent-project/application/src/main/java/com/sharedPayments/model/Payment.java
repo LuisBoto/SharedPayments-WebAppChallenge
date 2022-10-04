@@ -3,7 +3,6 @@ package com.sharedPayments.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -14,7 +13,6 @@ public class Payment {
 	private Long id;
 
 	@NotNull
-	@ManyToOne
 	private User payer;
 
 	private String description;
@@ -33,6 +31,19 @@ public class Payment {
 		this.payer = payer;
 		this.description = description;
 		this.price = price;
+		this.paymentDate = paymentDate;
+	}
+
+	public Payment(User payer, String description, double price) {
+		this.payer = payer;
+		this.description = description;
+		this.price = BigDecimal.valueOf(price).setScale(2);
+	}
+
+	public Payment(User payer, String description, double price, long paymentDate) {
+		this.payer = payer;
+		this.description = description;
+		this.price = BigDecimal.valueOf(price).setScale(2);
 		this.paymentDate = paymentDate;
 	}
 

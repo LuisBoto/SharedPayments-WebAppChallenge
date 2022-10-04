@@ -31,6 +31,10 @@ public class UserService {
     	return this.userRepository.save(newUser.toModel()).toDto();
     }
 
+	public List<MoneyMovementDto> getMoneyMovementsToCompensateDebt() {
+		return new DebtCalculator().calculateCompensationMovements(this.getUsers());
+	}
+	
 	public void updateUserDebts(Long payerId, Double price) {
 		int userCount = userRepository.count();
 		if (userCount <= 0) return;
@@ -38,7 +42,7 @@ public class UserService {
 		DebtCalculator debtCalculator = new DebtCalculator();
 		boolean addRoundingErrorCent;
 		BigDecimal priceBD = BigDecimal.valueOf(price);
-		BigDecimal userNumberBD = BigDecimal.valueOf(this.getUsers().size());
+		BigDecimal userNumberBD = BigDecimal.valueOf(userCount);
 		BigDecimal roundingErrorCents = BigDecimal.valueOf((price*100) % userCount), resultDebt;
 		
 		for (User user : userRepository.findAll()) {
@@ -55,9 +59,5 @@ public class UserService {
 			user.setDebt(resultDebt);
 			userRepository.save(user);
 		}
-	}
-
-	public List<MoneyMovementDto> getMoneyMovementsToCompensateDebt() {
-		return new DebtCalculator().calculateCompensationMovements(this.getUsers());
 	}
 }

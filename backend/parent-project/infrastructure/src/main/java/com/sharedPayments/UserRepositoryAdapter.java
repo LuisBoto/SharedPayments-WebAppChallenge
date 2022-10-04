@@ -6,16 +6,16 @@ import java.util.stream.Collectors;
 import com.sharedPayments.model.User;
 import com.sharedPayments.model.UserEntity;
 import com.sharedPayments.ports.UserRepository;
-import com.sharedPayments.repository.UserJpaRepository;
+import com.sharedPayments.repository.UserInfraJpaRepository;
 
 import io.micronaut.context.annotation.Bean;
 
 @Bean
 public class UserRepositoryAdapter implements UserRepository {
 
-	private UserJpaRepository userJpa;
+	private UserInfraJpaRepository userJpa;
 
-	public UserRepositoryAdapter(UserJpaRepository repository) {
+	public UserRepositoryAdapter(UserInfraJpaRepository repository) {
 		this.userJpa = repository;
 	}
 
