@@ -8,9 +8,9 @@ import com.sharedPayments.model.UserEntity;
 import com.sharedPayments.ports.UserRepository;
 import com.sharedPayments.repository.UserInfraJpaRepository;
 
-import io.micronaut.context.annotation.Bean;
+import jakarta.inject.Singleton;
 
-@Bean
+@Singleton
 public class UserRepositoryAdapter implements UserRepository {
 
 	private UserInfraJpaRepository userJpa;
@@ -26,7 +26,10 @@ public class UserRepositoryAdapter implements UserRepository {
 
 	@Override
 	public User findById(Long id) {
-		return this.userJpa.findById(id).get().toModel();
+		var user = this.userJpa.findById(id);
+		if (user.isEmpty()) 
+			return null;
+		return user.get().toModel();
 	}
 
 	@Override

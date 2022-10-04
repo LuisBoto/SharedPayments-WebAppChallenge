@@ -8,9 +8,9 @@ import com.sharedPayments.model.PaymentEntity;
 import com.sharedPayments.ports.PaymentRepository;
 import com.sharedPayments.repository.PaymentInfraJpaRepository;
 
-import io.micronaut.context.annotation.Bean;
+import jakarta.inject.Singleton;
 
-@Bean
+@Singleton
 public class PaymentRepositoryAdapter implements PaymentRepository {
 	
 	private PaymentInfraJpaRepository paymentJpa;

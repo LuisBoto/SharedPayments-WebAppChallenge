@@ -11,8 +11,8 @@ import java.util.Arrays;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
-import com.sharedPayments.model.User;
 import com.sharedPayments.dto.UserDto;
+import com.sharedPayments.model.User;
 import com.sharedPayments.service.UserService;
 
 import io.micronaut.http.HttpStatus;
@@ -40,7 +40,7 @@ public class ControllerIT {
         return userService;
     }
 	
-	//@Test
+	@Test
 	public void givenUsers_WhenGetUsers_ThenBodyContainsAllUserData (RequestSpecification spec) {
 		spec
 			.given()
@@ -55,7 +55,7 @@ public class ControllerIT {
 						"debt", hasItems(18.0f, 53.99f, 14.56f));//, -286.76f, 200.21f));
 	}
 	
-	//@Test
+	@Test
 	public void givenNewUser_WhenPostUsers_ThenBodyContainsNewUserData (RequestSpecification spec) {
 		JSONObject requestBody = new JSONObject();
 		requestBody.put("name", "ExampleTestUser");
@@ -74,7 +74,7 @@ public class ControllerIT {
 					"debt", equalTo(0f));
 	}
 	
-	//@Test
+	@Test
 	public void givenNewInvalidUser_WhenPostUsers_ThenRequestError (RequestSpecification spec) {
 		JSONObject requestBody = new JSONObject();
 		requestBody.put("debt", 20f);

@@ -52,25 +52,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.micronaut.data</groupId>
-			<artifactId>micronaut-data-hibernate-jpa</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.micronaut.sql</groupId>
-			<artifactId>micronaut-hibernate-jpa</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.micronaut.sql</groupId>
-			<artifactId>micronaut-jdbc-hikari</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<scope>test</scope>
@@ -168,9 +149,19 @@
 								<version>${micronaut.version}</version>
 							</path>
 							<path>
+								<groupId>io.micronaut.data</groupId>
+								<artifactId>micronaut-data-processor</artifactId>
+								<version>${micronaut.data.version}</version>
+							</path>
+							<path>
 								<groupId>io.micronaut</groupId>
 								<artifactId>micronaut-validation</artifactId>
 								<version>${micronaut.version}</version>
+							</path>
+							<path>
+								<groupId>io.micronaut.data</groupId>
+								<artifactId>micronaut-data-hibernate-jpa</artifactId>
+								<version>${micronaut.data.version}</version>
 							</path>
 						</annotationProcessorPaths>
 					</configuration>

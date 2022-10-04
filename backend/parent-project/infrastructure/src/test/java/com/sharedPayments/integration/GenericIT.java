@@ -6,15 +6,15 @@ import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import com.sharedPayments.model.Payment;
-import com.sharedPayments.model.User;
+import com.sharedPayments.model.PaymentEntity;
+import com.sharedPayments.model.UserEntity;
 
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 
 @MicronautTest
 public abstract class GenericIT {
-	
+
 	@Inject
 	protected EntityManager entityManager;
 	
@@ -26,13 +26,13 @@ public abstract class GenericIT {
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected List<User> getAllUsersFromDB() {
-		return this.entityManager.createQuery("from User").getResultList();
+	protected List<UserEntity> getAllUsersFromDB() {
+		return this.entityManager.createQuery("from UserEntity").getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected List<Payment> getAllPaymentsFromDB() {
-		return this.entityManager.createQuery("from Payment").getResultList();
+	protected List<PaymentEntity> getAllPaymentsFromDB() {
+		return this.entityManager.createQuery("from PaymentEntity").getResultList();
 	}
 	
 	protected abstract long getInitialID();

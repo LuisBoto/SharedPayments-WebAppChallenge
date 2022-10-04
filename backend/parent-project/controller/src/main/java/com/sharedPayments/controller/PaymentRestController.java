@@ -2,7 +2,6 @@ package com.sharedPayments.controller;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.sharedPayments.dto.PaymentDto;
@@ -42,7 +41,6 @@ public class PaymentRestController {
     
     @Post("/payments")
     @Produces(MediaType.APPLICATION_JSON) 
-    @Transactional
     public HttpResponse<PaymentDto> createPayment(@Body @Valid PaymentDto newPayment) {
     	var result = HttpResponse
         		.status(HttpStatus.OK)
