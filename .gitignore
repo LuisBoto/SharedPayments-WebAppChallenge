@@ -24,7 +24,8 @@ hs_err_pid*
 */.metadata/
 /node_modules/
 /.vscode/
-/.DS_Store/
+.DS_Store
 /META_INF/
-/target/
-.settings/
+*/target/*
+*/.settings/*
+*/.micronaut/*

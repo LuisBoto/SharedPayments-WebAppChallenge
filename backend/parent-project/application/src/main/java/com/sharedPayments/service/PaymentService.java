@@ -3,13 +3,11 @@ package com.sharedPayments.service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import com.sharedPayments.model.User;
 import com.sharedPayments.model.dto.PaymentDto;
-import com.sharedPayments.repository.PaymentRepository;
-import com.sharedPayments.repository.UserRepository;
+import com.sharedPayments.ports.PaymentRepository;
+import com.sharedPayments.ports.UserRepository;
 
 import jakarta.inject.Singleton;
 
@@ -35,11 +33,11 @@ public class PaymentService {
 	}
 
 	public PaymentDto createPayment(PaymentDto newPayment) {
-		Optional<User> payerUser = this.userRepository.findById(newPayment.getPayerId());
-		if (payerUser.isEmpty())
-			throw new NoSuchElementException("Payer User not found");
+		User payerUser = this.userRepository.findById(newPayment.getPayerId());
+		/*if (payerUser.isEmpty())
+			throw new NoSuchElementException("Payer User not found");*/
 
-		return this.paymentRepository.save(newPayment.toEntity(payerUser.get())).toDto();
+		return this.paymentRepository.save(newPayment.toModel(payerUser)).toDto();
 	}
 
 }

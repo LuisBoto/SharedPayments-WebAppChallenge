@@ -1,43 +1,55 @@
-package com.sharedPayments.model.dto;
+package com.sharedPayments.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.validation.Valid;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.sharedPayments.model.User;
-
 import io.micronaut.core.annotation.Introspected;
 
+@Entity
+@Table(name = "user")
 @Introspected
-public class UserDto {
+public class UserEntity {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@NotEmpty(message = "Cannot be empty")
 	@Size(min = 1, max = 75)
 	private String name;
+
 	@NotNull
 	private BigDecimal debt;
 
-	public UserDto() { }
-	
-	public UserDto(Long id, String name, double debt) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
+	public UserEntity() {
 	}
-	
-	public UserDto(Long id, String name, BigDecimal debt) {
+
+	public UserEntity(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name, BigDecimal debt) {
 		super();
-		this.id = id;
 		this.name = name;
+		this.debt = debt.setScale(2, RoundingMode.FLOOR);
+	}
+
+	public UserEntity(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
+		this(name, new BigDecimal(0D));
+	}
+
+	public void setDebt(BigDecimal debt) {
 		this.debt = debt;
+	}
+
+	public BigDecimal getDebt() {
+		return this.debt;
 	}
 
 	public Long getId() {
@@ -56,19 +68,12 @@ public class UserDto {
 		this.name = name;
 	}
 
-	public double getDebt() {
-		return debt!=null ? debt.doubleValue() : 0.0;
-	}
-	
-	public BigDecimal getBDDebt() {
-		return this.debt;
+	public static UserEntity fromModel(User user) {
+		return new UserEntity(user.getName(), user.getDebt());
+
 	}
 
-	public void setDebt(double debt) {
-		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
-	}
-
-	public @Valid User toModel() {
+	public User toModel() {
 		return new User(this.id, this.name, this.debt);
 	}
 
@@ -85,8 +90,13 @@ public class UserDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserDto other = (UserDto) obj;
+		UserEntity other = (UserEntity) obj;
 		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", debt=" + debt + "]";
 	}
 
 }

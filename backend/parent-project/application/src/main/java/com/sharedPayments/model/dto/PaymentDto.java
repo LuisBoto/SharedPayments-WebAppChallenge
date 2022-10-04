@@ -104,8 +104,9 @@ public class PaymentDto {
 		this.id = id;
 	}
 	
-	public @Valid Payment toEntity(User payer) {
+	public @Valid Payment toModel(User payer) {
 		return new Payment(
+				this.id, 
 				payer, 
 				this.description, 
 				this.price, 

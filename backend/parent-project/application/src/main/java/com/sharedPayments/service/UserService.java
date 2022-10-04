@@ -8,7 +8,7 @@ import com.sharedPayments.model.DebtCalculator;
 import com.sharedPayments.model.User;
 import com.sharedPayments.model.dto.MoneyMovementDto;
 import com.sharedPayments.model.dto.UserDto;
-import com.sharedPayments.repository.UserRepository;
+import com.sharedPayments.ports.UserRepository;
 
 import jakarta.inject.Singleton;
 
@@ -28,11 +28,11 @@ public class UserService {
     }
     
     public UserDto createUser(UserDto newUser) {
-    	return this.userRepository.save(newUser.toEntity()).toDto();
+    	return this.userRepository.save(newUser.toModel()).toDto();
     }
 
 	public void updateUserDebts(Long payerId, Double price) {
-		int userCount = (int) userRepository.count();
+		int userCount = userRepository.count();
 		if (userCount <= 0) return;
 		
 		DebtCalculator debtCalculator = new DebtCalculator();

@@ -25,6 +25,13 @@
 		<micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
 	</properties>
 
+	<modules>
+		<module>application</module>
+		<module>infrastructure</module>
+		<module>controller</module>
+		<module>startup</module>
+	</modules>
+
 	<repositories>
 		<repository>
 			<id>central</id>
@@ -77,12 +84,12 @@
 			<groupId>io.micronaut.test</groupId>
 			<artifactId>micronaut-test-junit5</artifactId>
 			<scope>test</scope>
-		</dependency> <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+		</dependency> 
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
-		</dependency> <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest -->
+		</dependency> 
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest</artifactId>
@@ -92,12 +99,12 @@
 			<groupId>io.micronaut.testresources</groupId>
 			<artifactId>micronaut-test-resources-core</artifactId>
 			<scope>test</scope>
-		</dependency> <!-- https://mvnrepository.com/artifact/io.micronaut.spring/micronaut-spring -->
+		</dependency>
 		<dependency>
 			<groupId>io.micronaut.spring</groupId>
 			<artifactId>micronaut-spring</artifactId>
 			<scope>test</scope>
-		</dependency> <!-- https://mvnrepository.com/artifact/io.micronaut.test/micronaut-test-rest-assured -->
+		</dependency>
 		<dependency>
 			<groupId>io.micronaut.test</groupId>
 			<artifactId>micronaut-test-rest-assured</artifactId>
@@ -111,7 +118,7 @@
 			<groupId>io.rest-assured</groupId>
 			<artifactId>xml-path</artifactId>
 			<scope>test</scope>
-		</dependency> <!-- https://mvnrepository.com/artifact/org.json/json -->
+		</dependency> 
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -146,13 +153,11 @@
 	</dependencies>
 	<build>
 		<pluginManagement>
-			<!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
 			<plugins>
-				<!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
 				<plugin>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.1.0</version>
-				</plugin> <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+				</plugin>
 				<plugin>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>3.0.2</version>
@@ -193,31 +198,6 @@
 							</path>
 						</annotationProcessorPaths>
 					</configuration>
-					<executions>
-						<execution>
-							<id>test-compile</id>
-							<goals>
-								<goal>testCompile</goal>
-							</goals>
-							<configuration>
-								<compilerArgs>
-									<arg>-parameters</arg>
-								</compilerArgs>
-								<annotationProcessorPaths>
-									<path>
-										<groupId>io.micronaut</groupId>
-										<artifactId>micronaut-inject-java</artifactId>
-										<version>${micronaut.version}</version>
-									</path>
-									<path>
-										<groupId>io.micronaut</groupId>
-										<artifactId>micronaut-validation</artifactId>
-										<version>${micronaut.version}</version>
-									</path>
-								</annotationProcessorPaths>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -231,70 +211,13 @@
 					<artifactId>maven-install-plugin</artifactId>
 					<version>2.5.2</version>
 				</plugin>
-				<plugin>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>2.8.2</version>
-				</plugin> <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-				<plugin>
-					<artifactId>maven-site-plugin</artifactId>
-					<version>3.7.1</version>
-				</plugin>
-				<plugin>
-					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.0.0</version>
-				</plugin>
-
 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>io.micronaut.build</groupId>
 				<artifactId>micronaut-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>none</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<transformers>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>${exec.mainClass}</mainClass>
-								</transformer>
-								<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<configuration>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>-noverify</argument>
-						<argument>-XX:TieredStopAtLevel=1</argument>
-						<argument>-Dcom.sun.management.jmxremote</argument>
-						<argument>${exec.mainClass}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
@@ -311,10 +234,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<modules>
-		<module>application</module>
-		<module>infrastructure</module>
-		<module>controller</module>
-		<module>startup</module>
-	</modules>
 </project>

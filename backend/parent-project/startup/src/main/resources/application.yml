@@ -23,7 +23,7 @@ jpa:
   default:
     entity-scan:
       classpath: true
-#packages: "com.sharedPayments"
+      packages: "com.sharedPayments.model"
     properties:
       hibernate:
         hbm2ddl:

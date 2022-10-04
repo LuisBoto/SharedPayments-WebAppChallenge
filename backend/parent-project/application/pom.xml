@@ -13,5 +13,7 @@
 	<properties>
 		<exec.mainClass>com.sharedPayments.Application</exec.mainClass>
 	</properties>
-	
+
+	<dependencies>
+	</dependencies>
 </project>
