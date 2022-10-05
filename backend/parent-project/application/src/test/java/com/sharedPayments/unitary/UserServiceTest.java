@@ -72,7 +72,7 @@ public class UserServiceTest {
 	
 	@Test
 	void givenNewValidUser_WhenCreateUser_ThenUserIsSaved() {
-		UserDto userDto = new UserDto(2L, "Marcos", 50);
+		UserDto userDto = new UserDto(2L, "Marcos", 50.0);
 
 		when(this.userRepository.save(any(User.class))).then(call -> {
 			User result = userDto.toModel();

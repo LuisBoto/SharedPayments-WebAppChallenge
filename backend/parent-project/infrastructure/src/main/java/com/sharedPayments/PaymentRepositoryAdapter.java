@@ -8,17 +8,15 @@ import com.sharedPayments.model.PaymentEntity;
 import com.sharedPayments.ports.PaymentRepository;
 import com.sharedPayments.repository.PaymentInfraJpaRepository;
 
-import io.micronaut.core.annotation.Introspected;
 import jakarta.inject.Singleton;
 
 @Singleton
-@Introspected
 public class PaymentRepositoryAdapter implements PaymentRepository {
 	
 	private PaymentInfraJpaRepository paymentJpa;
 	
-	public PaymentRepositoryAdapter(PaymentInfraJpaRepository repository) {
-		this.paymentJpa = repository;
+	public PaymentRepositoryAdapter(PaymentInfraJpaRepository paymentRepository) {
+		this.paymentJpa = paymentRepository;
 	}
 
 	@Override

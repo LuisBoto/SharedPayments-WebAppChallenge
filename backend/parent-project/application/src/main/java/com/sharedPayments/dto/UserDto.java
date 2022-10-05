@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.sharedPayments.model.User;
@@ -17,27 +16,29 @@ import io.micronaut.core.annotation.Introspected;
 public class UserDto {
 
 	private Long id;
-	
+
 	@NotEmpty(message = "Cannot be empty")
 	@Size(min = 1, max = 75)
 	private String name;
-	@NotNull
+
 	private BigDecimal debt;
 
-	public UserDto() { }
-	
-	public UserDto(Long id, String name, double debt) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
+	public UserDto() {
 	}
-	
-	public UserDto(Long id, String name, BigDecimal debt) {
-		super();
+
+	public UserDto(Long id, String name, Double debt) {
 		this.id = id;
 		this.name = name;
-		this.debt = debt;
+		this.setDebt(debt);
+	}
+
+	public UserDto(String name) {
+		this(null, name, 0.0);
+	}
+
+	public UserDto(Long id, String name, BigDecimal debt) {
+		this(id, name, debt == null ? 0.0 : debt.doubleValue());
+
 	}
 
 	public Long getId() {
@@ -56,20 +57,25 @@ public class UserDto {
 		this.name = name;
 	}
 
-	public double getDebt() {
-		return debt!=null ? debt.doubleValue() : 0.0;
-	}
-	
-	public BigDecimal getBDDebt() {
+	public BigDecimal getDebt() {
+		if (this.debt == null) this.setDebt(0.0);
 		return this.debt;
 	}
 
-	public void setDebt(double debt) {
-		this.debt = BigDecimal.valueOf(debt).setScale(2, RoundingMode.FLOOR);
+	public void setDebt(Double debt) {
+		if (debt == null)
+			debt = 0.0;
+		this.debt = new BigDecimal(debt).setScale(2, RoundingMode.HALF_EVEN);
+	}
+
+	public void setBDDebt(BigDecimal debt) {
+		if (debt == null)
+			debt = new BigDecimal(0);
+		this.debt = debt.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public @Valid User toModel() {
-		return new User(this.id, this.name, this.debt);
+		return new User(this.id, this.name, this.getDebt());
 	}
 
 	@Override

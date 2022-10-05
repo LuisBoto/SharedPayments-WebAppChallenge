@@ -19,7 +19,7 @@ public class DebtCalculator {
 	
 
 	private Comparator<UserDto> compareUsersByDebt = ((UserDto o1, UserDto o2) -> {
-		return o1.getDebt() <= o2.getDebt() ? 1 : -1;
+		return o1.getDebt().doubleValue() <= o2.getDebt().doubleValue() ? 1 : -1;
 	});
 
 	public DebtCalculator() {
@@ -38,8 +38,8 @@ public class DebtCalculator {
 
 		for (int i = 0; i < usersOwedMoney.size(); i++) {
 			this.userOwedMoney = usersOwedMoney.get(i);
-			for (int j=0; j < usersOwingMoney.size() && userOwedMoney.getDebt() < 0; j++) {
-				if (usersOwingMoney.get(j).getDebt() == 0)
+			for (int j=0; j < usersOwingMoney.size() && userOwedMoney.getDebt().doubleValue() < 0; j++) {
+				if (usersOwingMoney.get(j).getDebt().doubleValue() == 0)
 					continue;
 				this.userOwingMoney = usersOwingMoney.get(j);
 				this.compensateDebt();	
@@ -51,8 +51,8 @@ public class DebtCalculator {
 	
 	private void divideAndSortUsersByDebt(List<UserDto> users) {
 		for (UserDto user : users) 
-			if (user.getDebt() != 0) 
-				if (user.getDebt() < 0) usersOwedMoney.add(user); 
+			if (user.getDebt().doubleValue() != 0) 
+				if (user.getDebt().doubleValue() < 0) usersOwedMoney.add(user); 
 				else usersOwingMoney.add(user);
 		usersOwedMoney.sort(compareUsersByDebt);
 		usersOwingMoney.sort(compareUsersByDebt);
@@ -60,10 +60,10 @@ public class DebtCalculator {
 	
 	private void compensateDebt() {
 		BigDecimal transferAmount = 
-				Math.abs(userOwedMoney.getDebt()) < Math.abs(userOwingMoney.getDebt()) ?
-						userOwedMoney.getBDDebt().abs() : userOwingMoney.getBDDebt().abs();
-		userOwedMoney.setDebt(userOwedMoney.getBDDebt().add(transferAmount).doubleValue());
-		userOwingMoney.setDebt(userOwingMoney.getBDDebt().subtract(transferAmount).doubleValue());
+				userOwedMoney.getDebt().abs().doubleValue() < userOwingMoney.getDebt().abs().doubleValue() ?
+						userOwedMoney.getDebt().abs() : userOwingMoney.getDebt().abs();
+		userOwedMoney.setBDDebt(userOwedMoney.getDebt().add(transferAmount));
+		userOwingMoney.setBDDebt(userOwingMoney.getDebt().subtract(transferAmount));
 		this.movements.add(new MoneyMovementDto(userOwedMoney.getId(), transferAmount, userOwingMoney.getId()));
 	}
 	

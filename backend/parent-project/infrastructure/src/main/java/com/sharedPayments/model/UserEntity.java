@@ -35,7 +35,6 @@ public class UserEntity {
 	}
 
 	public UserEntity(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name, BigDecimal debt) {
-		super();
 		this.name = name;
 		this.debt = debt.setScale(2, RoundingMode.FLOOR);
 	}
@@ -69,7 +68,10 @@ public class UserEntity {
 	}
 
 	public static UserEntity fromModel(User user) {
-		return new UserEntity(user.getName(), user.getDebt());
+		UserEntity userE = new UserEntity(user.getName(), user.getDebt());
+		if (user.getId()!=null)
+			userE.setId(user.getId());
+		return userE;
 	}
 
 	public User toModel() {

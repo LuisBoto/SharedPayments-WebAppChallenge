@@ -32,7 +32,6 @@ public class PaymentDto {
 	}
 
 	public PaymentDto(Long payerId, Long paymentDate, BigDecimal price, String description, Long id) {
-		super();
 		this.payerId = payerId;
 		this.paymentDate = paymentDate;
 		this.price = price;
