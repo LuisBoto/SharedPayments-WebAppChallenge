@@ -70,7 +70,6 @@ public class UserEntity {
 
 	public static UserEntity fromModel(User user) {
 		return new UserEntity(user.getName(), user.getDebt());
-
 	}
 
 	public User toModel() {
