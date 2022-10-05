@@ -3,7 +3,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +24,7 @@ public class PaymentEntity {
 	private Long id;
 
 	@NotNull
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private UserEntity payer;
 
 	private String description;
@@ -112,7 +111,7 @@ public class PaymentEntity {
 				);
 		if (payment.getId() != null)
 			paymentE.setId(payment.getId());
-		System.out.println(paymentE.getId());
+		System.out.println(paymentE.getPayer().getId());
 		return paymentE;
 		
 	}

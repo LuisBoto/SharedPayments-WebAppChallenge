@@ -54,7 +54,8 @@ public class User {
 	private BigDecimal updateDebt(Long payerId, BigDecimal paymentPrice, BigDecimal userCount, BigDecimal roundingErrorCents) {
 		boolean addRoundingErrorCent = roundingErrorCents.doubleValue() > 0;
 		if (this.getId() == payerId)
-			this.debt = new DebtCalculator().calculatePayerDebt(this.getDebt(), paymentPrice, userCount);
+			this.setDebt(new DebtCalculator().calculatePayerDebt(
+					this.getDebt(), paymentPrice, userCount));
 		else {
 			this.setDebt(new DebtCalculator().calculateOwerDebt(
 					this.getDebt(), paymentPrice, userCount, addRoundingErrorCent));

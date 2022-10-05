@@ -2,12 +2,14 @@ package com.sharedPayments.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -30,6 +32,9 @@ public class UserEntity {
 
 	@NotNull
 	private BigDecimal debt;
+
+	@OneToMany(mappedBy = "payer")//, cascade = CascadeType.ALL)
+	private List<PaymentEntity> payments;
 
 	public UserEntity() {
 	}
@@ -59,6 +64,14 @@ public class UserEntity {
 		this.id = id;
 	}
 
+	public List<PaymentEntity> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<PaymentEntity> payments) {
+		this.payments = payments;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -69,7 +82,7 @@ public class UserEntity {
 
 	public static UserEntity fromModel(User user) {
 		UserEntity userE = new UserEntity(user.getName(), user.getDebt());
-		if (user.getId()!=null)
+		if (user.getId() != null)
 			userE.setId(user.getId());
 		return userE;
 	}

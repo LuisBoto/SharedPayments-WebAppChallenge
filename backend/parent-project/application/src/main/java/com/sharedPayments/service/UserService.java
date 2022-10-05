@@ -40,6 +40,6 @@ public class UserService {
 			return;
 		
 		List<User> updatedUsers = User.updateUsersDebt(this.userRepository.findAll(), payerId, price);
-		updatedUsers.forEach(u -> userRepository.save(u));
+		updatedUsers.forEach(u -> userRepository.update(u));
 	}
 }

@@ -7,6 +7,7 @@ import com.sharedPayments.model.Payment;
 import com.sharedPayments.model.PaymentEntity;
 import com.sharedPayments.ports.PaymentRepository;
 import com.sharedPayments.repository.PaymentInfraJpaRepository;
+import com.sharedPayments.repository.UserInfraJpaRepository;
 
 import jakarta.inject.Singleton;
 
@@ -14,14 +15,19 @@ import jakarta.inject.Singleton;
 public class PaymentRepositoryAdapter implements PaymentRepository {
 	
 	private PaymentInfraJpaRepository paymentJpa;
+	private UserInfraJpaRepository userJpa;
 	
-	public PaymentRepositoryAdapter(PaymentInfraJpaRepository paymentRepository) {
+	public PaymentRepositoryAdapter(PaymentInfraJpaRepository paymentRepository, UserInfraJpaRepository userRepository) {
 		this.paymentJpa = paymentRepository;
+		this.userJpa = userRepository;
 	}
 
 	@Override
 	public Payment save(Payment payment) {
-		return this.paymentJpa.save(PaymentEntity.fromModel(payment)).toModel();
+		var paymentE = PaymentEntity.fromModel(payment);
+		var user = this.userJpa.findById(paymentE.getPayer().getId());
+		paymentE.setPayer(user.get());
+		return this.paymentJpa.save(paymentE).toModel();
 	}
 
 	@Override

@@ -41,7 +41,10 @@ public class UserRepositoryAdapter implements UserRepository {
 
 	@Override
 	public User update(User user) {
-		return this.userJpa.update(UserEntity.fromModel(user)).toModel();
+		UserEntity persistedUser = this.userJpa.findById(user.getId()).get();
+		persistedUser.setDebt(user.getDebt());
+		persistedUser.setName(user.getName());
+		return this.userJpa.update(persistedUser).toModel();
 	}
 
 	@Override
