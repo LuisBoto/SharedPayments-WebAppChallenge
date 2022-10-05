@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import com.sharedPayments.dto.PaymentDto;
 import com.sharedPayments.service.PaymentService;
-import com.sharedPayments.service.UserService;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
@@ -23,11 +22,9 @@ import io.micronaut.validation.Validated;
 public class PaymentRestController {
 
     private PaymentService paymentService;
-    private UserService userService;
     
-    public PaymentRestController(PaymentService paymentService, UserService userService) {
+    public PaymentRestController(PaymentService paymentService) {
     	this.paymentService = paymentService;
-    	this.userService = userService;
     }
     
     @Get("/payments")
@@ -46,7 +43,6 @@ public class PaymentRestController {
         		.status(HttpStatus.OK)
         		.body(
         				this.paymentService.createPayment(newPayment));
-    	this.userService.updateUserDebts(newPayment.getPayerId(), newPayment.getPrice());
     	return result;
     }
 

@@ -8,9 +8,11 @@ import com.sharedPayments.model.UserEntity;
 import com.sharedPayments.ports.UserRepository;
 import com.sharedPayments.repository.UserInfraJpaRepository;
 
+import io.micronaut.core.annotation.Introspected;
 import jakarta.inject.Singleton;
 
 @Singleton
+@Introspected
 public class UserRepositoryAdapter implements UserRepository {
 
 	private UserInfraJpaRepository userJpa;

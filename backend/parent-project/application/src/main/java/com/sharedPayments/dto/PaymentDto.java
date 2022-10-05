@@ -80,8 +80,8 @@ public class PaymentDto {
 		this.paymentDate = paymentDate;
 	}
 
-	public Double getPrice() {
-		return this.price.doubleValue();
+	public BigDecimal getPrice() {
+		return this.price;
 	}
 
 	public void setPrice(Double price) {

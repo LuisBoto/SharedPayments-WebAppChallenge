@@ -38,8 +38,9 @@ public class PaymentService {
 		if (payerUser == null)
 			throw new NoSuchElementException("Payer User not found");
 
-		var createdPayment = this.paymentRepository.save(newPayment.toModel(payerUser)).toDto();
-		return createdPayment;
+		var createdPayment = this.paymentRepository.save(newPayment.toModel(payerUser));
+		new UserService(this.userRepository).updateUserDebts(createdPayment.getPayer().getId(), createdPayment.getPrice());
+		return createdPayment.toDto();
 	}
 	
 }

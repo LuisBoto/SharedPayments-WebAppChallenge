@@ -1,6 +1,8 @@
 package com.sharedPayments.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
@@ -40,7 +42,29 @@ public class User {
 		this.name = name;
 		this.debt = BigDecimal.valueOf(debt).setScale(2);
 	}
+	
+	public static List<User> updateUsersDebt(List<User> users, Long payerId, BigDecimal paymentPrice) {
+		BigDecimal userCount = new BigDecimal(users.size());
+		BigDecimal roundingErrorCents = paymentPrice.multiply(new BigDecimal(100)).remainder(userCount);
+		for (User user : users) 
+			roundingErrorCents = user.updateDebt(payerId, paymentPrice, userCount, roundingErrorCents);
+		return users;
+	}
 
+	private BigDecimal updateDebt(Long payerId, BigDecimal paymentPrice, BigDecimal userCount, BigDecimal roundingErrorCents) {
+		boolean addRoundingErrorCent = roundingErrorCents.doubleValue() > 0;
+		if (this.getId() == payerId)
+			this.debt = new DebtCalculator().calculatePayerDebt(this.getDebt(), paymentPrice, userCount);
+		else {
+			this.setDebt(new DebtCalculator().calculateOwerDebt(
+					this.getDebt(), paymentPrice, userCount, addRoundingErrorCent));
+			if (addRoundingErrorCent) 
+				roundingErrorCents = roundingErrorCents.subtract(BigDecimal.valueOf(1)).setScale(2, RoundingMode.HALF_EVEN);
+		}
+			
+		return roundingErrorCents;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -62,7 +86,7 @@ public class User {
 	}
 
 	public void setDebt(BigDecimal debt) {
-		this.debt = debt;
+		this.debt = debt.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	@Override

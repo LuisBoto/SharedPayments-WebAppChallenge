@@ -35,29 +35,11 @@ public class UserService {
 		return new DebtCalculator().calculateCompensationMovements(this.getUsers());
 	}
 	
-	public void updateUserDebts(Long payerId, Double price) {
-		int userCount = userRepository.count();
-		if (userCount <= 0) return;
+	public void updateUserDebts(Long payerId, BigDecimal price) {
+		if (this.userRepository.count() <= 0) 
+			return;
 		
-		DebtCalculator debtCalculator = new DebtCalculator();
-		boolean addRoundingErrorCent;
-		BigDecimal priceBD = BigDecimal.valueOf(price);
-		BigDecimal userNumberBD = BigDecimal.valueOf(userCount);
-		BigDecimal roundingErrorCents = BigDecimal.valueOf((price*100) % userCount), resultDebt;
-		
-		for (User user : userRepository.findAll()) {
-			if (user.getId() == payerId) 
-				resultDebt = debtCalculator.calculatePayerDebt(
-						user.getDebt(), priceBD, userNumberBD);
-			else {
-				addRoundingErrorCent = roundingErrorCents.doubleValue() > 0;
-				resultDebt = debtCalculator.calculateOwerDebt(
-						user.getDebt(), priceBD, userNumberBD, addRoundingErrorCent);
-				if (addRoundingErrorCent) roundingErrorCents = roundingErrorCents.subtract(BigDecimal.valueOf(1));
-			}
-			
-			user.setDebt(resultDebt);
-			userRepository.save(user);
-		}
+		List<User> updatedUsers = User.updateUsersDebt(this.userRepository.findAll(), payerId, price);
+		updatedUsers.forEach(u -> userRepository.save(u));
 	}
 }

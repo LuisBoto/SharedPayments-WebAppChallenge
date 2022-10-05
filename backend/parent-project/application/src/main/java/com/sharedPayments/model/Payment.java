@@ -24,29 +24,23 @@ public class Payment {
 	@NotNull
 	private Long paymentDate;
 
-	public Payment(Long id, @NotNull User payer, String description, @NotNull @Positive BigDecimal price,
+	public Payment(@NotNull User payer, String description, @NotNull @Positive double price) {
+		this.payer = payer;
+		this.description = description;
+		this.price = BigDecimal.valueOf(price).setScale(2);
+	}
+	
+	public Payment(Long id, User payer, String description, BigDecimal price,
 			@NotNull Long paymentDate) {
-		super();
+		this(payer, description, price.doubleValue(), paymentDate);
 		this.id = id;
-		this.payer = payer;
-		this.description = description;
-		this.price = price;
+	}
+
+	public Payment(User payer, String description, double price, @NotNull Long paymentDate) {
+		this(payer, description, price);
 		this.paymentDate = paymentDate;
 	}
-
-	public Payment(User payer, String description, double price) {
-		this.payer = payer;
-		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2);
-	}
-
-	public Payment(User payer, String description, double price, long paymentDate) {
-		this.payer = payer;
-		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2);
-		this.paymentDate = paymentDate;
-	}
-
+	
 	public Long getId() {
 		return id;
 	}

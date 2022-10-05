@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +88,7 @@ public class UserServiceTest {
 	@Test
 	void givenNoUsers_WhenUpdateUserDebts_ThenSizeIsZero() {
 		this.setUpMockRepositoryUsersWithDebts();
-		this.userService.updateUserDebts(1L, 100D);
+		this.userService.updateUserDebts(1L,  new BigDecimal(100D));
 		verify(this.userRepository, times(1)).count();
 		verify(this.userRepository, never()).save(any());
 		
@@ -96,14 +97,14 @@ public class UserServiceTest {
 	@Test
 	void givenOneUser_WhenUpdateUserDebts_ThenDebtIsUnchanged() {
 		this.setUpMockRepositoryUsersWithDebts(100D);
-		this.userService.updateUserDebts(1L, 300D);
+		this.userService.updateUserDebts(1L, new BigDecimal(300D));
 		assertEquals("100.00", this.getDebtForMockUser(1L));
 	}
 	
 	@Test
 	void givenTwoUsers_WhenUpdateUserDebts_ThenDebtIsDistributed() {
 		this.setUpMockRepositoryUsersWithDebts(-100D, 200D);
-		this.userService.updateUserDebts(2L, 80D);
+		this.userService.updateUserDebts(2L,  new BigDecimal(80D));
 		assertEquals("-60.00", this.getDebtForMockUser(1L));
 		assertEquals("160.00", this.getDebtForMockUser(2L));
 	}
@@ -111,7 +112,7 @@ public class UserServiceTest {
 	@Test
 	void givenTwoUsers_WhenUpdateUserDebtsWithBigPrice_ThenDebtsProportionallyReverse() {
 		this.setUpMockRepositoryUsersWithDebts(-45.60, 51.99);
-		this.userService.updateUserDebts(2L, 149.77);
+		this.userService.updateUserDebts(2L,  new BigDecimal(149.77));
 		assertEquals("29.29", this.getDebtForMockUser(1L));
 		assertEquals("-22.90", this.getDebtForMockUser(2L));
 	}
@@ -119,7 +120,7 @@ public class UserServiceTest {
 	@Test
 	void givenThreeUsers_WhenUpdateUserDebtsWithIndivisiblePrice_ThenRemainderIsAssigned() {
 		this.setUpMockRepositoryUsersWithDebts(0D, 0D, 0D);
-		this.userService.updateUserDebts(2L, 100D);
+		this.userService.updateUserDebts(2L,  new BigDecimal(100D));
 		assertEquals("33.34", this.getDebtForMockUser(1L));
 		assertEquals("-66.67", this.getDebtForMockUser(2L));
 		assertEquals("33.33", this.getDebtForMockUser(3L));
@@ -128,7 +129,7 @@ public class UserServiceTest {
 	@Test
 	void givenFiveUsers_WhenUpdateUserDebtsWithIndivisibleDecimalPrice_ThenRemainderIsAssigned() {
 		this.setUpMockRepositoryUsersWithDebts(0D, 0D, 0D, 0D, 0D);
-		this.userService.updateUserDebts(5L, 100.03D);
+		this.userService.updateUserDebts(5L,  new BigDecimal(100.03D));
 		assertEquals("20.01", this.getDebtForMockUser(1L));
 		assertEquals("20.01", this.getDebtForMockUser(2L));
 		assertEquals("20.01", this.getDebtForMockUser(3L));

@@ -16,11 +16,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.sharedPayments</groupId>
-			<artifactId>application</artifactId>
-			<version>0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sharedPayments</groupId>
 			<artifactId>controller</artifactId>
 			<version>0.3</version>
 		</dependency>
