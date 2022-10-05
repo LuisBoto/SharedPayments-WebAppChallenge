@@ -1,14 +1,14 @@
 FROM maven:3.8.4-openjdk-11 as builder
-WORKDIR /backend/sharedPayments
+WORKDIR /backend/parent-project
 
-COPY sharedPayments/pom.xml /backend/sharedPayments
+COPY parent-project/pom.xml /backend/parent-project
 RUN mvn -B clean verify --fail-never
-COPY sharedPayments/src /backend/sharedPayments/src
+COPY parent-project /backend/parent-project/
 RUN mvn -B package
 
 #########################################################
 FROM openjdk:11-jdk-slim
 WORKDIR /backend/sharedPayments/
-COPY --from=builder /backend/sharedPayments/target/sharedPayments-*.jar /backend/sharedPayments/
+COPY --from=builder /backend/parent-project/startup/target/startup-*.jar /backend/sharedPayments/
 EXPOSE 8080
-CMD [ "java", "-jar", "sharedPayments-0.2.jar" ]
+CMD [ "java", "-jar", "startup-0.3.jar" ]
