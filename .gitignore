@@ -21,12 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-*/.metadata/
+.metadata/
 */node_modules/
-*/.vscode/
+/.vscode/
 .DS_Store
-*/META_INF/
-*/target
-*/.settings/
-*/.micronaut/
-*/bin/
+/META_INF/
+target/
+.settings/
+.micronaut/
+bin/
+.factorypath
+.classpath
