@@ -70,23 +70,15 @@ public class User {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public BigDecimal getDebt() {
 		return debt;
 	}
 
-	public void setDebt(BigDecimal debt) {
+	private void setDebt(BigDecimal debt) {
 		this.debt = debt.setScale(2, RoundingMode.HALF_EVEN);
 	}
 

@@ -33,8 +33,8 @@ public class ControllerIT {
 		when(userService.getUsers()).thenReturn(users);
 		when(userService.createUser(any(UserDto.class))).thenAnswer(call -> {
 				UserDto paramUser = call.getArgument(0);
+				paramUser.setId(100L);
 				User user = paramUser.toModel();
-				user.setId(100L);
 				return user.toDto();
 			});
         return userService;

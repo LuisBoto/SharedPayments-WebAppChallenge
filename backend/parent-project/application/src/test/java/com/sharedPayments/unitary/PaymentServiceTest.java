@@ -9,6 +9,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -50,8 +51,7 @@ public class PaymentServiceTest {
 	void givenNewValidPayment_WhenCreatePayment_ThenPaymentIsSaved() {
 		PaymentDto paymentDto = new PaymentDto(5L, 10000L, 500.0, "Description", 15L);
 
-		User user = new User();
-		user.setId(5L);
+		User user = new User(5L, "Juan", new BigDecimal(0));
 		when(this.userRepository.findById(any())).thenReturn(user);
 		when(this.paymentRepository.save(any())).then(call -> {
 			paymentDto.setId(15L);

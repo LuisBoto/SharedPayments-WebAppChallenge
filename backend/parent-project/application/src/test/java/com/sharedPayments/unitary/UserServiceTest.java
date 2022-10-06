@@ -31,8 +31,7 @@ public class UserServiceTest {
 	private void setUpMockRepositoryUsersWithDebts(Double... debts) {
 		List<User> users = new ArrayList<User>();
 		for (int i=0; i<debts.length; i++) {
-			User user = new User("Name", debts[i]);
-			user.setId((long) i+1);
+			User user = new User(Integer.toUnsignedLong(i+1), "Name", new BigDecimal(debts[i]));
 			users.add(user);
 		}
 		
@@ -44,11 +43,13 @@ public class UserServiceTest {
 		when(this.userRepository.save(any(User.class))).thenAnswer(
 				call -> {
 					User paramUser = call.getArgument(0);
+					users.remove(paramUser);
+/*
 					for (User u : users) 
 						if (u.getId() == paramUser.getId()) {
 							u.setDebt(paramUser.getDebt());
 							return u;
-						}
+						}*/
 					users.add(paramUser);
 					return paramUser;
 				});
@@ -76,7 +77,6 @@ public class UserServiceTest {
 
 		when(this.userRepository.save(any(User.class))).then(call -> {
 			User result = userDto.toModel();
-			result.setId(2L);
 			return result;
 		});
 		
