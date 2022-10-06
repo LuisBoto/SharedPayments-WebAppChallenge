@@ -29,9 +29,8 @@ public class Payment {
 		this.description = description;
 		this.price = BigDecimal.valueOf(price).setScale(2);
 	}
-	
-	public Payment(Long id, User payer, String description, BigDecimal price,
-			@NotNull Long paymentDate) {
+
+	public Payment(Long id, User payer, String description, BigDecimal price, @NotNull Long paymentDate) {
 		this(payer, description, price.doubleValue(), paymentDate);
 		this.id = id;
 	}
@@ -40,45 +39,25 @@ public class Payment {
 		this(payer, description, price);
 		this.paymentDate = paymentDate;
 	}
-	
+
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public User getPayer() {
 		return payer;
 	}
 
-	public void setPayer(User payer) {
-		this.payer = payer;
-	}
-
 	public String getDescription() {
 		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
 	public Long getPaymentDate() {
 		return paymentDate;
-	}
-
-	public void setPaymentDate(Long paymentDate) {
-		this.paymentDate = paymentDate;
 	}
 
 	@Override

@@ -54,8 +54,8 @@ public class PaymentServiceTest {
 		user.setId(5L);
 		when(this.userRepository.findById(any())).thenReturn(user);
 		when(this.paymentRepository.save(any())).then(call -> {
+			paymentDto.setId(15L);
 			Payment result = paymentDto.toModel(user);
-			result.setId(15L);
 			return result;
 		});
 		
