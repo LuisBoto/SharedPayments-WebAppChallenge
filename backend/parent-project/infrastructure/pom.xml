@@ -25,11 +25,26 @@
 		<dependency>
 			<groupId>io.micronaut.sql</groupId>
 			<artifactId>micronaut-jdbc-hikari</artifactId>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>IT</id>
+			<activation>
+				 <activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.micronaut.build</groupId>
+						<artifactId>micronaut-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

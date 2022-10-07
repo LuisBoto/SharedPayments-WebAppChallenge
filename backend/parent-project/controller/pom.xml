@@ -10,7 +10,6 @@
 	<name>controller</name>
 	<packaging>jar</packaging>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.sharedPayments</groupId>
@@ -18,5 +17,20 @@
 			<version>0.3</version>
 		</dependency>
 	</dependencies>
-	
+	<profiles>
+		<profile>
+			<id>IT</id>
+			<activation>
+				 <activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.micronaut.build</groupId>
+						<artifactId>micronaut-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
