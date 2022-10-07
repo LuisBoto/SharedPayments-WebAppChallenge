@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sharedPayments</groupId>
 	<artifactId>parent-project</artifactId>
-	<version>0.3</version>
+	<version>${revision}</version>
 	<name>parent-project</name>
 	<packaging>pom</packaging>
 
@@ -14,6 +14,7 @@
 	</parent>
 
 	<properties>
+		<revision>0.3-SNAPSHOT</revision>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.11</maven.compiler.source>
 		<maven.compiler.target>1.11</maven.compiler.target>
