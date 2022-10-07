@@ -26,6 +26,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<finalName>startup</finalName>
 		<plugins>
 			<plugin>
 				<groupId>io.micronaut.build</groupId>
