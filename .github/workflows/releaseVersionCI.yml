@@ -12,7 +12,7 @@ jobs:
     env:
       IMAGE_NAME: booklibrary
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -26,16 +26,22 @@ jobs:
       - name: Build
         run: mvn package
 
-      - name: Generate pom version tag
-        run: echo ::set-output name=pom-version::$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
+      - name: Generate pom version ouput
+        run: echo ::set-output name=pom-version::$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) \
+             && VERSION=$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' \
+             && echo $VERSION | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.
         id: generate-pom-tag
       - name: Build Docker image
         run: cd ../.. && ./buildDockerImages.sh
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            startup/target/startup.jar
         
       - name: Adding .RC1 suffix
-        run: mvn versions:set -DnewVersion=${{ steps.generate-pom-tag.outputs.pom-version }}.RC1
+        run: mvn versions:set -DnewVersion=${{ steps.generate-pom-tag.outputs.pom-version }}
         shell: bash
-      - name: Publish maven artifact
-        run: mvn --batch-mode deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Print new version
+        run: echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
