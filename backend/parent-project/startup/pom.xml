@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>parent-project</artifactId>
+		<groupId>com.sharedPayments</groupId>
+		<version>0.3-SNAPSHOT</version>
+	</parent>
+	<artifactId>startup</artifactId>
+	<name>startup</name>
+	<packaging>jar</packaging>
+
+	<properties>
+		<exec.mainClass>com.sharedPayments.Application</exec.mainClass>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>com.sharedPayments</groupId>
+			<artifactId>controller</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sharedPayments</groupId>
+			<artifactId>infrastructure</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<finalName>startup</finalName>
+		<plugins>
+			<plugin>
+				<groupId>io.micronaut.build</groupId>
+				<artifactId>micronaut-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
