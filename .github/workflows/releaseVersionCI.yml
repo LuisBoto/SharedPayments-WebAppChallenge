@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  releaseTestArtifacts:
+  continuousIntegration:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: booklibrary
@@ -19,29 +19,32 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
 
-      - name: Into backend directory
-        run: cd backend/parent-project
       - name: Unitary & Integration tests
+        working-directory: ./backend/parent-project
         run: mvn clean install -P IT
       - name: Build
+        working-directory: ./backend/parent-project
         run: mvn package
 
       - name: Generate pom version ouput
+        working-directory: ./backend/parent-project
         run: echo ::set-output name=pom-version::$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) \
              && VERSION=$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' \
              && echo $VERSION | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.
         id: generate-pom-tag
       - name: Build Docker image
-        run: cd ../.. && ./buildDockerImages.sh
+        run: ./buildDockerImages.sh
 
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            startup/target/startup.jar
+            backend/parent-project/startup/target/startup.jar
         
       - name: Adding .RC1 suffix
+        working-directory: ./backend/parent-project
         run: mvn versions:set -DnewVersion=${{ steps.generate-pom-tag.outputs.pom-version }}
         shell: bash
       - name: Print new version
+        working-directory: ./backend/parent-project
         run: echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
