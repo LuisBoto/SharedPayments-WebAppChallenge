@@ -28,7 +28,7 @@ jobs:
 
       - name: Generate pom version ouput
         working-directory: ./backend/parent-project
-        run: sudo apt install gawk --yes
+        run: sudo apt install gawk --yes \
              && echo ::set-output name=pom-version::$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) \
              && VERSION=$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//') \
              && echo $(echo $VERSION | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)
