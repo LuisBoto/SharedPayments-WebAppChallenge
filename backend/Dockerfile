@@ -11,4 +11,4 @@ FROM openjdk:11-jdk-slim
 WORKDIR /backend/sharedPayments/
 COPY --from=builder /backend/parent-project/startup/target/startup-*.jar /backend/sharedPayments/
 EXPOSE 8080
-CMD [ "java", "-jar", "startup-0.3.jar" ]
+CMD [ "java", "-jar", "startup-0.3-SNAPSHOT.jar" ]

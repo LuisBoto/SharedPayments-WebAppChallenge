@@ -3,7 +3,6 @@ package com.sharedPayments.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Objects;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -11,6 +10,11 @@ import javax.validation.constraints.Size;
 
 import com.sharedPayments.dto.UserDto;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter @NoArgsConstructor @EqualsAndHashCode
 public class User {
 
 	private Long id;
@@ -35,9 +39,6 @@ public class User {
 		this.debt = BigDecimal.valueOf(0.0).setScale(2);
 	}
 
-	public User() {
-	}
-
 	public User(String name, Double debt) {
 		this.name = name;
 		this.debt = BigDecimal.valueOf(debt).setScale(2);
@@ -53,50 +54,21 @@ public class User {
 
 	private BigDecimal updateDebt(Long payerId, BigDecimal paymentPrice, BigDecimal userCount, BigDecimal roundingErrorCents) {
 		boolean addRoundingErrorCent = roundingErrorCents.doubleValue() > 0;
-		if (this.getId() == payerId)
+		if (this.id == payerId)
 			this.setDebt(new DebtCalculator().calculatePayerDebt(
-					this.getDebt(), paymentPrice, userCount));
+					this.debt, paymentPrice, userCount));
 		else {
 			this.setDebt(new DebtCalculator().calculateOwerDebt(
-					this.getDebt(), paymentPrice, userCount, addRoundingErrorCent));
+					this.debt, paymentPrice, userCount, addRoundingErrorCent));
 			if (addRoundingErrorCent) 
 				roundingErrorCents = roundingErrorCents.subtract(BigDecimal.valueOf(1)).setScale(2, RoundingMode.HALF_EVEN);
 		}
 			
 		return roundingErrorCents;
 	}
-	
-	public Long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public BigDecimal getDebt() {
-		return debt;
-	}
 
 	private void setDebt(BigDecimal debt) {
 		this.debt = debt.setScale(2, RoundingMode.HALF_EVEN);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(debt, id, name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
 	
 	public UserDto toDto() {

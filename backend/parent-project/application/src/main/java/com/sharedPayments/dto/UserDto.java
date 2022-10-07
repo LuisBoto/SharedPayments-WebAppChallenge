@@ -2,7 +2,6 @@ package com.sharedPayments.dto;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -11,8 +10,13 @@ import javax.validation.constraints.Size;
 import com.sharedPayments.model.User;
 
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Introspected
+@Data
+@NoArgsConstructor @AllArgsConstructor
 public class UserDto {
 
 	private Long id;
@@ -22,9 +26,6 @@ public class UserDto {
 	private String name;
 
 	private BigDecimal debt;
-
-	public UserDto() {
-	}
 
 	public UserDto(Long id, String name, Double debt) {
 		this.id = id;
@@ -36,29 +37,9 @@ public class UserDto {
 		this(null, name, 0.0);
 	}
 
-	public UserDto(Long id, String name, BigDecimal debt) {
-		this(id, name, debt == null ? 0.0 : debt.doubleValue());
-
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public BigDecimal getDebt() {
-		if (this.debt == null) this.setDebt(0.0);
+		if (this.debt == null)
+			this.setDebt(0.0);
 		return this.debt;
 	}
 
@@ -76,23 +57,6 @@ public class UserDto {
 
 	public @Valid User toModel() {
 		return new User(this.id, this.name, this.getDebt());
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(debt, id, name);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserDto other = (UserDto) obj;
-		return Objects.equals(debt, other.debt) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
 	}
 
 }
