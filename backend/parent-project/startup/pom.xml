@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>parent-project</artifactId>
 		<groupId>com.sharedPayments</groupId>
-		<version>${revision}</version>
+		<version>0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>startup</artifactId>
 	<name>startup</name>
@@ -17,12 +17,12 @@
 		<dependency>
 			<groupId>com.sharedPayments</groupId>
 			<artifactId>controller</artifactId>
-			<version>${revision}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sharedPayments</groupId>
 			<artifactId>infrastructure</artifactId>
-			<version>${revision}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
