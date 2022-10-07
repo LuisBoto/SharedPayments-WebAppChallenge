@@ -9,8 +9,6 @@ on:
 jobs:
   continuousIntegration:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: booklibrary
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -30,8 +28,8 @@ jobs:
         working-directory: ./backend/parent-project
         run: echo ::set-output name=pom-version::$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)
         id: generate-pom-tag
-      - name: Build Docker image
-        run: ./buildDockerImages.sh
+     # - name: Build Docker image
+     #   run: ./buildDockerImages.sh
 
       - name: Create release
         uses: softprops/action-gh-release@v1
@@ -39,7 +37,7 @@ jobs:
           files: |
             backend/parent-project/startup/target/startup.jar
         
-      - name: Adding .RC1 suffix
+      - name: Updating version
         working-directory: ./backend/parent-project
         run: mvn versions:set -DnewVersion=${{ steps.generate-pom-tag.outputs.pom-version }}
         shell: bash
