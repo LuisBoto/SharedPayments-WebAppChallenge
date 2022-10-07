@@ -29,7 +29,7 @@ jobs:
       - name: Generate pom version ouput
         working-directory: ./backend/parent-project
         run: echo ::set-output name=pom-version::$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) \
-             && VERSION=$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' \
+             && VERSION=$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//') \
              && echo $VERSION | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.
         id: generate-pom-tag
       - name: Build Docker image
