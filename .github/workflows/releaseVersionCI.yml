@@ -65,14 +65,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: releaseJar
-          path: /home/runner/work/SharedPayments-WebAppChallenge/backend/parent-project/startup/target/
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.old-version-number.outputs.pom-version }}
           prerelease: true
           files: |
-            backend/parent-project/startup/target/startup.jar
+            startup.jar
         
       - name: Updating parent version
         working-directory: ./backend/parent-project
