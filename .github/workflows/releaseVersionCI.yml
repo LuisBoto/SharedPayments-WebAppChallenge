@@ -45,11 +45,9 @@ jobs:
       - name: Updating parent version
         working-directory: ./backend/parent-project
         run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
-      - name: Updating submodules parent pom version
-        working-directory: ./backend/parent-project
-        run: mvn versions:update-child-modules -DallowSnapshots=true
-
+      
       - name: Commit new pom versions
+        working-directory: ./backend/parent-project
         uses: EndBug/add-and-commit@v9.1.0
         with:
           add: './\*.xml'
