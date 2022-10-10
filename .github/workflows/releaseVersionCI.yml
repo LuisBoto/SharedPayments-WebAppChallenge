@@ -46,6 +46,7 @@ jobs:
         working-directory: ./backend/parent-project
         run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
       - name: Clean pom backups
+        working-directory: ./backend/parent-project
         run: mvn versions:commit
       
       - name: Commit new pom versions
