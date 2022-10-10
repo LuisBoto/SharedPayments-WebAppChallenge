@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +23,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "payment")
-@Getter @Setter @EqualsAndHashCode @NoArgsConstructor
+@Getter @Setter @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor
+@Builder
 @Introspected
 public class PaymentEntity {
 
@@ -39,42 +43,31 @@ public class PaymentEntity {
 	private BigDecimal price;
 
 	@NotNull
-	private Long paymentDate;
-
-	public PaymentEntity(@NotNull UserEntity payer, String description, @NotNull @Positive BigDecimal price,
-			@NotNull Long paymentDate) {
-		this.payer = payer;
-		this.description = description;
-		this.price = price;
-		this.paymentDate = paymentDate;
-	}
-
-	public PaymentEntity(@NotNull UserEntity payer, String description, @NotNull @Positive double price,
-			@NotNull Long paymentDate) {
-		this(payer, description, BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR), paymentDate);
-	}
-
-	public PaymentEntity(@NotNull UserEntity payer, String description, @NotNull @Positive double price) {
-		this(payer, description, BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR), System.currentTimeMillis());
-	}
+	@Default
+	private Long paymentDate = System.currentTimeMillis();
 
 	public void setPrice(double price) {
-		this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.FLOOR);
+		this.price = BigDecimal.valueOf(price).setScale(2, RoundingMode.HALF_EVEN);
+	}
+	
+	public void setPrice(BigDecimal price) {
+		this.price = price.setScale(2, RoundingMode.HALF_EVEN);
 	}
 
 	public static PaymentEntity fromModel(Payment payment) {
-		PaymentEntity paymentE = new PaymentEntity(
-				UserEntity.fromModel(payment.getPayer()), 
-				payment.getDescription(),
-				payment.getPrice(), 
-				payment.getPaymentDate());
+		PaymentEntity paymentE = PaymentEntity.builder()
+				.payer(UserEntity.fromModel(payment.getPayer()))
+				.description(payment.getDescription())
+				.price(payment.getPrice())
+				.paymentDate(payment.getPaymentDate())
+				.build();
 		if (payment.getId() != null)
 			paymentE.setId(payment.getId());
 		return paymentE;
 	}
 
 	public Payment toModel() {
-		return new Payment(this.id, this.payer.toModel(), this.description, this.price, this.paymentDate);
+		return new Payment(this.id, this.payer.toModel(), this.description, this.price.setScale(2, RoundingMode.HALF_EVEN), this.paymentDate);
 	}
 
 }

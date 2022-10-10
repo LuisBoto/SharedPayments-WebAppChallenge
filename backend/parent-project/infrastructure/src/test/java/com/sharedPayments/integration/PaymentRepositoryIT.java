@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
@@ -36,8 +37,9 @@ public class PaymentRepositoryIT extends GenericIT {
 	
 	@Test
 	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsNewPayment() throws SQLException {
-		UserEntity payer = this.userRepository.save(new UserEntity("Payer"));
-		PaymentEntity payment = new PaymentEntity(payer, "NewPaymentDescription", 11.4);
+		UserEntity payer = this.userRepository.save(UserEntity.builder().name("Payer").build());
+		PaymentEntity payment = PaymentEntity.builder().payer(payer).description("NewPaymentDescription").build(); 
+		payment.setPrice(11.4);
 		
 		this.paymentRepository.save(payment);
 		var payments = this.getAllPaymentsFromDB();
@@ -50,7 +52,8 @@ public class PaymentRepositoryIT extends GenericIT {
 	@Test
 	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsAll() throws SQLException {		
 		UserEntity payer = this.userRepository.findById(2L).get();
-		PaymentEntity payment = new PaymentEntity(payer, "newer payment", 77.89);
+		PaymentEntity payment = PaymentEntity.builder().payer(payer).description("newer payment").price(new BigDecimal(77.89)).build(); 
+
 		payment = this.paymentRepository.save(payment);
 		var payments = this.getAllPaymentsFromDB();
 		
@@ -62,8 +65,8 @@ public class PaymentRepositoryIT extends GenericIT {
 	
 	@Test
 	void givenOneNewPayment_WhenSaved_ThenPaymentsTableContainsUserForeignKey() throws SQLException {
-		UserEntity payer = this.userRepository.save(new UserEntity("Payer1")); // Id 100
-		PaymentEntity payment = new PaymentEntity(payer, "NewPaymentWithUser", 25);
+		UserEntity payer = this.userRepository.save(UserEntity.builder().name("Payer1").build()); // Id 100
+		PaymentEntity payment = PaymentEntity.builder().payer(payer).description("NewPaymentWithUser").price(new BigDecimal(25)).build(); 
 		
 		this.paymentRepository.save(payment);
 		var payments = this.getAllPaymentsFromDB();
@@ -81,9 +84,10 @@ public class PaymentRepositoryIT extends GenericIT {
 	@Test
 	void givenTwoNewPayments_WhenFindAll_ThenListContainsAllPayments() throws SQLException {
 		this.savePayments(
-				new PaymentEntity(this.userRepository.findById(1L).get(), "First", 10.11),
-				new PaymentEntity(this.userRepository.findById(2L).get(), "Second", 20.22),
-				new PaymentEntity(this.userRepository.findById(3L).get(), "Third", 30.33));
+				PaymentEntity.builder().payer(this.userRepository.findById(1L).get()).description("First").price(new BigDecimal(10.11)).build(),
+				PaymentEntity.builder().payer(this.userRepository.findById(2L).get()).description("Second").price(new BigDecimal(20.22)).build(),
+				PaymentEntity.builder().payer(this.userRepository.findById(3L).get()).description("Third").price(new BigDecimal(30.33)).build()); 
+	
 		
 		assertEquals(this.getAllPaymentsFromDB(), this.paymentRepository.findAll());
 	}
@@ -98,9 +102,9 @@ public class PaymentRepositoryIT extends GenericIT {
 	
 	@Test
 	void givenOneNewPayment_WhenUpdateAmountAndPayer_ThenDatabaseHasUpdatedData() throws SQLException {
-		UserEntity user1 = this.userRepository.save(new UserEntity("u1"));
-		this.savePayments(new PaymentEntity(
-				this.userRepository.findById(3L).get(), "oldDescription", 55.99));
+		UserEntity user1 = this.userRepository.save(UserEntity.builder().name("u1").build());
+		this.savePayments(
+				PaymentEntity.builder().payer(this.userRepository.findById(3L).get()).description("oldDescription").price(new BigDecimal(55.99)).build());
 		
 		PaymentEntity payment = this.paymentRepository.findById(101L).get();
 		payment.setDescription("newUpdatedDescription");

@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +25,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "user")
-@Getter @Setter @EqualsAndHashCode @NoArgsConstructor
+@Getter @Setter @EqualsAndHashCode @NoArgsConstructor @AllArgsConstructor @Builder
 @Introspected
 public class UserEntity {
 
@@ -35,22 +38,14 @@ public class UserEntity {
 	private String name;
 
 	@NotNull
-	private BigDecimal debt;
+	@Default
+	private BigDecimal debt = new BigDecimal(0D).setScale(2, RoundingMode.HALF_EVEN);
 
 	@OneToMany(mappedBy = "payer")
 	private List<PaymentEntity> payments;
 
-	public UserEntity(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name, BigDecimal debt) {
-		this.name = name;
-		this.debt = debt.setScale(2, RoundingMode.FLOOR);
-	}
-
-	public UserEntity(@NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 20) String name) {
-		this(name, new BigDecimal(0D));
-	}
-
 	public static UserEntity fromModel(User user) {
-		UserEntity userE = new UserEntity(user.getName(), user.getDebt());
+		UserEntity userE = UserEntity.builder().name(user.getName()).debt(user.getDebt()).build(); 
 		if (user.getId() != null)
 			userE.setId(user.getId());
 		return userE;
