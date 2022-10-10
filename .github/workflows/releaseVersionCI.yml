@@ -52,10 +52,5 @@ jobs:
       - name: Commit new pom versions
         uses: EndBug/add-and-commit@v9.1.0
         with:
-          add: 
-            - 'pom.xml'
-            - 'startup/pom.xml'
-            - 'infrastructure/pom.xml'
-            - 'controller/pom.xml'
-            - 'application/pom.xml'
+          add: './\*.xml'
           message: 'CI: advancing pom versions'
