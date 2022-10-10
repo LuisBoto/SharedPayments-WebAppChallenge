@@ -31,11 +31,12 @@ jobs:
       - name: Build Docker image
         run: ./buildDockerImages.sh
 
-     # - name: Create release
-     #   uses: softprops/action-gh-release@v1
-     #   with:
-     #     files: |
-     #       backend/parent-project/startup/target/startup.jar
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            backend/parent-project/startup/target/startup.jar
         
       - name: Updating version
         working-directory: ./backend/parent-project
