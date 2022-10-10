@@ -45,9 +45,10 @@ jobs:
       - name: Updating parent version
         working-directory: ./backend/parent-project
         run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
+      - name: Clean pom backups
+        run: mvn versions:commit
       
       - name: Commit new pom versions
         uses: EndBug/add-and-commit@v9.1.0
         with:
-          add: './\*.xml'
           message: 'CI: advancing pom versions'
