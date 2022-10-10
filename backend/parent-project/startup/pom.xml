@@ -25,13 +25,44 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
-	<build>
-		<finalName>startup</finalName>
-		<plugins>
-			<plugin>
-				<groupId>io.micronaut.build</groupId>
-				<artifactId>micronaut-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+	<profiles>
+		<profile>
+			<id>IT</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>DockerizeBackend</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<finalName>startup</finalName>
+				<plugins>
+					<plugin>
+						<groupId>io.micronaut.build</groupId>
+						<artifactId>micronaut-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>com.spotify</groupId>
+						<artifactId>dockerfile-maven-plugin</artifactId>
+						<version>1.4.13</version>
+						<executions>
+							<execution>
+								<id>build docker image</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<repository>sharedpaymentsbackend</repository>
+							<tag>latest</tag>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
