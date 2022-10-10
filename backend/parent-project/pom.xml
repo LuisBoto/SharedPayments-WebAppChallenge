@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sharedPayments</groupId>
 	<artifactId>parent-project</artifactId>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.4</version>
 	<name>parent-project</name>
 	<packaging>pom</packaging>
 

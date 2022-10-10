@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>parent-project</artifactId>
 		<groupId>com.sharedPayments</groupId>
-		<version>0.3-SNAPSHOT</version>
+		<version>0.4</version>
 	</parent>
 	<artifactId>controller</artifactId>
 	<name>controller</name>
