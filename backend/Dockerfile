@@ -3,7 +3,7 @@ WORKDIR /backend/parent-project
 
 COPY parent-project/pom.xml /backend/parent-project
 RUN mvn -B clean verify --fail-never
-COPY parent-project /backend/parent-project/
+COPY parent-project/ /backend/parent-project/
 RUN mvn -B package
 
 #########################################################
