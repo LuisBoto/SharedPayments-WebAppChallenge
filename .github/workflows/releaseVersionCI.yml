@@ -65,7 +65,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: releaseJar
-          path: ./backend/parent-project/startup/target/startup.jar
+          path: /home/runner/work/SharedPayments-WebAppChallenge/backend/parent-project/startup/target/startup.jar
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
