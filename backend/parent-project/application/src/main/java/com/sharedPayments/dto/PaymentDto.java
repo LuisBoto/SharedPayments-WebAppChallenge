@@ -2,7 +2,6 @@ package com.sharedPayments.dto;
 
 import java.math.BigDecimal;
 
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -12,16 +11,20 @@ import com.sharedPayments.model.User;
 
 import io.micronaut.core.annotation.Introspected;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Introspected
-@Data @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class PaymentDto {
 
 	@NotNull
 	private Long payerId;
 	
-	private Long paymentDate;
+	@Default
+	private Long paymentDate = System.currentTimeMillis();
 	
 	@NotNull
 	@Positive
@@ -30,37 +33,6 @@ public class PaymentDto {
 	private String description;
 	
 	private Long id;
-
-	public PaymentDto() {
-	}
-	
-	public PaymentDto(Long payerId, Long paymentDate, double price, String description, Long id) {
-		this(payerId, 
-				paymentDate, 
-				BigDecimal.valueOf(price).setScale(2), 
-				description, 
-				id);
-	}
-	
-	public PaymentDto(Long payerId, BigDecimal price, String description, Long id) {
-		this(payerId, 
-				System.currentTimeMillis(), 
-				price, 
-				description, 
-				id);
-	}
-	
-	public PaymentDto(Long payerId, double price, String description, Long id) {
-		this(payerId, 
-				BigDecimal.valueOf(price).setScale(2), 
-				description, 
-				id);
-	}
-
-	public Long getPaymentDate() {
-		if (paymentDate==null) return System.currentTimeMillis();
-		return paymentDate;
-	}
 
 	public void setPrice(Double price) {
 		this.price = BigDecimal.valueOf(price);
