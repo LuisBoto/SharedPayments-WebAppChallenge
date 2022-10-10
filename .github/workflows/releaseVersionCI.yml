@@ -75,7 +75,7 @@ jobs:
         
       - name: Updating parent version
         working-directory: ./backend/parent-project
-        run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
+        run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}-SNAPSHOT
       - name: Clean pom backups
         working-directory: ./backend/parent-project
         run: mvn versions:commit
