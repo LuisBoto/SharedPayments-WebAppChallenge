@@ -34,6 +34,12 @@ jobs:
       - name: Build project & docker image
         working-directory: ./backend/parent-project
         run: mvn package
+      - name: Upload jar artifact for release job
+        uses: actions/upload-artifact@v3
+        with:
+          name: releaseJar
+          path: backend/parent-project/startup/target/startup.jar
+          retention-days : 1
 
   ReleaseAndUpgradeProjectVersion:
     runs-on: ubuntu-latest
@@ -55,6 +61,11 @@ jobs:
         run: echo ::set-output name=pom-version::$(echo ${{ steps.old-version-number.outputs.pom-version }} | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)
         id: new-version-number
 
+      - name: Download jar artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: releaseJar
+          path: backend/parent-project/startup/target/startup.jar
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
