@@ -20,28 +20,42 @@ jobs:
       - name: Unitary & Integration tests
         working-directory: ./backend/parent-project
         run: mvn clean install -P IT
-      - name: Build
+      - name: Build project & docker image
         working-directory: ./backend/parent-project
         run: mvn package
 
-      - name: Generate pom version ouput
+      - name: Read old pom version
         working-directory: ./backend/parent-project
-        run: echo ::set-output name=pom-version::$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)
-        id: generate-pom-tag
+        run: echo ::set-output name=pom-version::$(echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout) | sed 's/-SNAPSHOT*//' )
+        id: old-version-number
+      - name: Generate new pom version ouput
+        working-directory: ./backend/parent-project
+        run: echo ::set-output name=pom-version::$(echo ${{ steps.old-version-number.outputs.pom-version }} | awk -F. '/[0-9]+\./{$NF++;print}' OFS=.)
+        id: new-version-number
 
       - name: Create release
         uses: softprops/action-gh-release@v1
       #  if: startsWith(github.ref, 'refs/tags/')
         with:
-          tag_name: testRelease
+          tag_name: ${{ steps.old-version-number.outputs.pom-version }}
           prerelease: true
           files: |
             backend/parent-project/startup/target/startup.jar
         
-      - name: Updating version
+      - name: Updating parent version
         working-directory: ./backend/parent-project
-        run: mvn versions:set -DnewVersion=${{ steps.generate-pom-tag.outputs.pom-version }}
-        shell: bash
-      - name: Print new version
+        run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
+      - name: Updating submodules parent pom version
         working-directory: ./backend/parent-project
-        run: echo $(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
+        run: mvn versions:update-child-modules -DallowSnapshots=true
+
+      - name: Commit new pom versions
+        uses: EndBug/add-and-commit@v9.1.0
+        with:
+          add: 
+            - 'pom.xml'
+            - 'startup/pom.xml'
+            - 'infrastructure/pom.xml'
+            - 'controller/pom.xml'
+            - 'application/pom.xml'
+          message: 'CI: advancing pom versions'
