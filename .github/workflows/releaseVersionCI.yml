@@ -47,7 +47,6 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ steps.new-version-number.outputs.pom-version }}
       
       - name: Commit new pom versions
-        working-directory: ./backend/parent-project
         uses: EndBug/add-and-commit@v9.1.0
         with:
           add: './\*.xml'
