@@ -7,11 +7,14 @@ import javax.validation.constraints.Positive;
 
 import com.sharedPayments.dto.PaymentDto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter @NoArgsConstructor @EqualsAndHashCode
+@Getter @NoArgsConstructor @AllArgsConstructor @EqualsAndHashCode
+@Builder
 public class Payment {
 
 	private Long id;
@@ -27,22 +30,6 @@ public class Payment {
 
 	@NotNull
 	private Long paymentDate;
-
-	public Payment(@NotNull User payer, String description, @NotNull @Positive double price) {
-		this.payer = payer;
-		this.description = description;
-		this.price = BigDecimal.valueOf(price).setScale(2);
-	}
-
-	public Payment(Long id, User payer, String description, BigDecimal price, @NotNull Long paymentDate) {
-		this(payer, description, price.doubleValue(), paymentDate);
-		this.id = id;
-	}
-
-	public Payment(User payer, String description, double price, @NotNull Long paymentDate) {
-		this(payer, description, price);
-		this.paymentDate = paymentDate;
-	}
 
 	public PaymentDto toDto() {
 		return new PaymentDto(this.payer.getId(), this.paymentDate, this.price, this.description, this.id);

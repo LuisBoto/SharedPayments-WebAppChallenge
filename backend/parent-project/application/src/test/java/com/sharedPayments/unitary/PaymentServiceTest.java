@@ -31,12 +31,11 @@ public class PaymentServiceTest {
 	
 	@Test
 	void givenTwoPayments_WhenGetAllPayments_ThenAllPaymentsAreReturnedAndSorted() {
-		User payer = new User("Manola");
+		User payer = User.builder().name("Manola").build(); 
 		List<Payment> payments = Arrays.asList(
-				new Payment(payer, "Description", 500D, 100000L),
-				new Payment(payer, "Description 2", 235D, 500000L),
-				new Payment(payer, "Description 3", 800D, 3000L)
-				);
+				Payment.builder().payer(payer).description("Description").price(new BigDecimal(500)).paymentDate(50000L).build(),
+				Payment.builder().payer(payer).description("Description 2").price(new BigDecimal(500)).paymentDate(100000L).build(),
+				Payment.builder().payer(payer).description("Description 3").price(new BigDecimal(500)).paymentDate(3000L).build());
 		when(this.paymentRepository.findAll()).thenReturn(payments);
 		List<PaymentDto> sortedPayments = Arrays.asList(
 				payments.get(1).toDto(),
@@ -49,7 +48,8 @@ public class PaymentServiceTest {
 	
 	@Test
 	void givenNewValidPayment_WhenCreatePayment_ThenPaymentIsSaved() {
-		PaymentDto paymentDto = new PaymentDto(5L, 10000L, 500.0, "Description", 15L);
+		PaymentDto paymentDto = PaymentDto.builder()
+				.payerId(5L).description("Description").paymentDate(10000L).price(new BigDecimal(500.00).setScale(2)).id(15L).build();
 
 		User user = new User(5L, "Juan", new BigDecimal(0));
 		when(this.userRepository.findById(any())).thenReturn(user);
@@ -67,7 +67,8 @@ public class PaymentServiceTest {
 	@Test
 	void givenNewPayment_WhenPayerUserDoesNotExist_ThenError() {
 		when(this.userRepository.findById(any())).thenReturn(null);
-		PaymentDto paymentDto = new PaymentDto(-7L, 10000L, 500.0, "Description", 15L);
+		PaymentDto paymentDto = PaymentDto.builder()
+				.payerId(-7L).description("Description").paymentDate(10000L).price(new BigDecimal(500)).id(15L).build();
 		when(this.paymentRepository.save(any())).thenReturn(paymentDto.toModel(new User()));
 		assertThrows(
 				NoSuchElementException.class, 

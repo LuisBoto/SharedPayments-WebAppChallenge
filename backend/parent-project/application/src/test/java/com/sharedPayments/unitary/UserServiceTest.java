@@ -62,8 +62,8 @@ public class UserServiceTest {
 	@Test
 	void givenTwoUsers_WhenGetAllUsers_ThenAllUsersAreReturned() {
 		List<User> users = Arrays.asList(
-				new User("Juana"),
-				new User("Mark")
+				User.builder().name("Juana").build(),
+				User.builder().name("Mark").build()
 				);
 		when(this.userRepository.findAll()).thenReturn(users);
 
@@ -73,8 +73,8 @@ public class UserServiceTest {
 	
 	@Test
 	void givenNewValidUser_WhenCreateUser_ThenUserIsSaved() {
-		UserDto userDto = new UserDto(2L, "Marcos", 50.0);
-
+		UserDto userDto = UserDto.builder().id(2L).name("Marcos").debt(new BigDecimal(50.0)).build();  
+		
 		when(this.userRepository.save(any(User.class))).then(call -> {
 			User result = userDto.toModel();
 			return result;

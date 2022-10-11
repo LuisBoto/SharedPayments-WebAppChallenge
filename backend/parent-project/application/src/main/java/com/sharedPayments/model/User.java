@@ -10,11 +10,14 @@ import javax.validation.constraints.Size;
 
 import com.sharedPayments.dto.UserDto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter @NoArgsConstructor @EqualsAndHashCode
+@Getter @NoArgsConstructor @EqualsAndHashCode @AllArgsConstructor @Builder
 public class User {
 
 	private Long id;
@@ -24,25 +27,8 @@ public class User {
 	private String name;
 
 	@NotNull
-	private BigDecimal debt;
-
-	public User(Long id, @NotEmpty(message = "Cannot be empty") @Size(min = 1, max = 75) String name,
-			@NotNull BigDecimal debt) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.debt = debt;
-	}
-
-	public User(String name) {
-		this.name = name;
-		this.debt = BigDecimal.valueOf(0.0).setScale(2);
-	}
-
-	public User(String name, Double debt) {
-		this.name = name;
-		this.debt = BigDecimal.valueOf(debt).setScale(2);
-	}
+	@Default
+	private BigDecimal debt = new BigDecimal(0).setScale(2, RoundingMode.HALF_EVEN);
 	
 	public static List<User> updateUsersDebt(List<User> users, Long payerId, BigDecimal paymentPrice) {
 		BigDecimal userCount = new BigDecimal(users.size());

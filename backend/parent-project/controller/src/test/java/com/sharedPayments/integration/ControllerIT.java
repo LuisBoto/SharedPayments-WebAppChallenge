@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.json.JSONObject;
@@ -27,9 +28,9 @@ public class ControllerIT {
     public UserService dependency() {
 		var userService = mock(UserService.class);
 		var users = Arrays.asList(
-				new UserDto(1L, "Pepe", 18.0),
-				new UserDto(2L, "John", 53.99),
-				new UserDto(3L, "Maria", 14.56));
+				UserDto.builder().id(1L).name("Pepe").debt(new BigDecimal(18.0)).build(),
+				UserDto.builder().id(2L).name("John").debt(new BigDecimal(53.99)).build(),  
+				UserDto.builder().id(3L).name("Maria").debt(new BigDecimal(14.56)).build());
 		when(userService.getUsers()).thenReturn(users);
 		when(userService.createUser(any(UserDto.class))).thenAnswer(call -> {
 				UserDto paramUser = call.getArgument(0);
@@ -51,8 +52,8 @@ public class ControllerIT {
 				.statusCode(200)
 				.body(
 						"id", hasItems(1, 2, 3),//, 4, 5),
-						"name", hasItems("Pepe", "John", "Maria"),//, "Carla", "Rebeca"),
-						"debt", hasItems(18.0f, 53.99f, 14.56f));//, -286.76f, 200.21f));
+						"name", hasItems("Pepe", "John", "Maria"),
+						"debt", hasItems(18, 53.99F, 14.56F));
 	}
 	
 	@Test
